@@ -1,0 +1,12 @@
+#summary This is where Charles will post information he finds relative to his own part in this project.
+
+= Introduction =
+
+This is where Charles will post information he finds relative to his own part in this project.
+
+
+= Research =
+
+== Links ==
+
+*MSDN* How to Rotate and Move a Camera: http://msdn.microsoft.com/en-us/library/bb197901.aspx
