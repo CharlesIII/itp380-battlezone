@@ -206,28 +206,27 @@ namespace Battlezone
 
         #region Collision Detection Logistics
 
-        /* <summary>
-         * Adds a new actor to the list of actorsToAdd
-         * </summary>
-         */
+        /// <summary>
+        /// Adds a new actor to the list of actorsToAdd.
+        /// </summary>
+        /// <param name="a"></param>
         public void addActor(Actor a)
         {
             actorsToAdd.Add(a);
         }
 
-        /* <summary>
-         * Adds an actor to the list of actorsToRemove
-         * </summary>
-         */
+        /// <summary>
+        /// Adds an actor to the list of actorsToRemove.
+        /// </summary>
+        /// <param name="a"></param>
         public void removeActor(Actor a)
         {
             actorsToRemove.Remove(a);
         }
 
-        /* <summary>
-         * Performs maintenance on activeActors
-         * </summary>
-         */
+        /// <summary>
+        /// Performs maintenance on activeActors.
+        /// </summary>
         private void updateActors()
         {
             //remove all the actors that need to be removed
@@ -245,6 +244,9 @@ namespace Battlezone
             actorsToAdd.Clear();
         }
 
+        /// <summary>
+        /// Checks collisions between objects in game.
+        /// </summary>
         private void checkCollision()
         {
             //terrible brute force method

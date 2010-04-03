@@ -118,6 +118,10 @@ namespace Battlezone
 
         protected Utils.Timer timer;
 
+        /// <summary>
+        /// Constructs a new Actor.
+        /// </summary>
+        /// <param name="game">Reference to current game</param>
         public Actor(Game game)
             : base(game)
         {
@@ -153,6 +157,10 @@ namespace Battlezone
             base.Initialize();
         }
 
+        /// <summary>
+        /// Uses ContentManager to load Models specified by sMeshesToLoad and generate a BoundingSphere
+        /// for the Actor.
+        /// </summary>
         protected override void LoadContent()
         {
             meshLoader = new ContentManager(Game.Services, "Content");
@@ -189,12 +197,19 @@ namespace Battlezone
             base.LoadContent();
         }
 
+        /// <summary>
+        /// Unloads content loaded by ContentManager.
+        /// </summary>
         protected override void UnloadContent()
         {
             meshLoader.Unload();
             base.UnloadContent();
         }
 
+        /// <summary>
+        /// Handles drawing an Actor's models.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Draw(GameTime gameTime)
         {
             if (m_bChanged)
@@ -244,11 +259,19 @@ namespace Battlezone
             base.Draw(gameTime);
         }
 
+        /// <summary>
+        /// Gets the World facing vector of the Actor
+        /// </summary>
+        /// <returns>A Vector3 representing the facing of the Actor</returns>
         public Vector3 GetWorldFacing()
         {
             return worldTransform.Forward;
         }
 
+        /// <summary>
+        /// Gets the World position of the Actor
+        /// </summary>
+        /// <returns>A Vector3 containing the position of the Actor</returns>
         public Vector3 GetWorldPosition()
         {
             return worldTransform.Translation;
@@ -309,12 +332,19 @@ namespace Battlezone
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Removes the current Actor from the Game Components list as well as collision checking.
+        /// </summary>
         protected virtual void removeSelf()
         {
             Game.Components.Remove(this);
             GameplayScreen.Instance.removeActor(this);
         }
 
+        /// <summary>
+        /// Resolves collision based on defined behaviors.
+        /// </summary>
+        /// <param name="a">Actor with which it is currently colliding.</param>
         public virtual void collide(Actor a)
         {
             //stub method, inheriting classes are expected to provide functionality
