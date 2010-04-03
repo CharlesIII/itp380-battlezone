@@ -1,0 +1,11 @@
+General Research  
+ 
+This is where General research can be posted that the group finds relevant to the whole project.
+
+Introduction
+
+This is where General research can be posted that the group finds relevant to the whole project.
+
+Research
+
+XNA Creators Club Particle Effects in 3D: http://creators.xna.com/en-us/sample/particle3d
