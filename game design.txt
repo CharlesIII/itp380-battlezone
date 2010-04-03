@@ -1,0 +1,51 @@
+move
+	8 degrees of tank of movement
+	turret rotation/pitch
+cannon fire
+special abilities
+	armor piercing
+	explosive
+	nuke
+	smoke
+respawn
+	limited lives
+	temporary invincibility
+repair/regen
+armor value
+direction of fire to determine damage
+
+camera follows tank
+
+finite enemy tanks
+	fixed paths
+	patrol
+	chase player
+	shoot
+
+explosion
+death animations
+
+scoring
+	earn extra lives	
+
+sound effect
+
+collisions
+	tank with world/boundary
+	shell with tank
+	tank on tank
+	
+
+level geometry
+skybox/world boundary
+tank geometry
+ambient lighting
+directional lighting
+point lighting
+particle effects for explosions and smoke
+UI
+	radar
+	low health warning
+	health
+	score
+	current weapon
