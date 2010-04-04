@@ -10,5 +10,5 @@ This is where General information can be posted that the group finds relevant to
 
 XNA Creators Club Particle Effects in 3D: http://creators.xna.com/en-us/sample/particle3d
 
-Explains how to translate from World Space to Screen space in XNA. Helpful for Z-bufferring
+Blog found that explains how to translate from World Space to Screen space in XNA. Helpful for Z-buffering
 http://thunderfist-podium.blogspot.com/2009/08/xna-screen-projection.html
