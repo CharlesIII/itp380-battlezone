@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 
-
 namespace Battlezone.BattlezoneObjects
 {
     /// <summary>
@@ -35,6 +34,7 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your initialization code here
 
             base.Initialize();
+            COLLISION_IDENTIFIER = CollisionIdentifier.TANK;
         }
 
         /// <summary>

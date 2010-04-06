@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using Battlezone.Engine;
 #endregion
 
 namespace Battlezone
@@ -28,6 +29,7 @@ namespace Battlezone
     class GameplayScreen : GameScreen
     {
         #region Fields
+        
         private static GameplayScreen instance;    //singleton design pattern
         public static GameplayScreen Instance
         {
@@ -44,6 +46,8 @@ namespace Battlezone
 
         public static Vector3 DiffuseColor = Color.Black.ToVector3();
         public static Vector3 DirLightDirection = new Vector3(1,-1,0);
+
+        public PathFinder navPathFind;
 
         public static AudioEngine audioEngine;
         public static WaveBank waveBank;
@@ -74,12 +78,18 @@ namespace Battlezone
         /// </summary>
         public GameplayScreen()
         {
-            activeActors = new List<Actor>();
-            actorsToAdd = new List<Actor>();
-            actorsToRemove = new List<Actor>();
-            TransitionOnTime = TimeSpan.FromSeconds(1.5);
-            TransitionOffTime = TimeSpan.FromSeconds(0.5);
-            instance = this;
+            if (instance == null)
+            {
+                activeActors = new List<Actor>();
+                actorsToAdd = new List<Actor>();
+                actorsToRemove = new List<Actor>();
+                TransitionOnTime = TimeSpan.FromSeconds(1.5);
+                TransitionOffTime = TimeSpan.FromSeconds(0.5);
+                navPathFind = new PathFinder("Navigation Nodes.txt");
+                instance = this;
+            }
+            else
+                throw new Exception("There should only be one GameplayeScreen object in existence.");
         }
 
         /// <summary>
