@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
-
+using Battlezone.Engine;
 
 namespace Battlezone.BattlezoneObjects
 {
@@ -19,10 +19,13 @@ namespace Battlezone.BattlezoneObjects
     /// </summary>
     public class AITank : Actor
     {
-        public AITank(Game game)
+        PathFinder navigation;
+        public AITank(Game game, PathFinder pf)
             : base(game)
         {
             // TODO: Construct any child components here
+
+            navigation = pf;
         }
 
         /// <summary>
@@ -34,6 +37,7 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your initialization code here
 
             base.Initialize();
+            COLLISION_IDENTIFIER = CollisionIdentifier.TANK;
         }
 
         /// <summary>

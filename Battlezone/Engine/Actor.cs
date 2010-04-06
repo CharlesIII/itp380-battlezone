@@ -113,7 +113,7 @@ namespace Battlezone
             }
         }
 
-        public Matrix worldTransform;
+        public Matrix worldTransform;  //this needs to be changed later so that individual models can be transformed independently
         private Matrix[] boneTransforms;
 
         protected Utils.Timer timer;

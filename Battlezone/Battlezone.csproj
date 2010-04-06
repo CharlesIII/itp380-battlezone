@@ -73,6 +73,7 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml">
       <Private>False</Private>
     </Reference>
@@ -102,6 +103,7 @@
     <Compile Include="BattlezoneObjects\PlayerTank.cs" />
     <Compile Include="Engine\Actor.cs" />
     <Compile Include="Engine\CollisionIdentifier.cs" />
+    <Compile Include="Engine\PathFinder.cs" />
     <Compile Include="Engine\ScreenManager\GameScreen.cs" />
     <Compile Include="Engine\ScreenManager\InputState.cs" />
     <Compile Include="Engine\ScreenManager\ScreenManager.cs" />
@@ -112,6 +114,7 @@
     <Compile Include="BattlezoneGame.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BattlezoneObjects\Navigation Nodes.txt" />
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
