@@ -1,4 +1,5 @@
 using System;
+using Battlezone.Engine;
 
 namespace Battlezone
 {
@@ -9,10 +10,13 @@ namespace Battlezone
         /// </summary>
         static void Main(string[] args)
         {
+            
             using (BattlezoneGame game = new BattlezoneGame())
             {
                 game.Run();
             }
+             
+            //PathFinder pf = new PathFinder(@"..\..\..\BattlezoneObjects\Navigation Nodes.txt");
         }
     }
 }

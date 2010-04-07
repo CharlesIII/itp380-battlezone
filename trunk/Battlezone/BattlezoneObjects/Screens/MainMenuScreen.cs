@@ -54,7 +54,14 @@ namespace Battlezone
         /// </summary>
         void PlayGameMenuEntrySelected(object sender, EventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, true, new GameplayScreen());
+            try
+            {
+                LoadingScreen.Load(ScreenManager, true, new GameplayScreen());
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
         }
 
 

@@ -85,7 +85,14 @@ namespace Battlezone
                 actorsToRemove = new List<Actor>();
                 TransitionOnTime = TimeSpan.FromSeconds(1.5);
                 TransitionOffTime = TimeSpan.FromSeconds(0.5);
-                navPathFind = new PathFinder("Navigation Nodes.txt");
+                try
+                {
+                    navPathFind = new PathFinder("Navigation Nodes.txt");
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Unable to load path finding system.");
+                }
                 instance = this;
             }
             else
