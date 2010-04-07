@@ -24,8 +24,10 @@ namespace Battlezone
         private ArrayList ActorModels;
         private ContentManager meshLoader;
         protected ArrayList sMeshesToLoad;
+
         public ArrayList ModelBounds;
         public BoundingSphere WorldBounds;
+
         public int COLLISION_IDENTIFIER;
 
         protected float fMass;
@@ -113,7 +115,9 @@ namespace Battlezone
             }
         }
 
-        public Matrix worldTransform;  //this needs to be changed later so that individual models can be transformed independently
+        public Matrix worldTransform;  
+        //need to add additional offsets and rotations to generate compound matrices for the different models
+        //we also need separate boundingspheres and boxes later
         private Matrix[] boneTransforms;
 
         protected Utils.Timer timer;
