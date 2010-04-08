@@ -193,7 +193,7 @@ namespace Battlezone.Engine
                     }
                 }
             }
-            return null;
+            return null;    //indicates no path found. shouldn't be possible
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace Battlezone.Engine
             public float currentCost;
             public float estimatedCost;
 
-            public ArrayList path;
+            public ArrayList path;  //list contains Vertex objects while A* is running, but is formatted to contain Vector3 before returned as a solution
 
             public PotentialPath()
             {
