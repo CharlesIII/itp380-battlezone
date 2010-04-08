@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using Microsoft.Xna.Framework;
 using Battlezone.Engine;
 
 namespace Battlezone
@@ -15,8 +17,17 @@ namespace Battlezone
             {
                 game.Run();
             }
-             
-            //PathFinder pf = new PathFinder(@"..\..\..\BattlezoneObjects\Navigation Nodes.txt");
+            
+            //A* test code
+            /*
+            PathFinder pf = new PathFinder(@"..\..\..\BattlezoneObjects\Navigation Nodes.txt");
+            ArrayList nodes = pf.GetNavigationNodes();
+            ArrayList path = pf.GetPath((Vector3)nodes[0], (Vector3)nodes[2]);
+            foreach (Vector3 v in path)
+            {
+                Console.WriteLine(v.ToString());
+            }
+             */
         }
     }
 }

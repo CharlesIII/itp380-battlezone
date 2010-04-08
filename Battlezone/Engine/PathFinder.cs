@@ -135,7 +135,94 @@ namespace Battlezone.Engine
             string startKey = start.X.ToString() + start.Y.ToString() + start.Z.ToString();
             string endKey = end.X.ToString() + end.Y.ToString() + end.Z.ToString();
 
+            //get and store the Vertices we are starting at and wanting to end at
+            Vertex startVertex = (Vertex)graph[startKey];
+            Vertex endVertex = (Vertex)graph[endKey];
+
+            //create initial PotentialPath and add it to the list of possible solutions
+            PotentialPath initialPath = new PotentialPath();
+            initialPath.path.Add(startVertex);
+            possibleSolutions.Add(initialPath);
+
+            while (possibleSolutions.Count > 0)
+            {
+                //remove the first potential solution off the list
+                PotentialPath p = (PotentialPath)possibleSolutions[0];    //always remove the first one because the list is in sorted order from least to greatest
+                possibleSolutions.Remove(p);
+
+                if (p.path.Contains(endVertex))     //we have found the solution
+                {
+                    //format the solution to contain Vector3 instead of Vertex
+                    ArrayList path = p.path;
+
+                    for (int i = 0; i < path.Count; i++)
+                    {
+                        Vertex v = (Vertex)path[i];
+                        path[i] = v.position;
+                    }
+
+                    return path;
+                }
+                else
+                {
+                    //get the last Vertex in the path contained in the PotentialPath
+                    Vertex v = (Vertex)p.path[p.path.Count - 1];
+
+                    //create a new PotentialPath for every connected vertex and add it to the list of possible solutions
+                    foreach (Vertex u in v.connectedVertices)
+                    {
+                        //!!!!!!--Make sure we don't create a cycle--!!!!!!
+                        if (!p.path.Contains(u))
+                        {
+                            //compute distance from selected vertex to originating vertex
+                            float currentCost = (u.position - v.position).Length();
+
+                            //compute distance from selected vertex to end vertex; this is the heuristic
+                            float heuristic = (endVertex.position - u.position).Length();
+
+                            //create new PotentialPath for this vertex
+                            PotentialPath newSolution = new PotentialPath();
+                            newSolution.path = (ArrayList)p.path.Clone();
+                            newSolution.path.Add(u);
+                            newSolution.currentCost = p.currentCost + currentCost;
+                            newSolution.estimatedCost = newSolution.currentCost + heuristic;
+
+                            //add new PotentialPath to possibleSolutions in the proper place
+                            SortedInsert(possibleSolutions, newSolution);
+                        }
+                    }
+                }
+            }
             return null;
+        }
+
+        /// <summary>
+        /// Helper function for code readability. Takes in a list of PotentialPaths and new PotentialPath
+        /// and inserts it into the list in sorted order of estimated cost from least to greatest.
+        /// </summary>
+        /// <param name="list">List to add to.</param>
+        /// <param name="p">PotentialPath object to add.</param>
+        private void SortedInsert(ArrayList list, PotentialPath p)
+        {
+            //special case for inserting at beginning
+            if (list.Count == 0)
+                list.Add(p);
+            for (int i = 0; i < list.Count; i++)
+            {
+                PotentialPath temp = (PotentialPath)list[i];
+                if (temp.estimatedCost > p.estimatedCost)
+                {
+                    list.Insert(i, p);
+                    break;
+                }
+
+                //special case for inserting at end
+                if (i == list.Count - 1)
+                {
+                    list.Add(p);
+                    break;
+                }
+            }
         }
 
         //compute heuristic as search progress
@@ -158,6 +245,9 @@ namespace Battlezone.Engine
             }
         }
 
+        /// <summary>
+        /// This class represents a potential solution or path.
+        /// </summary>
         private class PotentialPath
         {
             public float currentCost;
