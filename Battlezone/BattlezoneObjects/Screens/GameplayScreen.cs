@@ -87,7 +87,7 @@ namespace Battlezone
                 TransitionOffTime = TimeSpan.FromSeconds(0.5);
                 try
                 {
-                    navPathFind = new PathFinder("Navigation Nodes.txt");
+                    //navPathFind = new PathFinder("Navigation Nodes.txt");
                 }
                 catch (Exception e)
                 {
