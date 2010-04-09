@@ -21,8 +21,8 @@ namespace Battlezone
     /// </summary>
     public class Actor : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        private ArrayList ActorModels;
-        private ContentManager meshLoader;
+        protected ArrayList ActorModels;
+        protected ContentManager meshLoader;
         protected ArrayList sMeshesToLoad;
 
         public ArrayList ModelBounds;
