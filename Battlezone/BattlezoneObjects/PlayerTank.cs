@@ -218,8 +218,8 @@ namespace Battlezone.BattlezoneObjects
                     effect.Projection = GameplayScreen.ProjectionMatrix;
 
                     effect.EnableDefaultLighting();
-                    //effect.PreferPerPixelLighting = true;
-                    //effect.AmbientLightColor = Color.White.ToVector3();
+                    effect.PreferPerPixelLighting = true;
+                    effect.AmbientLightColor = Color.White.ToVector3();
                 }
 
                 mesh.Draw();

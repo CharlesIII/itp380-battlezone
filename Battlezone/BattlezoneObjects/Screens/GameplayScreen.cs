@@ -123,9 +123,13 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(m_kSpawnManager);
 
             //Load Player Tank
-            m_kPlayer = new Battlezone.BattlezoneObjects.PlayerTank(ScreenManager.Game);
-            ScreenManager.Game.Components.Add(m_kPlayer);
+            //m_kPlayer = new Battlezone.BattlezoneObjects.PlayerTank(ScreenManager.Game);
+            //ScreenManager.Game.Components.Add(m_kPlayer);
 
+            Actor test = new Actor(ScreenManager.Game);
+            test.sMeshesToLoad.Add("enemyTank");
+            ScreenManager.Game.Components.Add(test);
+            test.Scale = 50.0f;
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
