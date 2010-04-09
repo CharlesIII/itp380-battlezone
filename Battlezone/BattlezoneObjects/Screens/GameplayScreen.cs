@@ -126,6 +126,7 @@ namespace Battlezone
             m_kPlayer = new Battlezone.BattlezoneObjects.PlayerTank(ScreenManager.Game);
             ScreenManager.Game.Components.Add(m_kPlayer);
 
+
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
             // it should not try to catch up.
@@ -198,6 +199,9 @@ namespace Battlezone
         /// </summary>
 		public override void HandleInput(InputState input, GameTime gameTime)
         {
+
+            float deltaTime = ((float)gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond) / 1000.0f;
+
             if (input == null)
                 throw new ArgumentNullException("input");
 
@@ -208,7 +212,14 @@ namespace Battlezone
             }
             else
             {
-                //figure out where input should go
+                if (input.TurnLeft)
+                {
+                    m_kPlayer.TurretRotation += (2 * deltaTime);
+                }
+                if (input.TurnRight)
+                {
+                    m_kPlayer.TurretRotation -=  (2 * deltaTime);
+                }
             }
         }
 

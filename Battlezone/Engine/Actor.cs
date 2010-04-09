@@ -23,7 +23,7 @@ namespace Battlezone
     {
         protected ArrayList ActorModels;
         protected ContentManager meshLoader;
-        protected ArrayList sMeshesToLoad;
+        public ArrayList sMeshesToLoad;
 
         public ArrayList ModelBounds;
         public BoundingSphere WorldBounds;

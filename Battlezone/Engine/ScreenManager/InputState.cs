@@ -133,7 +133,7 @@ namespace Battlezone
         /*
          * Goes pew pew pew
          */
-        public bool ShipFire
+        public bool Fire
         {
             get
             {
@@ -147,7 +147,7 @@ namespace Battlezone
         /*
          * Turns the ship left
          */
-        public bool ShipTurnLeft
+        public bool TurnLeft
         {
             get
             {
@@ -159,7 +159,7 @@ namespace Battlezone
         /*
          * Turns the ship right
          */
-        public bool ShipTurnRight
+        public bool TurnRight
         {
             get
             {
@@ -171,7 +171,7 @@ namespace Battlezone
         /*
          * Moves the ship forward
          */
-        public bool ShipMove
+        public bool Move
         {
             get
             {
@@ -183,7 +183,7 @@ namespace Battlezone
         /*
          * Moves the ship backward
          */
-        public bool ShipReverse
+        public bool Reverse
         {
             get
             {
