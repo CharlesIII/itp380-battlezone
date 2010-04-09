@@ -218,15 +218,11 @@ namespace Battlezone
         {
             if (m_bChanged)
             {
-                Matrix scaleMatrix = Matrix.CreateScale(m_fScale);
-                Matrix translateMatrix = Matrix.CreateTranslation(m_vWorldPosition);
-                Matrix rotateMatrix = Matrix.CreateFromQuaternion(m_Quat);
+                worldTransform = Matrix.CreateScale(m_fScale);
+                worldTransform *= Matrix.CreateFromQuaternion(m_Quat);
+                worldTransform *= Matrix.CreateTranslation(m_vWorldPosition);
 
-                worldTransform = scaleMatrix;
-                worldTransform *= rotateMatrix;
-                worldTransform *= translateMatrix;
-
-                WorldBounds.Center = m_vWorldPosition;
+                //WorldBounds.Center = m_vWorldPosition;
 
                 m_bChanged = false;
             }
