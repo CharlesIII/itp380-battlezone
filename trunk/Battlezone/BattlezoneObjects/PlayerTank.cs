@@ -22,6 +22,7 @@ namespace Battlezone.BattlezoneObjects
         public PlayerTank(Game game)
             : base(game)
         {
+            sMeshesToLoad.Add("playerTank");
             // TODO: Construct any child components here
         }
 
