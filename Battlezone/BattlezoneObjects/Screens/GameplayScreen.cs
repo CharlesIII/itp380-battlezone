@@ -59,6 +59,8 @@ namespace Battlezone
         private List<Actor> actorsToAdd;    //list of new actors to add to list of activeActors
         private List<Actor> actorsToRemove; //list of existing actors to be removed from list of activeActors;
 
+        private BattlezoneObjects.PlayerTank m_kPlayer;
+
         ContentManager content;
         SpriteFont gameFont;
 
@@ -119,6 +121,10 @@ namespace Battlezone
             //load spawn manager
             m_kSpawnManager = new SpawnManager(ScreenManager.Game);
             ScreenManager.Game.Components.Add(m_kSpawnManager);
+
+            //Load Player Tank
+            m_kPlayer = new Battlezone.BattlezoneObjects.PlayerTank(ScreenManager.Game);
+            ScreenManager.Game.Components.Add(m_kPlayer);
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
