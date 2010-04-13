@@ -23,6 +23,8 @@ namespace Battlezone
         ScreenManager screenManager;
         public Utils.FrameRateCounter m_kFrameRate;
 
+
+
         #region Properties
         public float fTargetMsPerFrame
         {
@@ -46,6 +48,8 @@ namespace Battlezone
             graphics.PreferredBackBufferWidth = 1024;
             graphics.PreferredBackBufferHeight = 768;
 
+            graphics.MinimumPixelShaderProfile = ShaderProfile.PS_2_0;
+
             // Create the screen manager component.
             screenManager = new ScreenManager(this);
 
@@ -61,6 +65,8 @@ namespace Battlezone
             // For testing purposes, let's disable fixed time step and vsync.
             IsFixedTimeStep = false;
             graphics.SynchronizeWithVerticalRetrace = false;
+
+
         }
 
         /// <summary>

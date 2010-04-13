@@ -70,6 +70,19 @@ namespace Battlezone
 
         SpawnManager m_kSpawnManager;
 
+        TimeSpan timeToNextProjectile = TimeSpan.Zero;
+
+        // The explosions effect works by firing projectiles up into the
+        // air, so we need to keep track of all the active projectiles.
+        List<Projectile> projectiles = new List<Projectile>();
+
+        private ParticleSystem explosionParticles;
+        private ParticleSystem explosionSmokeParticles;
+        private ParticleSystem projectileTrailParticles;
+        private ParticleSystem smokePlumeParticles;
+        private ParticleSystem fireParticles;
+
+
         #endregion
 
         #region Initialization
@@ -99,6 +112,8 @@ namespace Battlezone
             }
             else
                 throw new Exception("There should only be one GameplayeScreen object in existence.");
+
+
         }
 
         /// <summary>
@@ -130,6 +145,28 @@ namespace Battlezone
             test.sMeshesToLoad.Add("enemyTank");
             ScreenManager.Game.Components.Add(test);
             test.Scale = 50.0f;
+
+            // Construct our particle system components.
+            explosionParticles = new ExplosionParticleSystem(ScreenManager.Game, content);
+            explosionSmokeParticles = new ExplosionSmokeParticleSystem(ScreenManager.Game, content);
+            projectileTrailParticles = new ProjectileTrailParticleSystem(ScreenManager.Game, content);
+            smokePlumeParticles = new SmokePlumeParticleSystem(ScreenManager.Game, content);
+            fireParticles = new FireParticleSystem(ScreenManager.Game, content);
+
+            // Set the draw order so the explosions and fire
+            // will appear over the top of the smoke.
+            smokePlumeParticles.DrawOrder = 100;
+            explosionSmokeParticles.DrawOrder = 200;
+            projectileTrailParticles.DrawOrder = 300;
+            explosionParticles.DrawOrder = 400;
+            fireParticles.DrawOrder = 500;
+
+            // Register the particle system components.
+            ScreenManager.Game.Components.Add(explosionParticles);
+            ScreenManager.Game.Components.Add(explosionSmokeParticles);
+            ScreenManager.Game.Components.Add(projectileTrailParticles);
+            ScreenManager.Game.Components.Add(smokePlumeParticles);
+            ScreenManager.Game.Components.Add(fireParticles);
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -187,6 +224,9 @@ namespace Battlezone
                         }
                     }
 
+                    UpdateExplosions(gameTime);
+                    UpdateProjectiles(gameTime);
+
                     //perform activeActors maintenance
                     updateActors();
 
@@ -218,11 +258,17 @@ namespace Battlezone
             {
                 if (input.TurnLeft)
                 {
-                    m_kPlayer.TurretRotation += (2 * deltaTime);
+                    //m_kPlayer.TurretRotation += (2 * deltaTime);
+                    projectiles.Add(new Projectile(explosionParticles,
+                                              explosionSmokeParticles,
+                                              projectileTrailParticles));
                 }
                 if (input.TurnRight)
                 {
-                    m_kPlayer.TurretRotation -=  (2 * deltaTime);
+                    //m_kPlayer.TurretRotation -=  (2 * deltaTime);
+                    projectiles.Add(new Projectile(explosionParticles,
+                                              explosionSmokeParticles,
+                                              projectileTrailParticles));
                 }
             }
         }
@@ -235,9 +281,54 @@ namespace Battlezone
         {
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
                                                Color.Black, 0, 0);
+
+            explosionParticles.SetCamera(CameraMatrix, ProjectionMatrix);
+            explosionSmokeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
+            projectileTrailParticles.SetCamera(CameraMatrix, ProjectionMatrix);
+            smokePlumeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
+            fireParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             // If the game is transitioning on or off, fade it out to black.
             if (TransitionPosition > 0)
                 ScreenManager.FadeBackBufferToBlack(255 - TransitionAlpha);
+        }
+
+        void UpdateExplosions(GameTime gameTime)
+        {
+            timeToNextProjectile -= gameTime.ElapsedGameTime;
+
+            if (timeToNextProjectile <= TimeSpan.Zero)
+            {
+                // Create a new projectile once per second. The real work of moving
+                // and creating particles is handled inside the Projectile class.
+                projectiles.Add(new Projectile(explosionParticles,
+                                               explosionSmokeParticles,
+                                               projectileTrailParticles));
+
+                timeToNextProjectile += TimeSpan.FromSeconds(3);
+            }
+        }
+
+
+        /// <summary>
+        /// Helper for updating the list of active projectiles.
+        /// </summary>
+        void UpdateProjectiles(GameTime gameTime)
+        {
+            int i = 0;
+
+            while (i < projectiles.Count)
+            {
+                if (!projectiles[i].Update(gameTime))
+                {
+                    // Remove projectiles at the end of their life.
+                    projectiles.RemoveAt(i);
+                }
+                else
+                {
+                    // Advance to the next projectile.
+                    i++;
+                }
+            }
         }
 
         #endregion
@@ -281,6 +372,8 @@ namespace Battlezone
             }
             actorsToAdd.Clear();
         }
+
+
 
         /// <summary>
         /// Checks collisions between objects in game.

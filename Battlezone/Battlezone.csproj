@@ -109,6 +109,16 @@
     <Compile Include="Engine\ScreenManager\ScreenManager.cs" />
     <Compile Include="Engine\Utils\FrameRateCounter.cs" />
     <Compile Include="Engine\Utils\Timer.cs" />
+    <Compile Include="ParticleEmitter.cs" />
+    <Compile Include="ParticleSettings.cs" />
+    <Compile Include="ParticleSystem.cs" />
+    <Compile Include="ParticleSystems\ExplosionParticleSystem.cs" />
+    <Compile Include="ParticleSystems\ExplosionSmokeParticleSystem.cs" />
+    <Compile Include="ParticleSystems\FireParticleSystem.cs" />
+    <Compile Include="ParticleSystems\ProjectileTrailParticleSystem.cs" />
+    <Compile Include="ParticleSystems\SmokePlumeParticleSystem.cs" />
+    <Compile Include="ParticleVertex.cs" />
+    <Compile Include="Projectile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BattlezoneProgram.cs" />
     <Compile Include="BattlezoneGame.cs" />
