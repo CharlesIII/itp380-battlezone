@@ -146,7 +146,7 @@ namespace Battlezone
             // Fade the popup alpha during transitions.
             Color color = new Color(255, 255, 255, TransitionAlpha);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
 
             // Draw the background rectangle.
             spriteBatch.Draw(gradientTexture, backgroundRectangle, color);

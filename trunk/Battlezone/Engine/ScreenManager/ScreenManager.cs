@@ -307,7 +307,7 @@ namespace Battlezone
         {
             Viewport viewport = GraphicsDevice.Viewport;
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
 
             spriteBatch.Draw(blankTexture,
                              new Rectangle(0, 0, viewport.Width, viewport.Height),
