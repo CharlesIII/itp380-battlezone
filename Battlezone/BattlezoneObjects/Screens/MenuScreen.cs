@@ -171,7 +171,7 @@ namespace Battlezone
             else
                 position.X += transitionOffset * 512;
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
 
             // Draw each menu entry in turn.
             for (int i = 0; i < menuEntries.Count; i++)

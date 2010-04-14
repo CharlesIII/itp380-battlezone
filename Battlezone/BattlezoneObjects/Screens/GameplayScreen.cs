@@ -42,7 +42,7 @@ namespace Battlezone
         }
 
         public static Matrix CameraMatrix = Matrix.CreateLookAt(new Vector3(0.0f,0.0f,2000.0f),Vector3.Zero,Vector3.UnitY);
-        public static Matrix ProjectionMatrix = Matrix.CreateOrthographic(1024,768,0.1f,10000.0f);
+        public static Matrix ProjectionMatrix = Matrix.CreateOrthographic(1024,768,0.1f,100000.0f);
 
         public static Vector3 DiffuseColor = Color.Black.ToVector3();
         public static Vector3 DirLightDirection = new Vector3(1,-1,0);
@@ -84,6 +84,103 @@ namespace Battlezone
 
 
         #endregion
+
+        #region Chased object properties (set externally each frame)
+
+        /// <summary>
+        /// Position of object being chased.
+        /// </summary>
+        public Vector3 ChasePosition
+        {
+            get { return chasePosition; }
+            set { chasePosition = value; }
+        }
+        private Vector3 chasePosition;
+
+        /// <summary>
+        /// Direction the chased object is facing.
+        /// </summary>
+        public Vector3 ChaseDirection
+        {
+            get { return chaseDirection; }
+            set { chaseDirection = value; }
+        }
+        private Vector3 chaseDirection;
+
+        /// <summary>
+        /// Chased object's Up vector.
+        /// </summary>
+        public Vector3 Up
+        {
+            get { return up; }
+            set { up = value; }
+        }
+        private Vector3 up = Vector3.UnitY;
+
+        #endregion
+
+        #region Desired camera positioning (set when creating camera or changing view)
+
+        /// <summary>
+        /// Position of camera in world space.
+        /// </summary>
+        public Vector3 Position
+        {
+            get { return position; }
+        }
+        private Vector3 position;
+
+        /// <summary>
+        /// Desired camera position in the chased object's coordinate system.
+        /// </summary>
+        public Vector3 DesiredPositionOffset
+        {
+            get { return desiredPositionOffset; }
+            set { desiredPositionOffset = value; }
+        }
+        private Vector3 desiredPositionOffset = new Vector3(0.0f, 145.0f, 700.0f);
+
+        /// <summary>
+        /// Desired camera position in world space.
+        /// </summary>
+        public Vector3 DesiredPosition
+        {
+            get
+            {
+                // Ensure correct value even if update has not been called this frame
+                UpdateWorldPositions();
+                return desiredPosition;
+            }
+        }
+        private Vector3 desiredPosition;
+
+        /// <summary>
+        /// Look at point in the chased object's coordinate system.
+        /// </summary>
+        public Vector3 LookAtOffset
+        {
+            get { return lookAtOffset; }
+            set { lookAtOffset = value; }
+        }
+        private Vector3 lookAtOffset = new Vector3(0.0f, -5.0f, -100.0f);
+
+        /// <summary>
+        /// Look at point in world space.
+        /// </summary>
+        public Vector3 LookAt
+        {
+            get
+            {
+                // Ensure correct value even if update has not been called this frame
+                UpdateWorldPositions();
+
+                return lookAt;
+            }
+        }
+        private Vector3 lookAt;
+
+        #endregion
+
 
         #region Initialization
 
@@ -138,9 +235,11 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(m_kSpawnManager);
 
             //Load Player Tank
-            //m_kPlayer = new Battlezone.BattlezoneObjects.PlayerTank(ScreenManager.Game);
-            //ScreenManager.Game.Components.Add(m_kPlayer);
+            m_kPlayer = new Battlezone.BattlezoneObjects.PlayerTank(ScreenManager.Game);
+            ScreenManager.Game.Components.Add(m_kPlayer);
+            
 
+            /*
             Actor test = new Actor(ScreenManager.Game);
             test.sMeshesToLoad.Add("enemyTank");
             ScreenManager.Game.Components.Add(test);
@@ -167,6 +266,7 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(projectileTrailParticles);
             ScreenManager.Game.Components.Add(smokePlumeParticles);
             ScreenManager.Game.Components.Add(fireParticles);
+             * */
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -224,14 +324,21 @@ namespace Battlezone
                         }
                     }
 
-                    UpdateExplosions(gameTime);
-                    UpdateProjectiles(gameTime);
+                    //UpdateExplosions(gameTime);
+                    //UpdateProjectiles(gameTime);
 
                     //perform activeActors maintenance
                     updateActors();
 
                     //check for collisions
                     checkCollision();
+
+                    //Update Camera
+                    UpdateWorldPositions();
+                    ChasePosition = m_kPlayer.WorldPosition;
+                    ChaseDirection = (m_kPlayer.turretBone.Transform.Forward * -1);
+                    Up = Vector3.UnitY;
+                    CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
                 }
             }
         }
@@ -258,17 +365,15 @@ namespace Battlezone
             {
                 if (input.TurnLeft)
                 {
-                    //m_kPlayer.TurretRotation += (2 * deltaTime);
-                    projectiles.Add(new Projectile(explosionParticles,
-                                              explosionSmokeParticles,
-                                              projectileTrailParticles));
+                    m_kPlayer.TurretRotation += (2 * deltaTime);
+                    //projectiles.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles));
+                    //CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
                 }
                 if (input.TurnRight)
                 {
-                    //m_kPlayer.TurretRotation -=  (2 * deltaTime);
-                    projectiles.Add(new Projectile(explosionParticles,
-                                              explosionSmokeParticles,
-                                              projectileTrailParticles));
+                    m_kPlayer.TurretRotation -=  (2 * deltaTime);
+                    //projectiles.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles));
+                    //CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
                 }
             }
         }
@@ -282,15 +387,38 @@ namespace Battlezone
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
                                                Color.Black, 0, 0);
 
+            /*
             explosionParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             explosionSmokeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             projectileTrailParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             smokePlumeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             fireParticles.SetCamera(CameraMatrix, ProjectionMatrix);
+            */
             // If the game is transitioning on or off, fade it out to black.
             if (TransitionPosition > 0)
                 ScreenManager.FadeBackBufferToBlack(255 - TransitionAlpha);
         }
+
+        /// <summary>
+        /// Rebuilds object space values in world space. Invoke before publicly
+        /// returning or privately accessing world space values.
+        /// </summary>
+        private void UpdateWorldPositions()
+        {
+            // Construct a matrix to transform from object space to worldspace
+            Matrix transform = Matrix.Identity;
+            transform.Forward = ChaseDirection;
+            transform.Up = Up;
+            transform.Right = Vector3.Cross(Up, ChaseDirection);
+
+            // Calculate desired camera properties in world space
+            desiredPosition = ChasePosition +
+                Vector3.TransformNormal(DesiredPositionOffset, transform);
+            lookAt = ChasePosition +
+                Vector3.TransformNormal(LookAtOffset, transform);
+        }
+
+
 
         void UpdateExplosions(GameTime gameTime)
         {

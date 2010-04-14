@@ -103,13 +103,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="enemyTank.fbx">
-      <Name>enemyTank</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="explosion.png">
       <Name>explosion</Name>
       <Importer>TextureImporter</Importer>

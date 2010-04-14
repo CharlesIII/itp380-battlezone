@@ -36,7 +36,7 @@ namespace Battlezone.BattlezoneObjects
         ModelBone rightFrontWheelBone;
         ModelBone leftSteerBone;
         ModelBone rightSteerBone;
-        ModelBone turretBone;
+        public ModelBone turretBone;
         ModelBone cannonBone;
         ModelBone hatchBone;
 
@@ -48,7 +48,7 @@ namespace Battlezone.BattlezoneObjects
         Matrix rightFrontWheelTransform;
         Matrix leftSteerTransform;
         Matrix rightSteerTransform;
-        Matrix turretTransform;
+        public Matrix turretTransform;
         Matrix cannonTransform;
         Matrix hatchTransform;
 
@@ -143,6 +143,7 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your initialization code here
 
             base.Initialize();
+            Scale = 0.35f;
          
             COLLISION_IDENTIFIER = CollisionIdentifier.TANK;
         }
@@ -184,6 +185,8 @@ namespace Battlezone.BattlezoneObjects
 
         public override void Draw(GameTime gameTime)
         {
+            base.updateWorldTransform();
+
             // Set the world matrix as the root transform of the model.
             tankModel.Root.Transform = worldTransform;
 

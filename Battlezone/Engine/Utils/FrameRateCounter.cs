@@ -66,7 +66,7 @@ namespace Utils
         
         public override void Draw(GameTime gameTime)
         {
-            m_kSpriteBatch.Begin();
+            m_kSpriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
             
 			// Color this based on the framerate
             Color DrawColor = Color.Green;

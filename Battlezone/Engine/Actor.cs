@@ -210,11 +210,7 @@ namespace Battlezone
             base.UnloadContent();
         }
 
-        /// <summary>
-        /// Handles drawing an Actor's models.
-        /// </summary>
-        /// <param name="gameTime"></param>
-        public override void Draw(GameTime gameTime)
+        protected void updateWorldTransform()
         {
             if (m_bChanged)
             {
@@ -226,6 +222,17 @@ namespace Battlezone
 
                 m_bChanged = false;
             }
+        }
+
+        /// <summary>
+        /// Handles drawing an Actor's models.
+        /// </summary>
+        /// <param name="gameTime"></param>
+        public override void Draw(GameTime gameTime)
+        {
+            
+            updateWorldTransform();
+            
 
             GraphicsDevice.RenderState.DepthBufferEnable = true;
 
