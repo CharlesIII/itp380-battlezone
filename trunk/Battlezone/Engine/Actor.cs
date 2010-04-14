@@ -158,6 +158,7 @@ namespace Battlezone
             vForce = new Vector3(0.0f, 0.0f, 0.0f);
             vAcceleration = new Vector3(0.0f, 0.0f, 0.0f);
             COLLISION_IDENTIFIER = CollisionIdentifier.NONCOLLIDING;
+            GameplayScreen.Instance.addActor(this);
             base.Initialize();
         }
 

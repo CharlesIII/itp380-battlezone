@@ -120,6 +120,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="enemyTank.fbx">
+      <Name>enemyTank</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <Compile Include="font.spritefont">
       <Name>font</Name>
       <Importer>FontDescriptionImporter</Importer>

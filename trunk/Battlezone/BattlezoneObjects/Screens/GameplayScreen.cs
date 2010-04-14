@@ -244,7 +244,7 @@ namespace Battlezone
             test.sMeshesToLoad.Add("enemyTank");
             ScreenManager.Game.Components.Add(test);
             test.Scale = 50.0f;
-
+            
             // Construct our particle system components.
             explosionParticles = new ExplosionParticleSystem(ScreenManager.Game, content);
             explosionSmokeParticles = new ExplosionSmokeParticleSystem(ScreenManager.Game, content);
