@@ -57,7 +57,7 @@ namespace Battlezone.BattlezoneObjects
         // We could just allocate this locally inside the Draw method, but it
         // is more efficient to reuse a single array, as this avoids creating
         // unnecessary garbage.
-        Matrix[] boneTransforms;
+        //Matrix[] boneTransforms;      ----Using inherited matrix from Actor----
 
 
         // Current animation positions.
