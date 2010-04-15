@@ -17,6 +17,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using Battlezone.Engine;
+using Battlezone.BattlezoneObjects;
 #endregion
 
 namespace Battlezone
@@ -42,7 +43,7 @@ namespace Battlezone
         }
 
         public static Matrix CameraMatrix = Matrix.CreateLookAt(new Vector3(0.0f,0.0f,2000.0f),Vector3.Zero,Vector3.UnitY);
-        public static Matrix ProjectionMatrix = Matrix.CreateOrthographic(1024,768,0.1f,100000.0f);
+        public static Matrix ProjectionMatrix = Matrix.CreateOrthographic(1024,768,0.1f,100000.0f);     //TODO: This needs to be Perspective
 
         public static Vector3 DiffuseColor = Color.Black.ToVector3();
         public static Vector3 DirLightDirection = new Vector3(1,-1,0);
@@ -199,7 +200,7 @@ namespace Battlezone
                 TransitionOffTime = TimeSpan.FromSeconds(0.5);
                 try
                 {
-                    //navPathFind = new PathFinder("Navigation Nodes.txt");
+                    navPathFind = new PathFinder(@"..\..\..\BattlezoneObjects\Navigation Nodes.txt");
                 }
                 catch (Exception e)
                 {
@@ -235,16 +236,13 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(m_kSpawnManager);
 
             //Load Player Tank
-            m_kPlayer = new Battlezone.BattlezoneObjects.PlayerTank(ScreenManager.Game);
+            m_kPlayer = new PlayerTank(ScreenManager.Game);
             ScreenManager.Game.Components.Add(m_kPlayer);
-            
+
+            //AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3());
+            //ScreenManager.Game.Components.Add(test);
 
             /*
-            Actor test = new Actor(ScreenManager.Game);
-            test.sMeshesToLoad.Add("enemyTank");
-            ScreenManager.Game.Components.Add(test);
-            test.Scale = 50.0f;
-            
             // Construct our particle system components.
             explosionParticles = new ExplosionParticleSystem(ScreenManager.Game, content);
             explosionSmokeParticles = new ExplosionSmokeParticleSystem(ScreenManager.Game, content);

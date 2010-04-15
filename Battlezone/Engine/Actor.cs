@@ -118,7 +118,7 @@ namespace Battlezone
         public Matrix worldTransform;  
         //need to add additional offsets and rotations to generate compound matrices for the different models
         //we also need separate boundingspheres and boxes later
-        private Matrix[] boneTransforms;
+        protected Matrix[] boneTransforms;
 
         protected Utils.Timer timer;
 
