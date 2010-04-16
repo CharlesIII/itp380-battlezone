@@ -104,6 +104,7 @@
     <Compile Include="Engine\Actor.cs" />
     <Compile Include="Engine\CollisionIdentifier.cs" />
     <Compile Include="Engine\PathFinder.cs" />
+    <Compile Include="Engine\Projectile.cs" />
     <Compile Include="Engine\ScreenManager\GameScreen.cs" />
     <Compile Include="Engine\ScreenManager\InputState.cs" />
     <Compile Include="Engine\ScreenManager\ScreenManager.cs" />
@@ -118,7 +119,6 @@
     <Compile Include="Engine\ParticleSystems\ProjectileTrailParticleSystem.cs" />
     <Compile Include="Engine\ParticleSystems\SmokePlumeParticleSystem.cs" />
     <Compile Include="Engine\ParticleVertex.cs" />
-    <Compile Include="Projectile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BattlezoneProgram.cs" />
     <Compile Include="BattlezoneGame.cs" />
