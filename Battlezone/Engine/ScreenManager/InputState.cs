@@ -145,7 +145,7 @@ namespace Battlezone
         }
 
         /*
-         * Turns the ship left
+         * Turns the tank left
          */
         public bool TurnLeft
         {
@@ -157,7 +157,32 @@ namespace Battlezone
         }
 
         /*
-         * Turns the ship right
+         * Turns the tank left
+         */
+        public bool TurretLeft
+        {
+            get
+            {
+                return IsNewKeyPress(Keys.Left) ||
+                       IsKeyHeld(Keys.Left);
+            }
+        }
+
+        /*
+         * Turns the tank left
+         */
+        public bool TurretRight
+        {
+            get
+            {
+                return IsNewKeyPress(Keys.Right) ||
+                       IsKeyHeld(Keys.Right);
+            }
+        }
+
+
+        /*
+         * Turns the tank right
          */
         public bool TurnRight
         {
@@ -169,7 +194,7 @@ namespace Battlezone
         }
 
         /*
-         * Moves the ship forward
+         * Moves the tank forward
          */
         public bool Move
         {
@@ -181,7 +206,7 @@ namespace Battlezone
         }
 
         /*
-         * Moves the ship backward
+         * Moves the tank backward
          */
         public bool Reverse
         {
