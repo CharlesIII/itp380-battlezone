@@ -241,6 +241,9 @@ namespace Battlezone
             m_kPlayer = new PlayerTank(ScreenManager.Game);
             ScreenManager.Game.Components.Add(m_kPlayer);
 
+            Level l = new Level(ScreenManager.Game);
+            ScreenManager.Game.Components.Add(l);
+
             //AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3());
             //ScreenManager.Game.Components.Add(test);
 

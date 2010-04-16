@@ -136,11 +136,19 @@
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="world.fbx">
-      <Name>world</Name>
+    <Compile Include="ground.fbx">
+      <Name>ground</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ground-texture.jpg">
+      <Name>ground-texture</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
