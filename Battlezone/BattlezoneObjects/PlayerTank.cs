@@ -61,12 +61,13 @@ namespace Battlezone.BattlezoneObjects
 
 
         // Current animation positions.
-        float wheelRotationValue;
+        float LwheelRotationValue;
+        float RwheelRotationValue;
         float steerRotationValue;
         float turretRotationValue;
         float cannonRotationValue;
         float hatchRotationValue;
-
+        public float turnDirection = 1.0f;
 
         #endregion
 
@@ -76,10 +77,19 @@ namespace Battlezone.BattlezoneObjects
         /// <summary>
         /// Gets or sets the wheel rotation amount.
         /// </summary>
-        public float WheelRotation
+        public float LWheelRotation
         {
-            get { return wheelRotationValue; }
-            set { wheelRotationValue = value; }
+            get { return LwheelRotationValue; }
+            set { LwheelRotationValue = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the wheel rotation amount.
+        /// </summary>
+        public float RWheelRotation
+        {
+            get { return RwheelRotationValue; }
+            set { RwheelRotationValue = value; }
         }
 
 
@@ -91,6 +101,7 @@ namespace Battlezone.BattlezoneObjects
             get { return steerRotationValue; }
             set { steerRotationValue = value; }
         }
+
 
 
         /// <summary>
@@ -191,17 +202,18 @@ namespace Battlezone.BattlezoneObjects
             tankModel.Root.Transform = worldTransform;
 
             // Calculate matrices based on the current animation position.
-            Matrix wheelRotation = Matrix.CreateRotationX(wheelRotationValue);
+            Matrix LwheelRotation = Matrix.CreateRotationX(LwheelRotationValue);
+            Matrix RwheelRotation = Matrix.CreateRotationX(RwheelRotationValue);
             Matrix steerRotation = Matrix.CreateRotationY(steerRotationValue);
             Matrix turretRotation = Matrix.CreateRotationY(turretRotationValue);
             Matrix cannonRotation = Matrix.CreateRotationX(cannonRotationValue);
             Matrix hatchRotation = Matrix.CreateRotationX(hatchRotationValue);
 
             // Apply matrices to the relevant bones.
-            leftBackWheelBone.Transform = wheelRotation * leftBackWheelTransform;
-            rightBackWheelBone.Transform = wheelRotation * rightBackWheelTransform;
-            leftFrontWheelBone.Transform = wheelRotation * leftFrontWheelTransform;
-            rightFrontWheelBone.Transform = wheelRotation * rightFrontWheelTransform;
+            leftBackWheelBone.Transform = LwheelRotation * leftBackWheelTransform;
+            rightBackWheelBone.Transform = RwheelRotation * rightBackWheelTransform;
+            leftFrontWheelBone.Transform = LwheelRotation * leftFrontWheelTransform;
+            rightFrontWheelBone.Transform = RwheelRotation * rightFrontWheelTransform;
             leftSteerBone.Transform = steerRotation * leftSteerTransform;
             rightSteerBone.Transform = steerRotation * rightSteerTransform;
             turretBone.Transform = turretRotation * turretTransform;
