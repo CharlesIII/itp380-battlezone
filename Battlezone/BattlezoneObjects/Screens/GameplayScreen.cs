@@ -191,6 +191,7 @@ namespace Battlezone
         /// </summary>
         public GameplayScreen()
         {
+            
             if (instance == null)
             {
                 activeActors = new List<Actor>();
@@ -200,7 +201,7 @@ namespace Battlezone
                 TransitionOffTime = TimeSpan.FromSeconds(0.5);
                 try
                 {
-                    navPathFind = new PathFinder(@"..\..\..\BattlezoneObjects\Navigation Nodes.txt");
+                    //navPathFind = new PathFinder(@"..\..\..\BattlezoneObjects\Navigation Nodes.txt");
                 }
                 catch (Exception e)
                 {

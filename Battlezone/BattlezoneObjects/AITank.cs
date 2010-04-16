@@ -138,8 +138,12 @@ namespace Battlezone.BattlezoneObjects
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
-            if ((m_vCurrentTarget - WorldPosition).Length > 0.5f)
-                Velocity = (m_vCurrentTarget - WorldPosition).Normalize() * 5.0f;
+            if ((m_vCurrentTarget - WorldPosition).Length() > 0.5f)
+            {
+                Vector3 temp = m_vCurrentTarget - WorldPosition;
+                temp.Normalize();
+                Velocity =  temp * 5.0f;
+            }
             else
                 Velocity = new Vector3(0.0f);
 
