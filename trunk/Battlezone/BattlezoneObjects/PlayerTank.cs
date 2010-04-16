@@ -143,7 +143,7 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your initialization code here
 
             base.Initialize();
-            Scale = 0.35f;
+            Scale = 0.15f;
          
             COLLISION_IDENTIFIER = CollisionIdentifier.TANK;
         }
@@ -210,6 +210,8 @@ namespace Battlezone.BattlezoneObjects
 
             // Look up combined bone matrices for the entire model.
             tankModel.CopyAbsoluteBoneTransformsTo(boneTransforms);
+
+            GraphicsDevice.RenderState.DepthBufferEnable = true;
 
             // Draw the model.
             foreach (ModelMesh mesh in tankModel.Meshes)
