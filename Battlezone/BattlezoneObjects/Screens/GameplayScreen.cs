@@ -43,7 +43,8 @@ namespace Battlezone
         }
 
         public static Matrix CameraMatrix = Matrix.CreateLookAt(new Vector3(0.0f,0.0f,2000.0f),Vector3.Zero,Vector3.UnitY);
-        public static Matrix ProjectionMatrix = Matrix.CreateOrthographic(1024,768,0.1f,100000.0f);     //TODO: This needs to be Perspective
+        //public static Matrix ProjectionMatrix = Matrix.CreateOrthographic(1024,768,0.00001f,10000.0f);     //TODO: This needs to be Perspective
+        public static Matrix ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(75.0f * (float)Math.PI / 180.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 
         public static Vector3 DiffuseColor = Color.Black.ToVector3();
         public static Vector3 DirLightDirection = new Vector3(1,-1,0);
@@ -139,7 +140,7 @@ namespace Battlezone
             get { return desiredPositionOffset; }
             set { desiredPositionOffset = value; }
         }
-        private Vector3 desiredPositionOffset = new Vector3(0.0f, 145.0f, 700.0f);
+        private Vector3 desiredPositionOffset = new Vector3(0.0f, 130.0f, 1200.0f);
 
         /// <summary>
         /// Desired camera position in world space.
@@ -163,7 +164,7 @@ namespace Battlezone
             get { return lookAtOffset; }
             set { lookAtOffset = value; }
         }
-        private Vector3 lookAtOffset = new Vector3(0.0f, -5.0f, -100.0f);
+        private Vector3 lookAtOffset = new Vector3(0.0f, 10.0f, -10.0f);
 
         /// <summary>
         /// Look at point in world space.
@@ -379,15 +380,30 @@ namespace Battlezone
                 if (input.TurnLeft)
                 {
                     //m_kPlayer.TurretRotation += ((float)Math.PI / 5) * deltaTime;
+                    m_kPlayer.SteerRotation = (float)Math.PI / 5;
                     m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), ((float)Math.PI/5) * deltaTime);
                 }
 
                 if (input.TurnRight)
                 {
                     //m_kPlayer.TurretRotation -= ((float)Math.PI / 5) * deltaTime;
+                    m_kPlayer.SteerRotation = -(float)Math.PI / 5;
                     m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, -1.0f, 0.0f), ((float)Math.PI/5) * deltaTime);
                 }
 
+                if (input.Move)
+                {
+                    m_kPlayer.WheelRotation += (2 * deltaTime);
+                }
+
+                if (input.Reverse)
+                {
+                    m_kPlayer.WheelRotation -= (2 * deltaTime);
+                }
+                if (!input.TurnLeft && !input.TurnRight)
+                {
+                    m_kPlayer.SteerRotation = 0.0f;
+                }
             }
         }
 
