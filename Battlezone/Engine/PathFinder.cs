@@ -10,14 +10,14 @@ namespace Battlezone.Engine
     /// <summary>
     /// This class implements A* for pathfinding. It handles the loading and generation of a graph from a text file
     /// with the following format:
-    /// "xyz xyz"
+    /// "x,y,z x,y,z"
     /// where xyz are coordinates for navigation nodes in world space. Two nodes on a line indicate that an edge 
     /// exists between those nodes.
     /// </summary>
     public class PathFinder
     {
         private const int EXPECTED_NUMBER_OF_TOKENS = 2;
-        private const int EXPECTED_TOKEN_LENGTH = 3;
+        private const int EXPECTED_TOKEN_LENGTH = 8;
 
         StreamReader fileReader;
         Hashtable graph;    //key-value pair between "xyz" and Vertex objects
@@ -71,10 +71,22 @@ namespace Battlezone.Engine
                     string pos1 = tokens[0];
                     string pos2 = tokens[1];
 
-                    if (pos1.Length != EXPECTED_TOKEN_LENGTH || pos2.Length != EXPECTED_TOKEN_LENGTH)
+                    if (pos1.Length > EXPECTED_TOKEN_LENGTH || pos2.Length > EXPECTED_TOKEN_LENGTH)
                         throw new Exception("Input file is incorrectly formatted.");
                     else
                     {
+                        string[] pos1Components = pos1.Split(',');
+                        string[] pos2Components = pos2.Split(',');
+
+                        //reconstruct the string representation without commas
+                        pos1 = "";
+                        pos2 = "";
+                        for (int i = 0; i < pos1Components.Length; i++)
+                        {
+                            pos1 += pos1Components[i];
+                            pos2 += pos2Components[i];
+                        }
+
                         Vertex firstVertex;
                         Vertex secondVertex;
 
@@ -84,7 +96,7 @@ namespace Battlezone.Engine
                         }
                         else
                         {
-                            firstVertex = new Vertex(float.Parse(pos1[0].ToString()), float.Parse(pos1[1].ToString()), float.Parse(pos1[2].ToString()));
+                            firstVertex = new Vertex(float.Parse(pos1Components[0].ToString()), float.Parse(pos1Components[1].ToString()), float.Parse(pos1Components[2].ToString()));
                             navNodes.Add(firstVertex.position);
                             graph.Add(pos1, firstVertex);
                         }
@@ -95,7 +107,7 @@ namespace Battlezone.Engine
                         }
                         else
                         {
-                            secondVertex = new Vertex(float.Parse(pos2[0].ToString()), float.Parse(pos2[1].ToString()), float.Parse(pos2[2].ToString()));
+                            secondVertex = new Vertex(float.Parse(pos2Components[0].ToString()), float.Parse(pos2Components[1].ToString()), float.Parse(pos2Components[2].ToString()));
                             navNodes.Add(secondVertex.position);
                             graph.Add(pos2, secondVertex);
                         }

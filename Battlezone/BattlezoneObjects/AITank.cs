@@ -61,19 +61,20 @@ namespace Battlezone.BattlezoneObjects
 
             base.Initialize();
 
-            Scale = 50.0f;
+            navNodes = navigation.GetNavigationNodes();
 
-            COLLISION_IDENTIFIER = CollisionIdentifier.TANK;
+            Random rg = new Random();
+            m_vPatrolBegin = (Vector3)navNodes[rg.Next(navNodes.Count)];
+            m_vPatrolEnd = (Vector3)navNodes[rg.Next(navNodes.Count)];
+            WorldPosition = m_vPatrolBegin;
 
             //set the initial targets to be the current position so the tank doesn't move
             m_vCurrentTarget = WorldPosition;
             m_vNewTarget = WorldPosition;
 
-            navNodes = navigation.GetNavigationNodes();
+            Scale = 50.0f;
 
-            Random rg = new Random();
-            //m_vPatrolBegin = navNodes[rg.Next(navNodes.Count)];
-            //m_vPatrolEnd = navNodes[rg.Next(navNodes.Count)];
+            COLLISION_IDENTIFIER = CollisionIdentifier.TANK;         
         }
 
         /// <summary>
@@ -137,16 +138,25 @@ namespace Battlezone.BattlezoneObjects
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
+            //check to see if we're close to the target position
             if ((m_vCurrentTarget - WorldPosition).Length() > 0.5f)
             {
                 Vector3 temp = m_vCurrentTarget - WorldPosition;
                 temp.Normalize();
-                //if (Vector3.Dot(GetWorldFacing().Normalize, temp) ==;
+                Vector3 facing = GetWorldFacing();
+                facing.Normalize();
+                if (Vector3.Dot(facing, temp) != 1)
                 Velocity =  temp * 5.0f;
             }
             else
+            {
+                //we're close enough so stop moving and snap position
                 Velocity = new Vector3(0.0f);
+                WorldPosition = m_vCurrentTarget;
+
+                //check to see if there's a new target that was set while we were moving to the current one
+                
+            }
 
             base.Update(gameTime);
 
