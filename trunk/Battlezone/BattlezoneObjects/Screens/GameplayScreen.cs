@@ -239,7 +239,9 @@ namespace Battlezone
 
             //Load Player Tank
             m_kPlayer = new PlayerTank(ScreenManager.Game);
-            ScreenManager.Game.Components.Add(m_kPlayer);
+            //ScreenManager.Game.Components.Add(m_kPlayer);
+            /* Debug usage for AI Tank testing*/
+            m_kPlayer.Initialize();
 
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
@@ -367,51 +369,54 @@ namespace Battlezone
             }
             else
             {
-                if (input.TurretLeft)
+                if (m_kPlayer != null)
                 {
-                    m_kPlayer.TurretRotation += (2 * deltaTime);
-                    //projectiles.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles));
-                    //CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
-                }
-                if (input.TurretRight)
-                {
-                    m_kPlayer.TurretRotation -=  (2 * deltaTime);
-                    //projectiles.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles));
-                    //CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
-                }
+                    if (input.TurretLeft)
+                    {
+                        m_kPlayer.TurretRotation += (2 * deltaTime);
+                        //projectiles.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles));
+                        //CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
+                    }
+                    if (input.TurretRight)
+                    {
+                        m_kPlayer.TurretRotation -= (2 * deltaTime);
+                        //projectiles.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles));
+                        //CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
+                    }
 
-                if (input.TurnLeft)
-                {
-                    //m_kPlayer.TurretRotation += ((float)Math.PI / 5) * deltaTime;
-                    //m_kPlayer.SteerRotation = (float)Math.PI / 5;
-                    m_kPlayer.LWheelRotation -= (2 * deltaTime);
-                    m_kPlayer.RWheelRotation += (2 * deltaTime);
-                    m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), ((float)Math.PI/5) * deltaTime);
-                }
+                    if (input.TurnLeft)
+                    {
+                        //m_kPlayer.TurretRotation += ((float)Math.PI / 5) * deltaTime;
+                        //m_kPlayer.SteerRotation = (float)Math.PI / 5;
+                        m_kPlayer.LWheelRotation -= (2 * deltaTime);
+                        m_kPlayer.RWheelRotation += (2 * deltaTime);
+                        m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), ((float)Math.PI / 5) * deltaTime);
+                    }
 
-                if (input.TurnRight)
-                {
-                    //m_kPlayer.TurretRotation -= ((float)Math.PI / 5) * deltaTime;
-                    //m_kPlayer.SteerRotation = -(float)Math.PI / 5;
-                    m_kPlayer.LWheelRotation += (2 * deltaTime);
-                    m_kPlayer.RWheelRotation -= (2 * deltaTime);
-                    m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, -1.0f, 0.0f), ((float)Math.PI/5) * deltaTime);
-                }
+                    if (input.TurnRight)
+                    {
+                        //m_kPlayer.TurretRotation -= ((float)Math.PI / 5) * deltaTime;
+                        //m_kPlayer.SteerRotation = -(float)Math.PI / 5;
+                        m_kPlayer.LWheelRotation += (2 * deltaTime);
+                        m_kPlayer.RWheelRotation -= (2 * deltaTime);
+                        m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, -1.0f, 0.0f), ((float)Math.PI / 5) * deltaTime);
+                    }
 
-                if (input.Move)
-                {
-                    m_kPlayer.LWheelRotation += (2 * deltaTime);
-                    m_kPlayer.RWheelRotation += (2 * deltaTime);
-                }
+                    if (input.Move)
+                    {
+                        m_kPlayer.LWheelRotation += (2 * deltaTime);
+                        m_kPlayer.RWheelRotation += (2 * deltaTime);
+                    }
 
-                if (input.Reverse)
-                {
-                    m_kPlayer.LWheelRotation -= (2 * deltaTime);
-                    m_kPlayer.RWheelRotation -= (2 * deltaTime);
-                }
-                if (!input.TurnLeft && !input.TurnRight)
-                {
-                    m_kPlayer.SteerRotation = 0.0f;
+                    if (input.Reverse)
+                    {
+                        m_kPlayer.LWheelRotation -= (2 * deltaTime);
+                        m_kPlayer.RWheelRotation -= (2 * deltaTime);
+                    }
+                    if (!input.TurnLeft && !input.TurnRight)
+                    {
+                        m_kPlayer.SteerRotation = 0.0f;
+                    }
                 }
             }
         }

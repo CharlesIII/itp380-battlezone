@@ -27,7 +27,7 @@ namespace Battlezone
             {
                 Console.WriteLine(v.ToString());
             }
-             */
+            */
         }
     }
 }
