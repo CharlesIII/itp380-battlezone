@@ -35,21 +35,20 @@ namespace Battlezone.BattlezoneObjects
         Vector3 m_vPlayerPosition;
         Vector3 m_vCurrentTarget;
         Vector3 m_vNewTarget;
-        Vector3[] patrolPath;   //probably need to pass in a file to load
+        Vector3 m_vPatrolBegin;
+        Vector3 m_vPatrolEnd;
 
         string patrolFilePath;
 
         float turretRotationValue;
 
-        public AITank(Game game, PathFinder pf, Vector3 playerPos, string patrolFile)
+        public AITank(Game game, PathFinder pf, Vector3 playerPos)
             : base(game)
         {
             // TODO: Construct any child components here
             sMeshesToLoad.Add("enemyTank");
             navigation = pf;
             m_vPlayerPosition = playerPos;  //AI always knows where the player is
-
-            patrolFilePath = patrolFile;
         }
 
         /// <summary>
@@ -72,8 +71,9 @@ namespace Battlezone.BattlezoneObjects
 
             navNodes = navigation.GetNavigationNodes();
 
-            //need to write loader code here for patrol path
-            //otherwise, maybe i could perform a DFS of the navigation graph and take the first cycle i find as the path?
+            Random rg = new Random();
+            //m_vPatrolBegin = navNodes[rg.Next(navNodes.Count)];
+            //m_vPatrolEnd = navNodes[rg.Next(navNodes.Count)];
         }
 
         /// <summary>
@@ -142,6 +142,7 @@ namespace Battlezone.BattlezoneObjects
             {
                 Vector3 temp = m_vCurrentTarget - WorldPosition;
                 temp.Normalize();
+                //if (Vector3.Dot(GetWorldFacing().Normalize, temp) ==;
                 Velocity =  temp * 5.0f;
             }
             else

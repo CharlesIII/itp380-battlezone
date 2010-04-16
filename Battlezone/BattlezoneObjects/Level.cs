@@ -26,6 +26,7 @@ namespace Battlezone.BattlezoneObjects
             : base(game)
         {
             // TODO: Construct any child components here
+            sMeshesToLoad.Add("ground");
         }
 
         /// <summary>
@@ -37,11 +38,12 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your initialization code here
 
             base.Initialize();
+            Scale = 100.0f;
         }
 
         protected override void LoadContent()
         {
-            //TODO: Add customer content loading logic
+            base.LoadContent();
         }
 
         /// <summary>
