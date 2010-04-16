@@ -335,7 +335,8 @@ namespace Battlezone
                     //Update Camera
                     UpdateWorldPositions();
                     ChasePosition = m_kPlayer.WorldPosition;
-                    ChaseDirection = (m_kPlayer.turretBone.Transform.Forward * -1);
+                    Matrix temp = m_kPlayer.worldTransform * m_kPlayer.turretBone.Transform;
+                    ChaseDirection = (temp.Forward * -1);
                     Up = Vector3.UnitY;
                     CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
                 }
@@ -362,18 +363,31 @@ namespace Battlezone
             }
             else
             {
-                if (input.TurnLeft)
+                if (input.TurretLeft)
                 {
                     m_kPlayer.TurretRotation += (2 * deltaTime);
                     //projectiles.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles));
                     //CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
                 }
-                if (input.TurnRight)
+                if (input.TurretRight)
                 {
                     m_kPlayer.TurretRotation -=  (2 * deltaTime);
                     //projectiles.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles));
                     //CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
                 }
+
+                if (input.TurnLeft)
+                {
+                    //m_kPlayer.TurretRotation += ((float)Math.PI / 5) * deltaTime;
+                    m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), ((float)Math.PI/5) * deltaTime);
+                }
+
+                if (input.TurnRight)
+                {
+                    //m_kPlayer.TurretRotation -= ((float)Math.PI / 5) * deltaTime;
+                    m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, -1.0f, 0.0f), ((float)Math.PI/5) * deltaTime);
+                }
+
             }
         }
 
