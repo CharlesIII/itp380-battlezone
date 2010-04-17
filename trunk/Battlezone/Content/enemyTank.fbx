@@ -10,18 +10,18 @@ FBXHeaderExtension:  {
         Version: 1000
         Year: 2010
         Month: 4
-        Day: 16
-        Hour: 19
-        Minute: 20
-        Second: 51
-        Millisecond: 435
+        Day: 17
+        Hour: 15
+        Minute: 28
+        Second: 16
+        Millisecond: 744
     }
     Creator: "FBX SDK/FBX Plugins version 2009.3"
     OtherFlags:  {
         FlagPLE: 0
     }
 }
-CreationTime: "2010-04-16 19:20:51:435"
+CreationTime: "2010-04-17 15:28:16:744"
 Creator: "FBX SDK/FBX Plugins build 20080926"
 
 ; Document Description
@@ -135,7 +135,7 @@ Objects:  {
             Property: "NegativePercentShapeSupport", "bool", "",1
             Property: "DefaultAttributeIndex", "int", "",0
             Property: "Lcl Translation", "Lcl Translation", "A+",0,0,0
-            Property: "Lcl Rotation", "Lcl Rotation", "A+",0,0,0
+            Property: "Lcl Rotation", "Lcl Rotation", "A+",0,90,0
             Property: "Lcl Scaling", "Lcl Scaling", "A+",2.06172941422784,2.06172941422784,2.06172941422784
             Property: "Visibility", "Visibility", "A+",1
             Property: "Color", "ColorRGB", "N",0.8,0.8,0.8
@@ -353,7 +353,7 @@ Objects:  {
             Property: "NegativePercentShapeSupport", "bool", "",1
             Property: "DefaultAttributeIndex", "int", "",0
             Property: "Lcl Translation", "Lcl Translation", "A+",0,0,0
-            Property: "Lcl Rotation", "Lcl Rotation", "A+",0,0,0
+            Property: "Lcl Rotation", "Lcl Rotation", "A+",0,90,0
             Property: "Lcl Scaling", "Lcl Scaling", "A+",2.06172941422784,2.06172941422784,2.06172941422784
             Property: "Visibility", "Visibility", "A+",1
             Property: "Color", "ColorRGB", "N",0.8,0.8,0.8
@@ -695,7 +695,7 @@ Objects:  {
             Property: "NegativePercentShapeSupport", "bool", "",1
             Property: "DefaultAttributeIndex", "int", "",0
             Property: "Lcl Translation", "Lcl Translation", "A+",0,0,0
-            Property: "Lcl Rotation", "Lcl Rotation", "A+",0,0,0
+            Property: "Lcl Rotation", "Lcl Rotation", "A+",0,90,0
             Property: "Lcl Scaling", "Lcl Scaling", "A+",2.06172941422784,2.06172941422784,2.06172941422784
             Property: "Visibility", "Visibility", "A+",1
             Property: "Color", "ColorRGB", "N",0.8,0.8,0.8
@@ -1076,14 +1076,14 @@ Objects:  {
             Property: "Original|ApplicationVendor", "KString", "", "Autodesk"
             Property: "Original|ApplicationName", "KString", "", "Maya"
             Property: "Original|ApplicationVersion", "KString", "", "2009.3"
-            Property: "Original|DateTime_GMT", "DateTime", "", "17/04/2010 02:20:51.435"
+            Property: "Original|DateTime_GMT", "DateTime", "", "17/04/2010 22:28:16.744"
             Property: "Original|FileName", "KString", "", "C:/Users/Xin Liu/Desktop/School/ITP-380/Final - Battlezone/Battlezone/Content/enemyTank.fbx"
              
             Property: "LastSaved", "Compound", ""
             Property: "LastSaved|ApplicationVendor", "KString", "", "Autodesk"
             Property: "LastSaved|ApplicationName", "KString", "", "Maya"
             Property: "LastSaved|ApplicationVersion", "KString", "", "2009.3"
-            Property: "LastSaved|DateTime_GMT", "DateTime", "", "17/04/2010 02:20:51.435"
+            Property: "LastSaved|DateTime_GMT", "DateTime", "", "17/04/2010 22:28:16.744"
         }
     }
     Material: "Material::texture_shader", "" {
