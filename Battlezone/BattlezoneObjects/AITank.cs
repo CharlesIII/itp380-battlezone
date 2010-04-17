@@ -20,9 +20,9 @@ namespace Battlezone.BattlezoneObjects
     /// </summary>
     public class AITank : Actor
     {
-        const float TURRET_ROTATION_SPEED = 2.5f;
+        const float TURRET_ROTATION_SPEED = 1.0f;
         const float AUTOMATIC_DETECTION_RADIUS = 20.0f;
-        const float TANK_ROTATION_SPEED = 1.5f;
+        const float TANK_ROTATION_SPEED = 1.25f;
 
         ModelBone chassisBone;
         ModelBone turretBone;
@@ -79,9 +79,9 @@ namespace Battlezone.BattlezoneObjects
 
             base.Initialize();
 
-            fMass = 500;
+            fMass = 10;
             bPhysicsDriven = true;
-            fTerminalVelocity = 5.0f;
+            fTerminalVelocity = 200.0f;
 
             navNodes = navigation.GetNavigationNodes();
 
@@ -173,7 +173,7 @@ namespace Battlezone.BattlezoneObjects
             timer.Update(gameTime);
 
             //first update the tank's position
-            if ((m_vCurrentPathTarget - WorldPosition).Length() < 0.5f)
+            if ((m_vCurrentPathTarget - WorldPosition).Length() < 5.0f)
             {
                 //we're close enough so stop moving and snap position
                 Velocity = new Vector3(0.0f);
@@ -187,7 +187,7 @@ namespace Battlezone.BattlezoneObjects
                     RotAngle += TANK_ROTATION_SPEED * fDelta;
                     
                     //clamp RotAngle to target if close enough
-                    if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.5f)
+                    if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.10f)
                         RotAngle = targetTankRotationValue;
                     Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
                 }
@@ -197,7 +197,7 @@ namespace Battlezone.BattlezoneObjects
                     RotAngle -= TANK_ROTATION_SPEED * fDelta;
 
                     //clamp RotAngle to target if close enough
-                    if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.5f)
+                    if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.10f)
                         RotAngle = targetTankRotationValue;
                     Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
                 }
@@ -228,12 +228,13 @@ namespace Battlezone.BattlezoneObjects
                 }
             }
 
-            
+            //Console.Out.WriteLine(WorldPosition);
+            //Console.Out.WriteLine(m_vCurrentPathTarget);
             //Console.Out.WriteLine(currentState);
 
-            //now perform AI logic
             /****************************************************************
              * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             * AI LOGIC CODE
              * REMINDER TO SELF: come up with a way to resolve or avoid 
              * collisions in paths of the AI tanks.
              * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -284,21 +285,24 @@ namespace Battlezone.BattlezoneObjects
 
                 //set the force vector to be in the right direction
                 Force = (m_vCurrentPathTarget - WorldPosition);
-
+                Vector3 tempForce = Force;
                 //figure out how much we need to rotate by and whether the rotation should CW or CCW
                 Vector3 Facing = GetWorldFacing();
-                Force.Normalize();
+                Facing.X *= -1; //I don't even know
+                tempForce.Normalize();
                 Facing.Normalize();
                 Console.Out.WriteLine(Force);
-                Console.Out.WriteLine(tankModel.Root.Transform.Forward);
-                float deltaRotationValue = (float)Math.Acos((Double)Vector3.Dot(Force, Facing)); //what a terrible casting mess...
+                Console.Out.WriteLine(Facing);
+                float deltaRotationValue = (float)Math.Acos((Double)Vector3.Dot(tempForce, Facing)); //what a terrible casting mess...
+                Console.Out.WriteLine(Vector3.Dot(tempForce, Facing));
+                Console.Out.WriteLine(deltaRotationValue);
                 if (Vector3.Cross(Force, Facing).Y > 0.0f)
                     targetTankRotationValue = RotAngle + deltaRotationValue;
                 else
                     targetTankRotationValue = RotAngle - deltaRotationValue;
 
                 //set the magnitude of the Force vector
-                Force = Force * fTerminalVelocity;
+                Force = tempForce * fTerminalVelocity;
 
                 currentState = AIStates.PATROL;
 
