@@ -25,7 +25,7 @@ namespace Battlezone.BattlezoneObjects
         const float TURRET_ROTATION_SPEED = 1.0f;
         const float AUTOMATIC_DETECTION_RADIUS = 20.0f;
         const float TANK_ROTATION_SPEED = 1.25f;
-        const float PURSUIT_DURATION = 10.0f;
+        const float PURSUIT_DURATION = 30.0f;
 
         ModelBone chassisBone;
         ModelBone turretBone;
