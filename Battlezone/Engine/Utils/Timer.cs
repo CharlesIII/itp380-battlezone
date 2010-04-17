@@ -143,6 +143,15 @@ namespace Utils
             else
                 return -1.0f;
 		}
+
+        /// <summary>
+        /// GetNumberOfTimers gets the number of TimerInstances registered to this timer.
+        /// </summary>
+        /// <returns></returns>
+        public int GetNumberOfTimers()
+        {
+            return m_kTimers.Count;
+        }
 		#endregion
 	}
 }
