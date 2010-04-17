@@ -20,9 +20,12 @@ namespace Battlezone.BattlezoneObjects
     /// </summary>
     public class AITank : Actor
     {
+        #region Variables
+
         const float TURRET_ROTATION_SPEED = 1.0f;
         const float AUTOMATIC_DETECTION_RADIUS = 20.0f;
         const float TANK_ROTATION_SPEED = 1.25f;
+        const float PURSUIT_DURATION = 10.0f;
 
         ModelBone chassisBone;
         ModelBone turretBone;
@@ -46,13 +49,17 @@ namespace Battlezone.BattlezoneObjects
         Vector3 m_vPatrolEnd;
         Vector3 m_vCurrentPathTarget;
 
-        enum AIStates {PURSUE, PATROL, NEED_PATROL, SCAN, ATTACK};
+        enum AIStates {NEED_PURSUE, PURSUE, PATROL, NEED_PATROL, SCAN, ATTACK};
         AIStates currentState;
 
         float turretRotationValue;
         float turretTargetRotationValue;
 
         float targetTankRotationValue;
+
+        Random rg = new Random();
+
+        #endregion
 
         /// <summary>
         /// Constructs an AI controlled tank.
@@ -85,7 +92,6 @@ namespace Battlezone.BattlezoneObjects
 
             navNodes = navigation.GetNavigationNodes();
 
-            Random rg = new Random();
             m_vPatrolBegin = (Vector3)navNodes[rg.Next(navNodes.Count)];
             do{
                 m_vPatrolEnd = (Vector3)navNodes[rg.Next(navNodes.Count)];
@@ -244,6 +250,7 @@ namespace Battlezone.BattlezoneObjects
                 //player has been automatically detected so set PlayerLastKnownPosition
                 //m_vPlayerLastKnownPosition = new Vector3(m_vPlayerPosition.X, m_vPlayerPosition.Y, m_vPlayerPosition.Z);
 
+                //change action flow based on current state and modify state
                 //perform quick instant vision check
                 //if visible, set turretRotationTarget and stop moving and set state to attack
                 //if not visisble, find the closest nav node to the player position and navigate to it and set state to pursue
@@ -284,29 +291,9 @@ namespace Battlezone.BattlezoneObjects
                 }
 
                 //set the force vector to be in the right direction
-                Force = (m_vCurrentPathTarget - WorldPosition);
-                Vector3 tempForce = Force;
-                //figure out how much we need to rotate by and whether the rotation should CW or CCW
-                Vector3 Facing = GetWorldFacing();
-                Facing.X *= -1; //I don't even know
-                tempForce.Normalize();
-                Facing.Normalize();
-                Console.Out.WriteLine(Force);
-                Console.Out.WriteLine(Facing);
-                float deltaRotationValue = (float)Math.Acos((Double)Vector3.Dot(tempForce, Facing)); //what a terrible casting mess...
-                Console.Out.WriteLine(Vector3.Dot(tempForce, Facing));
-                Console.Out.WriteLine(deltaRotationValue);
-                if (Vector3.Cross(Force, Facing).Y > 0.0f)
-                    targetTankRotationValue = RotAngle + deltaRotationValue;
-                else
-                    targetTankRotationValue = RotAngle - deltaRotationValue;
-
-                //set the magnitude of the Force vector
-                Force = tempForce * fTerminalVelocity;
+                UpdateForce();
 
                 currentState = AIStates.PATROL;
-
-                Console.Out.WriteLine("Force: " +Force);
             }
             else if (currentState == AIStates.SCAN)
             {
@@ -332,6 +319,52 @@ namespace Battlezone.BattlezoneObjects
                     }
                     else
                         currentState = AIStates.NEED_PATROL;
+                }
+            }
+            else if (currentState == AIStates.NEED_PURSUE)
+            {
+                timer.AddTimer("Stop Pursuit", PURSUIT_DURATION, StopPursuit, false);
+
+                m_vTarget = FindClosestNavNode(m_vPlayerLastKnownPosition);
+                path = navigation.GetPath(m_vCurrentPathTarget, m_vTarget);
+
+                currentState = AIStates.PURSUE;
+            }
+            else if (currentState == AIStates.PURSUE)
+            {
+                //only scan for the player once we reach the navnode closest to its last known position
+                if (WorldPosition.Equals(m_vTarget))
+                {
+                    if (CheckPlayerSighted())
+                    {
+                        currentState = AIStates.ATTACK;
+                    }
+                    else
+                    {
+                        //pick a random place to look
+                        m_vTarget = (Vector3)navNodes[rg.Next(navNodes.Count)];
+                        path = navigation.GetPath(WorldPosition, m_vTarget);
+                    }
+                }
+                else
+                {
+                    if (WorldPosition.Equals(m_vCurrentPathTarget))
+                    {
+                        m_vCurrentPathTarget = (Vector3)path[path.IndexOf(m_vCurrentPathTarget)+1];
+                        UpdateForce();
+                    }
+                }
+            }
+            else if (currentState == AIStates.ATTACK)
+            {
+                if (CheckPlayerSighted())
+                {
+                    //do attack
+                }
+                else
+                {
+                    //lost sight, begin pursuit
+                    currentState = AIStates.PURSUE;
                 }
             }
             //Console.Out.WriteLine("Current state: " + currentState);
@@ -387,6 +420,39 @@ namespace Battlezone.BattlezoneObjects
         private Vector3 FindClosestNavNode(Vector3 position)
         {
             return new Vector3();
+        }
+
+        private void StopPursuit()
+        {
+            currentState = AIStates.NEED_PATROL;
+        }
+
+        /// <summary>
+        /// Update the force vector to move the tank towards the new path target
+        /// </summary>
+        private void UpdateForce()
+        {
+            Force = (m_vCurrentPathTarget - WorldPosition);
+            Vector3 tempForce = Force;
+            //figure out how much we need to rotate by and whether the rotation should CW or CCW
+            Vector3 Facing = GetWorldFacing();
+            Facing.X *= -1; //I don't even know
+            tempForce.Normalize();
+            Facing.Normalize();
+            Console.Out.WriteLine(Force);
+            Console.Out.WriteLine(Facing);
+            float deltaRotationValue = (float)Math.Acos((Double)Vector3.Dot(tempForce, Facing));
+            Console.Out.WriteLine(Vector3.Dot(tempForce, Facing));
+            Console.Out.WriteLine(deltaRotationValue);
+            if (Vector3.Cross(Force, Facing).Y > 0.0f)
+                targetTankRotationValue = RotAngle + deltaRotationValue;
+            else
+                targetTankRotationValue = RotAngle - deltaRotationValue;
+
+            //set the magnitude of the Force vector
+            Force = tempForce * fTerminalVelocity;
+
+            Console.Out.WriteLine("Force: " +Force);
         }
     }
 }
