@@ -20,6 +20,9 @@ namespace Battlezone.BattlezoneObjects
     /// </summary>
     public class AITank : Actor
     {
+        const float TURRET_ROTATION_SPEED = 2.5f;
+        const float AUTOMATIC_DETECTION_RADIUS = 20.0f;
+
         ModelBone chassisBone;
         ModelBone turretBone;
         ModelBone cannonBone;
@@ -31,17 +34,30 @@ namespace Battlezone.BattlezoneObjects
 
         PathFinder navigation;
         ArrayList navNodes;
+        ArrayList path;
+        ArrayList pathFromPatrolBeginToEnd;
+        ArrayList pathFromPatrolEndToBegin;
 
         Vector3 m_vPlayerPosition;
-        Vector3 m_vCurrentTarget;
-        Vector3 m_vNewTarget;
+        Vector3 m_vPlayerLastKnownPosition;
+        Vector3 m_vTarget;
         Vector3 m_vPatrolBegin;
         Vector3 m_vPatrolEnd;
+        Vector3 m_vCurrentPathTarget;
 
-        string patrolFilePath;
+        enum AIStates {PURSUE, PATROL, NEED_PATROL, SCAN, ATTACK};
+        AIStates currentState;
 
         float turretRotationValue;
+        float turretTargetRotationValue;
 
+
+        /// <summary>
+        /// Constructs an AI controlled tank.
+        /// </summary>
+        /// <param name="game">A reference to the game.</param>
+        /// <param name="pf">A* Path Finding implementation.</param>
+        /// <param name="playerPos">A reference to the player's position.</param>
         public AITank(Game game, PathFinder pf, Vector3 playerPos)
             : base(game)
         {
@@ -66,11 +82,18 @@ namespace Battlezone.BattlezoneObjects
             Random rg = new Random();
             m_vPatrolBegin = (Vector3)navNodes[rg.Next(navNodes.Count)];
             m_vPatrolEnd = (Vector3)navNodes[rg.Next(navNodes.Count)];
-            WorldPosition = m_vPatrolBegin;
 
-            //set the initial targets to be the current position so the tank doesn't move
-            m_vCurrentTarget = WorldPosition;
-            m_vNewTarget = WorldPosition;
+            //compute the patrol paths once and store them to save on computation costs
+            pathFromPatrolBeginToEnd = navigation.GetPath(m_vPatrolBegin, m_vPatrolEnd);
+            pathFromPatrolEndToBegin = navigation.GetPath(m_vPatrolEnd, m_vPatrolBegin);
+
+            WorldPosition = m_vPatrolBegin; //start off at the beginning of the patrol path;
+
+            m_vTarget = m_vPatrolEnd;
+            path = pathFromPatrolBeginToEnd;
+            m_vCurrentPathTarget = WorldPosition;   //set the initial targets to be the current position so the tank doesn't move
+            
+            currentState = AIStates.PATROL;
 
             Scale = 50.0f;
 
@@ -133,36 +156,179 @@ namespace Battlezone.BattlezoneObjects
         }
 
         /// <summary>
-        /// Allows the game component to update itself.
+        /// This works like a scheduler in Agent design.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            //check to see if we're close to the target position
-            if ((m_vCurrentTarget - WorldPosition).Length() > 0.5f)
+            float fDelta = gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f;
+            timer.Update(gameTime);
+
+            //first update the tank's position
+            if ((m_vCurrentPathTarget - WorldPosition).Length() < 0.5f)
             {
-                Vector3 temp = m_vCurrentTarget - WorldPosition;
-                temp.Normalize();
+                //we're close enough so stop moving and snap position
+                Velocity = new Vector3(0.0f);
+                WorldPosition = m_vCurrentPathTarget;
+            }
+            else
+            {
+                if (bPhysicsDriven)
+                {
+
+                }
+                else
+                {
+                    
+                    WorldPosition = Velocity * fDelta;
+                }
+            }
+
+            //now perform AI logic
+            /****************************************************************
+             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             * REMINDER TO SELF: come up with a way to resolve or avoid 
+             * collisions in paths of the AI tanks.
+             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             ****************************************************************/
+            if ((WorldPosition - m_vPlayerPosition).Length() < AUTOMATIC_DETECTION_RADIUS)
+            {
+                //player has been automatically detected so set PlayerLastKnownPosition
+                //m_vPlayerLastKnownPosition = new Vector3(m_vPlayerPosition.X, m_vPlayerPosition.Y, m_vPlayerPosition.Z);
+
+                //perform quick instant vision check
+                //if visible, set turretRotationTarget and stop moving and set state to attack
+                //if not visisble, find the closest nav node to the player position and navigate to it and set state to pursue
+            }
+
+            if (currentState == AIStates.PATROL)
+            {
+                //if we've reached CurrentPathTarget, scan for player
+                if (WorldPosition.Equals(m_vCurrentPathTarget))
+                {
+                    currentState = AIStates.SCAN;
+                }
+            }
+            else if (currentState == AIStates.NEED_PATROL)
+            {
+                if (path.IndexOf(m_vCurrentPathTarget) == path.Count - 1)
+                {
+                    if (WorldPosition.Equals(m_vPatrolEnd))
+                    {
+                        m_vTarget = m_vPatrolBegin;
+                        path = pathFromPatrolEndToBegin;
+                    }
+                    else if (WorldPosition.Equals(m_vPatrolBegin))
+                    {
+                        m_vTarget = m_vPatrolEnd;
+                        path = pathFromPatrolBeginToEnd;
+                    }
+                    else
+                    {
+                        m_vTarget = m_vPatrolBegin;
+                        path = navigation.GetPath(WorldPosition, m_vPatrolBegin);
+                    }
+                    m_vCurrentPathTarget = (Vector3)path[0];
+                }
+                else
+                {
+                    m_vCurrentPathTarget = (Vector3)path[path.IndexOf(m_vCurrentPathTarget) + 1];
+                }
+                currentState = AIStates.PATROL;
+            }
+            else if (currentState == AIStates.SCAN)
+            {
+                //scan for the player
+                if (turretRotationValue + TURRET_ROTATION_SPEED * fDelta < 2*Math.PI)
+                {
+                    turretRotationValue += TURRET_ROTATION_SPEED * fDelta;
+
+                    if (CheckPlayerSighted())
+                    {
+                        //player is visible, switch over to attack mode
+                        currentState = AIStates.ATTACK;
+                    }
+                }
+                else
+                {
+                    //finished or almost finished a full rotation of the turret so snap it to 0 and perform once last scan
+                    turretRotationValue = 0;
+             
+                    if (CheckPlayerSighted())
+                    {
+                        currentState = AIStates.ATTACK;
+                    }
+                    else
+                        currentState = AIStates.NEED_PATROL;
+                }
+            }
+            //Console.Out.WriteLine("Current state: " + currentState);
+            /*
+            //check to see if we're close to the target position
+            if ((m_vTarget - WorldPosition).Length() > 0.5f)
+            {
+                Vector3 temp = m_vTarget - WorldPosition;
                 Vector3 facing = GetWorldFacing();
+
+                temp.Normalize();
                 facing.Normalize();
+
                 if (Vector3.Dot(facing, temp) != 1)
                 Velocity =  temp * 5.0f;
             }
             else
             {
-                //we're close enough so stop moving and snap position
-                Velocity = new Vector3(0.0f);
-                WorldPosition = m_vCurrentTarget;
+                
 
                 //check to see if there's a new target that was set while we were moving to the current one
-                
+                if (!m_vNewTarget.Equals(m_vTarget))
+                {
+                    //there's another target to move to so set the current target to be that
+                    m_vTarget = m_vNewTarget;
+                }
             }
+            */
+            /*
+            if (bPhysicsDriven)
+            {
+                m_vVelocity += vAcceleration * fDelta / 2.0f;
+                //TODO: Make sure this is being assigned by value, not by reference
+                m_vPreviousWorldPosition = m_vWorldPosition;
+                m_vWorldPosition += m_vVelocity * fDelta;
+                vAcceleration = vForce / fMass;
+                m_vVelocity += vAcceleration * fDelta / 2.0f;
+                if (m_vVelocity.Length() >= fTerminalVelocity)
+                {
+                    m_vVelocity.Normalize();
+                    m_vVelocity *= fTerminalVelocity;
+                }
+            }
+            else
+            {
+                m_vWorldPosition += Vector3.Multiply(m_vVelocity, gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f);
 
-            base.Update(gameTime);
+                //TODO: Add World Bound check so the player doesn't fall off the world
+            }*/
 
             //when the tank reaches its target, it performs a radial check for the player
             //if the player is within a minimum detection distance, the AI will instantly "discover" the player
             //AI tank has a 20 degree viewing angle for checking? maybe?
+        }
+
+        //Helper functions to keep the Update method clean
+        private bool CheckPlayerSighted()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Finds the closest navigation node to the given position.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns>Closest navigation node.</returns>
+        private Vector3 FindClosestNavNode(Vector3 position)
+        {
+            return new Vector3();
         }
     }
 }

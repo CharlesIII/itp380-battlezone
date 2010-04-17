@@ -356,7 +356,7 @@ namespace Battlezone
         public virtual void collide(Actor a)
         {
             //stub method, inheriting classes are expected to provide functionality
-            System.Console.Out.WriteLine("Inside Actor collide");
+            //System.Console.Out.WriteLine("Inside Actor collide");
         }
     }
 }

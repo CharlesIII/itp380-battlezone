@@ -202,7 +202,7 @@ namespace Battlezone
                 TransitionOffTime = TimeSpan.FromSeconds(0.5);
                 try
                 {
-                    //navPathFind = new PathFinder(@"..\..\..\BattlezoneObjects\Navigation Nodes.txt");
+                    navPathFind = new PathFinder(@"..\..\..\BattlezoneObjects\Navigation Nodes.txt");
                 }
                 catch (Exception e)
                 {
@@ -246,8 +246,8 @@ namespace Battlezone
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
 
-            //AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3());
-            //ScreenManager.Game.Components.Add(test);
+            AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3());
+            ScreenManager.Game.Components.Add(test);
 
             /*
             // Construct our particle system components.
