@@ -17,7 +17,7 @@ namespace Battlezone.Engine
     public class PathFinder
     {
         private const int EXPECTED_NUMBER_OF_TOKENS = 2;
-        private const int EXPECTED_TOKEN_LENGTH = 8;
+        private const int EXPECTED_TOKEN_LENGTH = 3;
 
         StreamReader fileReader;
         Hashtable graph;    //key-value pair between "xyz" and Vertex objects
@@ -71,13 +71,13 @@ namespace Battlezone.Engine
                     string pos1 = tokens[0];
                     string pos2 = tokens[1];
 
-                    if (pos1.Length > EXPECTED_TOKEN_LENGTH || pos2.Length > EXPECTED_TOKEN_LENGTH)
+                    string[] pos1Components = pos1.Split(',');
+                    string[] pos2Components = pos2.Split(',');
+
+                    if (pos1Components.Length > EXPECTED_TOKEN_LENGTH || pos2Components.Length > EXPECTED_TOKEN_LENGTH)
                         throw new Exception("Input file is incorrectly formatted.");
                     else
                     {
-                        string[] pos1Components = pos1.Split(',');
-                        string[] pos2Components = pos2.Split(',');
-
                         //reconstruct the string representation without commas
                         pos1 = "";
                         pos2 = "";

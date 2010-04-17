@@ -39,6 +39,10 @@ namespace Battlezone
             {
                 return vForce;
             }
+            set
+            {
+                vForce = value;
+            }
         }
         protected Vector3 vAcceleration;
         protected bool bPhysicsDriven;
@@ -219,7 +223,7 @@ namespace Battlezone
                 worldTransform *= Matrix.CreateFromQuaternion(m_Quat);
                 worldTransform *= Matrix.CreateTranslation(m_vWorldPosition);
 
-                //WorldBounds.Center = m_vWorldPosition;
+                WorldBounds.Center = m_vWorldPosition;
 
                 m_bChanged = false;
             }
