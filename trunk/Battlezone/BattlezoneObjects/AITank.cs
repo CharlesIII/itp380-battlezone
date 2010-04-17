@@ -22,6 +22,7 @@ namespace Battlezone.BattlezoneObjects
     {
         const float TURRET_ROTATION_SPEED = 2.5f;
         const float AUTOMATIC_DETECTION_RADIUS = 20.0f;
+        const float TANK_ROTATION_SPEED = 1.5f;
 
         ModelBone chassisBone;
         ModelBone turretBone;
@@ -51,6 +52,7 @@ namespace Battlezone.BattlezoneObjects
         float turretRotationValue;
         float turretTargetRotationValue;
 
+        float targetTankRotationValue;
 
         /// <summary>
         /// Constructs an AI controlled tank.
@@ -77,11 +79,17 @@ namespace Battlezone.BattlezoneObjects
 
             base.Initialize();
 
+            fMass = 500;
+            bPhysicsDriven = true;
+            fTerminalVelocity = 5.0f;
+
             navNodes = navigation.GetNavigationNodes();
 
             Random rg = new Random();
             m_vPatrolBegin = (Vector3)navNodes[rg.Next(navNodes.Count)];
-            m_vPatrolEnd = (Vector3)navNodes[rg.Next(navNodes.Count)];
+            do{
+                m_vPatrolEnd = (Vector3)navNodes[rg.Next(navNodes.Count)];
+            } while (m_vPatrolEnd.Equals(m_vPatrolBegin));
 
             //compute the patrol paths once and store them to save on computation costs
             pathFromPatrolBeginToEnd = navigation.GetPath(m_vPatrolBegin, m_vPatrolEnd);
@@ -173,16 +181,55 @@ namespace Battlezone.BattlezoneObjects
             }
             else
             {
-                if (bPhysicsDriven)
+                if (RotAngle < targetTankRotationValue)
                 {
+                    //we need to rotate CCW
+                    RotAngle += TANK_ROTATION_SPEED * fDelta;
+                    
+                    //clamp RotAngle to target if close enough
+                    if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.5f)
+                        RotAngle = targetTankRotationValue;
+                    Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
+                }
+                else if (RotAngle > targetTankRotationValue)
+                {
+                    //we need to rotate CW
+                    RotAngle -= TANK_ROTATION_SPEED * fDelta;
 
+                    //clamp RotAngle to target if close enough
+                    if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.5f)
+                        RotAngle = targetTankRotationValue;
+                    Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
                 }
                 else
                 {
-                    
-                    WorldPosition = Velocity * fDelta;
+                    if (bPhysicsDriven)
+                    {
+                        //Console.Out.WriteLine(Velocity);
+                        Velocity += vAcceleration * fDelta / 2.0f;
+                        m_vPreviousWorldPosition = m_vWorldPosition;
+                        WorldPosition += Velocity * fDelta;
+                        vAcceleration = vForce / fMass;
+                        Velocity += vAcceleration * fDelta / 2.0f;
+                        if (Velocity.Length() >= fTerminalVelocity)
+                        {
+                            //Console.Out.WriteLine("Normalizing");
+                            Vector3 temp = Velocity;
+                            temp.Normalize();
+                            Velocity = temp;
+                            Velocity *= fTerminalVelocity;
+                        }
+                        //Console.Out.WriteLine(Velocity);
+                    }
+                    else
+                    {
+                        WorldPosition = Velocity * fDelta;
+                    }
                 }
             }
+
+            
+            //Console.Out.WriteLine(currentState);
 
             //now perform AI logic
             /****************************************************************
@@ -228,13 +275,34 @@ namespace Battlezone.BattlezoneObjects
                         m_vTarget = m_vPatrolBegin;
                         path = navigation.GetPath(WorldPosition, m_vPatrolBegin);
                     }
-                    m_vCurrentPathTarget = (Vector3)path[0];
+                    m_vCurrentPathTarget = (Vector3)path[1];    //target/world position is already the starting position of the path so get the next node
                 }
                 else
                 {
                     m_vCurrentPathTarget = (Vector3)path[path.IndexOf(m_vCurrentPathTarget) + 1];
                 }
+
+                //set the force vector to be in the right direction
+                Force = (m_vCurrentPathTarget - WorldPosition);
+
+                //figure out how much we need to rotate by and whether the rotation should CW or CCW
+                Vector3 Facing = GetWorldFacing();
+                Force.Normalize();
+                Facing.Normalize();
+                Console.Out.WriteLine(Force);
+                Console.Out.WriteLine(tankModel.Root.Transform.Forward);
+                float deltaRotationValue = (float)Math.Acos((Double)Vector3.Dot(Force, Facing)); //what a terrible casting mess...
+                if (Vector3.Cross(Force, Facing).Y > 0.0f)
+                    targetTankRotationValue = RotAngle + deltaRotationValue;
+                else
+                    targetTankRotationValue = RotAngle - deltaRotationValue;
+
+                //set the magnitude of the Force vector
+                Force = Force * fTerminalVelocity;
+
                 currentState = AIStates.PATROL;
+
+                Console.Out.WriteLine("Force: " +Force);
             }
             else if (currentState == AIStates.SCAN)
             {
@@ -289,20 +357,6 @@ namespace Battlezone.BattlezoneObjects
             }
             */
             /*
-            if (bPhysicsDriven)
-            {
-                m_vVelocity += vAcceleration * fDelta / 2.0f;
-                //TODO: Make sure this is being assigned by value, not by reference
-                m_vPreviousWorldPosition = m_vWorldPosition;
-                m_vWorldPosition += m_vVelocity * fDelta;
-                vAcceleration = vForce / fMass;
-                m_vVelocity += vAcceleration * fDelta / 2.0f;
-                if (m_vVelocity.Length() >= fTerminalVelocity)
-                {
-                    m_vVelocity.Normalize();
-                    m_vVelocity *= fTerminalVelocity;
-                }
-            }
             else
             {
                 m_vWorldPosition += Vector3.Multiply(m_vVelocity, gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f);
