@@ -141,7 +141,7 @@ namespace Battlezone.BattlezoneObjects
         public PlayerTank(Game game)
             : base(game)
         {
-            sMeshesToLoad.Add("playerTank");
+            sMeshToLoad = "playerTank";
             // TODO: Construct any child components here
         }
 
@@ -156,7 +156,7 @@ namespace Battlezone.BattlezoneObjects
             base.Initialize();
             Scale = 0.15f;
          
-            COLLISION_IDENTIFIER = CollisionIdentifier.TANK;
+            COLLISION_IDENTIFIER = CollisionIdentifier.PLAYER_TANK;
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace Battlezone.BattlezoneObjects
         {
             base.LoadContent();
 
-            tankModel = (Model)ActorModels[0];  //base.meshLoader.Load<Model>("playerTank");
+            tankModel = ActorModel;  //base.meshLoader.Load<Model>("playerTank");
 
             // Look up shortcut references to the bones we are going to animate.
             leftBackWheelBone = tankModel.Bones["l_back_wheel_geo"];

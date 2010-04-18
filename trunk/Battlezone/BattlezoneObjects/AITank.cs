@@ -71,7 +71,7 @@ namespace Battlezone.BattlezoneObjects
             : base(game)
         {
             // TODO: Construct any child components here
-            sMeshesToLoad.Add("enemyTank");
+            sMeshToLoad = "enemyTank";
             navigation = pf;
             m_vPlayerPosition = playerPos;  //AI always knows where the player is
         }
@@ -111,7 +111,7 @@ namespace Battlezone.BattlezoneObjects
 
             Scale = 50.0f;
 
-            COLLISION_IDENTIFIER = CollisionIdentifier.TANK;         
+            COLLISION_IDENTIFIER = CollisionIdentifier.AI_TANK;         
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Battlezone.BattlezoneObjects
         {
             base.LoadContent();
 
-            tankModel = ActorModels[0] as Model;
+            tankModel = ActorModel;
 
             // Look up shortcut references to the bones we are going to animate.
             chassisBone = tankModel.Bones["chassis_geo"];
@@ -409,7 +409,30 @@ namespace Battlezone.BattlezoneObjects
         //Helper functions to keep the Update method clean
         private bool CheckPlayerSighted()
         {
-            return false;
+            Ray sightRay = new Ray(cannonBone.Transform.Translation, GetWorldFacing());
+            bool seePlayer = false;
+
+            foreach (Actor a in GameplayScreen.Instance.activeActors)
+            {
+                if (a.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING)
+                {
+                    if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING) 
+                    {
+                        Building b = (Building)a;
+                        if (sightRay.Intersects(b.WorldBoundsBox) != null)
+                            return false;
+                    }
+                    else if (sightRay.Intersects(a.WorldBounds) != null)
+                    {
+                        if (a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK)
+                            seePlayer = true;
+                        else
+                            return false;
+                    }
+                }
+            }
+                    
+            return seePlayer;
         }
 
         /// <summary>
@@ -419,7 +442,18 @@ namespace Battlezone.BattlezoneObjects
         /// <returns>Closest navigation node.</returns>
         private Vector3 FindClosestNavNode(Vector3 position)
         {
-            return new Vector3();
+            Vector3 result = new Vector3(); //for compilation sake
+            float shortestLength = float.MaxValue;
+            foreach (Vector3 v in navNodes)
+            {
+                float length = (v - position).Length();
+                if (length < shortestLength)
+                {
+                    shortestLength = length;
+                    result = v;
+                }
+            }
+            return result;
         }
 
         private void StopPursuit()
@@ -427,6 +461,12 @@ namespace Battlezone.BattlezoneObjects
             currentState = AIStates.NEED_PATROL;
         }
 
+        public override Vector3 GetWorldFacing()
+        {
+            Vector3 result = worldTransform.Forward;
+            result.X *= -1; //I don't even know
+            return result;
+        }
         /// <summary>
         /// Update the force vector to move the tank towards the new path target
         /// </summary>
@@ -436,7 +476,6 @@ namespace Battlezone.BattlezoneObjects
             Vector3 tempForce = Force;
             //figure out how much we need to rotate by and whether the rotation should CW or CCW
             Vector3 Facing = GetWorldFacing();
-            Facing.X *= -1; //I don't even know
             tempForce.Normalize();
             Facing.Normalize();
             Console.Out.WriteLine(Force);

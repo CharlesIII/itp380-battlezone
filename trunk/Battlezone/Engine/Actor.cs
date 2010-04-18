@@ -21,11 +21,11 @@ namespace Battlezone
     /// </summary>
     public class Actor : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        protected ArrayList ActorModels;
+        protected Model ActorModel;
         protected ContentManager meshLoader;
-        public ArrayList sMeshesToLoad;
+        public string sMeshToLoad;
 
-        public ArrayList ModelBounds;
+        public BoundingSphere ModelBounds;
         public BoundingSphere WorldBounds;
 
         public int COLLISION_IDENTIFIER;
@@ -119,9 +119,7 @@ namespace Battlezone
             }
         }
 
-        public Matrix worldTransform;  
-        //need to add additional offsets and rotations to generate compound matrices for the different models
-        //we also need separate boundingspheres and boxes later
+        public Matrix worldTransform;
         protected Matrix[] boneTransforms;
 
         protected Utils.Timer timer;
@@ -135,12 +133,6 @@ namespace Battlezone
         {
             // TODO: Construct any child components here
             timer = new Utils.Timer();
-
-            //initialize to 3 since it's expected that an actor will have at most 3 models making it up
-            //just doing it to avoid resize and reallocation penalty
-            ActorModels = new ArrayList(3);
-            ModelBounds = new ArrayList(3);
-            sMeshesToLoad = new ArrayList(3);
         }
 
         /// <summary>
@@ -173,34 +165,12 @@ namespace Battlezone
         protected override void LoadContent()
         {
             meshLoader = new ContentManager(Game.Services, "Content");
+            ActorModel = meshLoader.Load<Model>(sMeshToLoad);
+            boneTransforms = new Matrix[ActorModel.Bones.Count];
 
-            //load all the meshes associated with this actor as models and keep track of the model
-            //with the highest number of bones
-            int maxBones = 0;
-            foreach (string meshName in sMeshesToLoad)
+            foreach (ModelMesh mesh in ActorModel.Meshes)
             {
-                Model tempModel = meshLoader.Load<Model>(meshName);
-                ActorModels.Add(tempModel);
-                if (tempModel.Bones.Count > maxBones)
-                    maxBones = tempModel.Bones.Count;
-            }
-            boneTransforms = new Matrix[maxBones];
-
-            //create a BoundingSphere in Model Space for each model
-            foreach (Model model in ActorModels)
-            {
-                BoundingSphere ModelBound = new BoundingSphere();
-                foreach (ModelMesh mesh in model.Meshes)
-                {
-                    ModelBound = BoundingSphere.CreateMerged(ModelBound, mesh.BoundingSphere);
-                }
-                ModelBounds.Add(ModelBound);
-            }
-
-            //create a BoundingSphere in World Space made up of all the model BoundingSpheres
-            foreach (BoundingSphere ModelBound in ModelBounds)
-            {
-                WorldBounds = BoundingSphere.CreateMerged(WorldBounds, ModelBound);
+                ModelBounds = BoundingSphere.CreateMerged(ModelBounds, mesh.BoundingSphere);
             }
 
             base.LoadContent();
@@ -224,6 +194,7 @@ namespace Battlezone
                 worldTransform *= Matrix.CreateTranslation(m_vWorldPosition);
 
                 WorldBounds.Center = m_vWorldPosition;
+                WorldBounds.Radius = ModelBounds.Radius * m_fScale;
 
                 m_bChanged = false;
             }
@@ -237,35 +208,31 @@ namespace Battlezone
         {
             
             updateWorldTransform();
-            
 
             GraphicsDevice.RenderState.DepthBufferEnable = true;
 
-            foreach (Model model in ActorModels)
+            ActorModel.CopyAbsoluteBoneTransformsTo(boneTransforms);
+            foreach (ModelMesh mesh in ActorModel.Meshes)
             {
-                model.CopyAbsoluteBoneTransformsTo(boneTransforms);
-                foreach (ModelMesh mesh in model.Meshes)
+                foreach (BasicEffect effect in mesh.Effects)
                 {
-                    foreach (BasicEffect effect in mesh.Effects)
-                    {
-                        effect.World = boneTransforms[mesh.ParentBone.Index] * worldTransform;
-                        effect.View = GameplayScreen.CameraMatrix;
-                        effect.Projection = GameplayScreen.ProjectionMatrix;
+                    effect.World = boneTransforms[mesh.ParentBone.Index] * worldTransform;
+                    effect.View = GameplayScreen.CameraMatrix;
+                    effect.Projection = GameplayScreen.ProjectionMatrix;
 
-                        effect.EnableDefaultLighting();
-                        effect.PreferPerPixelLighting = true;
-                        effect.AmbientLightColor = Color.White.ToVector3();
+                    effect.EnableDefaultLighting();
+                    effect.PreferPerPixelLighting = true;
+                    effect.AmbientLightColor = Color.White.ToVector3();
 
-                        //change later
-                        /*
-                        effect.SpecularColor = Color.Pink.ToVector3();
-                        effect.SpecularPower = 4f;
-                        effect.DirectionalLight0.Direction = GameplayScreen.DirLightDirection;
-                        effect.DirectionalLight0.DiffuseColor = GameplayScreen.DiffuseColor;
-                         */
-                    }
-                    mesh.Draw();
+                    //change later
+                    /*
+                    effect.SpecularColor = Color.Pink.ToVector3();
+                    effect.SpecularPower = 4f;
+                    effect.DirectionalLight0.Direction = GameplayScreen.DirLightDirection;
+                    effect.DirectionalLight0.DiffuseColor = GameplayScreen.DiffuseColor;
+                     */
                 }
+                mesh.Draw();
             }
 
             base.Draw(gameTime);
@@ -275,7 +242,7 @@ namespace Battlezone
         /// Gets the World facing vector of the Actor
         /// </summary>
         /// <returns>A Vector3 representing the facing of the Actor</returns>
-        public Vector3 GetWorldFacing()
+        public virtual Vector3 GetWorldFacing()
         {
             return worldTransform.Forward;
         }
