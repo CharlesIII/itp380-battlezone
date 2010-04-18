@@ -364,7 +364,7 @@ namespace Battlezone.BattlezoneObjects
                 else
                 {
                     //lost sight, begin pursuit
-                    currentState = AIStates.PURSUE;
+                    currentState = AIStates.NEED_PURSUE;
                 }
             }
             //Console.Out.WriteLine("Current state: " + currentState);
