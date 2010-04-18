@@ -20,13 +20,14 @@ namespace Battlezone.BattlezoneObjects
     /// </summary>
     public class Building : Actor
     {
-        BoundingBox ModelBounds;
-        BoundingBox WorldBounds;
+        //BoundingBox ModelBounds;
+        public BoundingBox WorldBoundsBox;
 
         public Building(Game game)
             : base(game)
         {
             // TODO: Construct any child components here
+            //sMeshToLoad = "playerTank";
         }
 
         /// <summary>
@@ -38,11 +39,21 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your initialization code here
 
             base.Initialize();
+
+            COLLISION_IDENTIFIER = CollisionIdentifier.BUILDING;
         }
 
         protected override void LoadContent()
         {
             //TODO: Add custom content loading logic
+            base.LoadContent();
+
+            foreach (ModelMesh mesh in ActorModel.Meshes)
+            {
+                Vector3[] vertices = new Vector3[mesh.IndexBuffer.SizeInBytes / mesh.MeshParts[0].VertexStride];
+                mesh.VertexBuffer.GetData<Vector3>(vertices);
+                WorldBoundsBox = BoundingBox.CreateFromPoints(vertices);
+            }
         }
 
         /// <summary>

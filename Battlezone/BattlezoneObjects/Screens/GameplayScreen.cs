@@ -56,11 +56,11 @@ namespace Battlezone
         public static SoundBank soundBank;
 
         private float m_fTotalTime;
-
-        private List<Actor> activeActors;   //list of active actors for collision checking
+        
+        public List<Actor> activeActors;   //list of active actors for collision checking
         private List<Actor> actorsToAdd;    //list of new actors to add to list of activeActors
         private List<Actor> actorsToRemove; //list of existing actors to be removed from list of activeActors;
-
+        
         private BattlezoneObjects.PlayerTank m_kPlayer;
 
         ContentManager content;
@@ -192,7 +192,6 @@ namespace Battlezone
         /// </summary>
         public GameplayScreen()
         {
-            
             if (instance == null)
             {
                 activeActors = new List<Actor>();
@@ -247,8 +246,11 @@ namespace Battlezone
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
 
-            AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3());
-            ScreenManager.Game.Components.Add(test);
+            //AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3());
+            //ScreenManager.Game.Components.Add(test);
+
+            //Building b = new Building(ScreenManager.Game);
+            //ScreenManager.Game.Components.Add(b);
 
             /*
             // Construct our particle system components.
