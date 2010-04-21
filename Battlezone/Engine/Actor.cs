@@ -124,6 +124,8 @@ namespace Battlezone
 
         protected Utils.Timer timer;
 
+        protected bool dead = false;
+
         /// <summary>
         /// Constructs a new Actor.
         /// </summary>
@@ -206,36 +208,38 @@ namespace Battlezone
         /// <param name="gameTime"></param>
         public override void Draw(GameTime gameTime)
         {
-            
-            updateWorldTransform();
-
-            GraphicsDevice.RenderState.DepthBufferEnable = true;
-
-            ActorModel.CopyAbsoluteBoneTransformsTo(boneTransforms);
-            foreach (ModelMesh mesh in ActorModel.Meshes)
+            if (!dead)
             {
-                foreach (BasicEffect effect in mesh.Effects)
+                updateWorldTransform();
+
+                GraphicsDevice.RenderState.DepthBufferEnable = true;
+
+                ActorModel.CopyAbsoluteBoneTransformsTo(boneTransforms);
+                foreach (ModelMesh mesh in ActorModel.Meshes)
                 {
-                    effect.World = boneTransforms[mesh.ParentBone.Index] * worldTransform;
-                    effect.View = GameplayScreen.CameraMatrix;
-                    effect.Projection = GameplayScreen.ProjectionMatrix;
+                    foreach (BasicEffect effect in mesh.Effects)
+                    {
+                        effect.World = boneTransforms[mesh.ParentBone.Index] * worldTransform;
+                        effect.View = GameplayScreen.CameraMatrix;
+                        effect.Projection = GameplayScreen.ProjectionMatrix;
 
-                    effect.EnableDefaultLighting();
-                    effect.PreferPerPixelLighting = true;
-                    effect.AmbientLightColor = Color.White.ToVector3();
+                        effect.EnableDefaultLighting();
+                        effect.PreferPerPixelLighting = true;
+                        effect.AmbientLightColor = Color.White.ToVector3();
 
-                    //change later
-                    /*
-                    effect.SpecularColor = Color.Pink.ToVector3();
-                    effect.SpecularPower = 4f;
-                    effect.DirectionalLight0.Direction = GameplayScreen.DirLightDirection;
-                    effect.DirectionalLight0.DiffuseColor = GameplayScreen.DiffuseColor;
-                     */
+                        //change later
+                        /*
+                        effect.SpecularColor = Color.Pink.ToVector3();
+                        effect.SpecularPower = 4f;
+                        effect.DirectionalLight0.Direction = GameplayScreen.DirLightDirection;
+                        effect.DirectionalLight0.DiffuseColor = GameplayScreen.DiffuseColor;
+                         */
+                    }
+                    mesh.Draw();
                 }
-                mesh.Draw();
-            }
 
-            base.Draw(gameTime);
+                base.Draw(gameTime);
+            }
         }
 
         /// <summary>
