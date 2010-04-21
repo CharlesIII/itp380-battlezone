@@ -266,34 +266,51 @@ namespace Battlezone.BattlezoneObjects
             }
             else if (currentState == AIStates.NEED_PATROL)
             {
-                if (path.IndexOf(m_vCurrentPathTarget) == path.Count - 1)
+                //reset turret
+                if (turretRotationValue != 0)
                 {
-                    if (WorldPosition.Equals(m_vPatrolEnd))
+                    if (turretRotationValue + TURRET_ROTATION_SPEED * fDelta < 2 * Math.PI)
                     {
-                        m_vTarget = m_vPatrolBegin;
-                        path = pathFromPatrolEndToBegin;
-                    }
-                    else if (WorldPosition.Equals(m_vPatrolBegin))
-                    {
-                        m_vTarget = m_vPatrolEnd;
-                        path = pathFromPatrolBeginToEnd;
+                        turretRotationValue += TURRET_ROTATION_SPEED * fDelta;
                     }
                     else
                     {
-                        m_vTarget = m_vPatrolBegin;
-                        path = navigation.GetPath(WorldPosition, m_vPatrolBegin);
+                        //finished or almost finished a full rotation of the turret so snap it to 0 so we can perform tasks
+                        turretRotationValue = 0;
                     }
-                    m_vCurrentPathTarget = (Vector3)path[1];    //target/world position is already the starting position of the path so get the next node
                 }
                 else
                 {
-                    m_vCurrentPathTarget = (Vector3)path[path.IndexOf(m_vCurrentPathTarget) + 1];
+                    if (path.IndexOf(m_vCurrentPathTarget) == path.Count - 1)
+                    {
+                        if (WorldPosition.Equals(m_vPatrolEnd))
+                        {
+                            m_vTarget = m_vPatrolBegin;
+                            path = pathFromPatrolEndToBegin;
+                        }
+                        else if (WorldPosition.Equals(m_vPatrolBegin))
+                        {
+                            m_vTarget = m_vPatrolEnd;
+                            path = pathFromPatrolBeginToEnd;
+                        }
+                        else
+                        {
+                            m_vTarget = m_vPatrolBegin;
+                            path = navigation.GetPath(WorldPosition, m_vPatrolBegin);
+                        }
+                        m_vCurrentPathTarget = (Vector3)path[1];    //target/world position is already the starting position of the path so get the next node
+                    }
+                    else
+                    {
+                        m_vCurrentPathTarget = (Vector3)path[path.IndexOf(m_vCurrentPathTarget) + 1];
+                    }
+
+                    //set the force vector to be in the right direction
+                    UpdateForce();
+
+
+                    currentState = AIStates.PATROL;
                 }
-
-                //set the force vector to be in the right direction
-                UpdateForce();
-
-                currentState = AIStates.PATROL;
             }
             else if (currentState == AIStates.SCAN)
             {
@@ -312,39 +329,62 @@ namespace Battlezone.BattlezoneObjects
                 {
                     //finished or almost finished a full rotation of the turret so snap it to 0 and perform once last scan
                     turretRotationValue = 0;
-             
+
                     if (CheckPlayerSighted())
                     {
                         currentState = AIStates.ATTACK;
                     }
                     else
-                        currentState = AIStates.NEED_PATROL;
+                    {
+                        if (timer.GetNumberOfTimers() > 0)
+                        {
+                            //means we should be in pursuit mode
+                            currentState = AIStates.PURSUE;
+                        }
+                        else
+                        {
+                            currentState = AIStates.NEED_PATROL;
+                        }
+                    }
                 }
             }
             else if (currentState == AIStates.NEED_PURSUE)
             {
-                timer.AddTimer("Stop Pursuit", PURSUIT_DURATION, StopPursuit, false);
+                //reset turret
+                
+                if (turretRotationValue > fDelta * TURRET_ROTATION_SPEED)
+                {
+                    if (turretRotationValue + TURRET_ROTATION_SPEED * fDelta < 2 * Math.PI)
+                    {
+                        turretRotationValue += TURRET_ROTATION_SPEED * fDelta;
+                    }
+                    else
+                    {
+                        //finished or almost finished a full rotation of the turret so snap it to 0 so we can perform tasks
+                        turretRotationValue = 0;
+                    }
+                }
+                else
+                {
+                    turretRotationValue = 0;
+                    timer.AddTimer("Stop Pursuit", PURSUIT_DURATION, StopPursuit, false);
 
-                m_vTarget = FindClosestNavNode(m_vPlayerLastKnownPosition);
-                path = navigation.GetPath(m_vCurrentPathTarget, m_vTarget);
+                    m_vTarget = FindClosestNavNode(m_vPlayerLastKnownPosition);
+                    path = navigation.GetPath(m_vCurrentPathTarget, m_vTarget);
 
-                currentState = AIStates.PURSUE;
+                    currentState = AIStates.PURSUE;
+                }
             }
             else if (currentState == AIStates.PURSUE)
             {
                 //only scan for the player once we reach the navnode closest to its last known position
                 if (WorldPosition.Equals(m_vTarget))
                 {
-                    if (CheckPlayerSighted())
-                    {
-                        currentState = AIStates.ATTACK;
-                    }
-                    else
-                    {
-                        //pick a random place to look
-                        m_vTarget = (Vector3)navNodes[rg.Next(navNodes.Count)];
-                        path = navigation.GetPath(WorldPosition, m_vTarget);
-                    }
+                    currentState = AIStates.SCAN;
+
+                    //pick a random place to look
+                    m_vTarget = (Vector3)navNodes[rg.Next(navNodes.Count)];
+                    path = navigation.GetPath(WorldPosition, m_vTarget);
                 }
                 else
                 {
@@ -361,6 +401,7 @@ namespace Battlezone.BattlezoneObjects
                 {
                     //do attack
                     //Console.Out.WriteLine("Can see tank in ATTACK");
+                    timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early
                 }
                 else
                 {
@@ -368,7 +409,7 @@ namespace Battlezone.BattlezoneObjects
                     currentState = AIStates.NEED_PURSUE;
                 }
             }
-            //Console.Out.WriteLine("Current state: " + currentState);
+            Console.Out.WriteLine("Current state: " + currentState);
             /*
             //check to see if we're close to the target position
             if ((m_vTarget - WorldPosition).Length() > 0.5f)
@@ -410,9 +451,10 @@ namespace Battlezone.BattlezoneObjects
         //Helper functions to keep the Update method clean
         private bool CheckPlayerSighted()
         {
-            Ray sightRay = new Ray(cannonBone.Transform.Translation, cannonBone.Transform.Forward);
+            Ray sightRay = new Ray(cannonBone.Transform.Translation, GetCannonFacing());
+            //Console.Out.WriteLine(sightRay.Direction);
             bool seePlayer = false;
-
+            
             foreach (Actor a in GameplayScreen.Instance.activeActors)
             {
                 //Console.Out.WriteLine(GameplayScreen.Instance.activeActors.Count);
@@ -428,7 +470,9 @@ namespace Battlezone.BattlezoneObjects
                     {
                         if (a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK)
                         {
-                            Console.Out.WriteLine(a.WorldBounds);
+                            //Console.Out.WriteLine(a.WorldBounds);
+                            //Console.Out.WriteLine("Can see player");
+                            //m_vPlayerLastKnownPosition = new Vector3(a.WorldPosition.X, a.WorldPosition.Y, a.WorldPosition.Z);
                             seePlayer = true;
                         }
                         else
@@ -472,6 +516,15 @@ namespace Battlezone.BattlezoneObjects
             result.X *= -1; //I don't even know
             return result;
         }
+
+        public Vector3 GetCannonFacing()
+        {
+            Vector3 result = (worldTransform * Matrix.CreateRotationY(turretRotationValue)).Forward;
+            result.X *= -1;
+            result.Z *= -1;
+            result.Normalize();
+            return result;
+        }
         /// <summary>
         /// Update the force vector to move the tank towards the new path target
         /// </summary>
@@ -483,11 +536,11 @@ namespace Battlezone.BattlezoneObjects
             Vector3 Facing = GetWorldFacing();
             tempForce.Normalize();
             Facing.Normalize();
-            Console.Out.WriteLine(Force);
-            Console.Out.WriteLine(Facing);
+            //Console.Out.WriteLine(Force);
+            //Console.Out.WriteLine(Facing);
             float deltaRotationValue = (float)Math.Acos((Double)Vector3.Dot(tempForce, Facing));
-            Console.Out.WriteLine(Vector3.Dot(tempForce, Facing));
-            Console.Out.WriteLine(deltaRotationValue);
+            //Console.Out.WriteLine(Vector3.Dot(tempForce, Facing));
+            //Console.Out.WriteLine(deltaRotationValue);
             if (Vector3.Cross(Force, Facing).Y > 0.0f)
                 targetTankRotationValue = RotAngle + deltaRotationValue;
             else
@@ -496,7 +549,7 @@ namespace Battlezone.BattlezoneObjects
             //set the magnitude of the Force vector
             Force = tempForce * fTerminalVelocity;
 
-            Console.Out.WriteLine("Force: " +Force);
+            //Console.Out.WriteLine("Force: " +Force);
         }
     }
 }

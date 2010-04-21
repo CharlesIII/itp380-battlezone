@@ -334,7 +334,10 @@ namespace Battlezone
                                 break;
                         }
                     }
-
+                    /*foreach (Actor a in activeActors)
+                    {
+                        Console.Out.WriteLine(a.COLLISION_IDENTIFIER);
+                    }*/
                     //UpdateExplosions(gameTime);
                     //UpdateProjectiles(gameTime);
 
@@ -554,19 +557,19 @@ namespace Battlezone
         /// </summary>
         private void updateActors()
         {
-            //remove all the actors that need to be removed
-            foreach (Actor a in actorsToRemove)
-            {
-                activeActors.Remove(a);
-            }
-            actorsToRemove.Clear();
-
             //add in all the new actors
             foreach (Actor a in actorsToAdd)
             {
                 activeActors.Add(a);
             }
             actorsToAdd.Clear();
+
+            //remove all the actors that need to be removed
+            foreach (Actor a in actorsToRemove)
+            {
+                activeActors.Remove(a);
+            }
+            actorsToRemove.Clear();
         }
 
 

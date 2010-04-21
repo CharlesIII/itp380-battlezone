@@ -314,7 +314,7 @@ namespace Battlezone
         /// <summary>
         /// Removes the current Actor from the Game Components list as well as collision checking.
         /// </summary>
-        protected virtual void removeSelf()
+        public virtual void removeSelf()
         {
             Game.Components.Remove(this);
             GameplayScreen.Instance.removeActor(this);
