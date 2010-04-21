@@ -468,23 +468,7 @@ namespace Battlezone
                             Vector3 offSet = new Vector3(0, 100, 40);
                             Vector3 pos = m_kPlayer.WorldPosition + offSet;
 
-                            ExplosionParticleSystem explosionParticles = new ExplosionParticleSystem(ScreenManager.Game, content);
-                            ExplosionSmokeParticleSystem explosionSmokeParticles = new ExplosionSmokeParticleSystem(ScreenManager.Game, content);
-                            ProjectileTrailParticleSystem projectileTrailParticles = new ProjectileTrailParticleSystem(ScreenManager.Game, content);
-
-                            // Set the draw order so the explosions and fire
-                            // will appear over the top of the smoke.
-                            explosionSmokeParticles.DrawOrder = 200;
-                            projectileTrailParticles.DrawOrder = 300;
-                            explosionParticles.DrawOrder = 400;
-
-
-                            // Register the particle system components.
-                            ScreenManager.Game.Components.Add(explosionParticles);
-                            ScreenManager.Game.Components.Add(explosionSmokeParticles);
-                            ScreenManager.Game.Components.Add(projectileTrailParticles);
-
-                            Projectile pro = new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles, pos, ChaseDirection, 2, ScreenManager.Game);
+                            Projectile pro = new Projectile(content, pos, ChaseDirection, 2, ScreenManager.Game);
                             pro.Initialize(100,150,90,100,100,0);
 
                             ScreenManager.Game.Components.Add(pro);
