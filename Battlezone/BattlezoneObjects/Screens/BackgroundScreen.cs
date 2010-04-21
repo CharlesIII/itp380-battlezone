@@ -286,7 +286,7 @@ namespace Battlezone
                 tank.LWheelRotation += (2 * deltaTime);
                 tank.RWheelRotation += (2 * deltaTime);
 
-                tank.TurretRotation += (0.50f * deltaTime);
+                //tank.TurretRotation += (0.50f * deltaTime);
 
                 UpdateWorldPositions();
                 ChasePosition = tank.WorldPosition;
@@ -350,13 +350,13 @@ namespace Battlezone
                 int num = random.Next(0,50);
                 if (fired)
                 {
-                    temp1 = new Vector3(random.Next(50, 100), 0, 200);
+                    temp1 = new Vector3(random.Next(150, 200), 0, 300);
                     temp1 = LookAt + temp1;
                     fired = false;
                 }
                 else
                 {
-                    temp1 = new Vector3(random.Next(50, 100), 0, -200);
+                    temp1 = new Vector3(random.Next(150, 200), 0, -300);
                     temp1 = LookAt - temp1;
                     fired = true;
                 }

@@ -80,7 +80,7 @@ namespace Battlezone
                 velocity.X = cameraDirection.X * 500.0f;
                 velocity.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
                 velocity.Z = cameraDirection.Z * 500.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
-                projectileLifespan = (float)random.Next(2, 5);
+                projectileLifespan = (float)random.Next(1, 4);
             }
             else if (screenNum == 2)
             {
