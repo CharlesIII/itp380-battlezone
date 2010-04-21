@@ -93,14 +93,14 @@ namespace Battlezone
         // Values for individual particles are randomly chosen from somewhere between
         // these limits.
         public float MinStartSize = 100;
-        public float MaxStartSize = 100;
+        public float MaxStartSize = 200;
 
 
         // Range of values controlling how big particles become at the end of their
         // life. Values for individual particles are randomly chosen from somewhere
         // between these limits.
         public float MinEndSize = 100;
-        public float MaxEndSize = 100;
+        public float MaxEndSize = 200;
 
 
         // Alpha blending settings.

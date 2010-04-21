@@ -239,7 +239,7 @@ namespace Battlezone
 
             //Load Player Tank
             m_kPlayer = new PlayerTank(ScreenManager.Game);
-            //ScreenManager.Game.Components.Add(m_kPlayer);
+            ScreenManager.Game.Components.Add(m_kPlayer);
             /* Debug usage for AI Tank testing*/
             m_kPlayer.Initialize();
 
@@ -443,6 +443,10 @@ namespace Battlezone
             // If the game is transitioning on or off, fade it out to black.
             if (TransitionPosition > 0)
                 ScreenManager.FadeBackBufferToBlack(255 - TransitionAlpha);
+
+            ScreenManager.GraphicsDevice.RenderState.DepthBufferEnable = true;
+            ScreenManager.GraphicsDevice.RenderState.AlphaBlendEnable = false;
+            ScreenManager.GraphicsDevice.RenderState.AlphaTestEnable = false;
         }
 
         /// <summary>
@@ -474,9 +478,9 @@ namespace Battlezone
             {
                 // Create a new projectile once per second. The real work of moving
                 // and creating particles is handled inside the Projectile class.
-                projectiles.Add(new Projectile(explosionParticles,
-                                               explosionSmokeParticles,
-                                               projectileTrailParticles));
+                //projectiles.Add(new Projectile(explosionParticles,
+                //                               explosionSmokeParticles,
+                //                               projectileTrailParticles));
 
                 timeToNextProjectile += TimeSpan.FromSeconds(3);
             }

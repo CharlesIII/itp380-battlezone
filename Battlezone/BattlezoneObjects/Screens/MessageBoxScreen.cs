@@ -126,7 +126,7 @@ namespace Battlezone
             SpriteFont font = ScreenManager.Font;
 
             // Darken down any other screens that were drawn beneath the popup.
-            ScreenManager.FadeBackBufferToBlack(TransitionAlpha * 2 / 3);
+            ScreenManager.FadeBackBufferToBlack(TransitionAlpha * 1);
 
             // Center the message text in the viewport.
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
@@ -146,7 +146,7 @@ namespace Battlezone
             // Fade the popup alpha during transitions.
             Color color = new Color(255, 255, 255, TransitionAlpha);
 
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
+            spriteBatch.Begin();
 
             // Draw the background rectangle.
             spriteBatch.Draw(gradientTexture, backgroundRectangle, color);
@@ -155,6 +155,9 @@ namespace Battlezone
             spriteBatch.DrawString(font, message, textPosition, color);
 
             spriteBatch.End();
+            //ScreenManager.GraphicsDevice.RenderState.DepthBufferEnable = true;
+            //ScreenManager.GraphicsDevice.RenderState.AlphaBlendEnable = false;
+            //ScreenManager.GraphicsDevice.RenderState.AlphaTestEnable = false;
         }
 
 

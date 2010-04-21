@@ -25,7 +25,7 @@ namespace Battlezone
 
 
         // Settings class controls the appearance and animation of this particle system.
-        ParticleSettings settings = new ParticleSettings();
+        protected ParticleSettings settings = new ParticleSettings();
 
 
         // For loading the effect and particle texture.
@@ -477,6 +477,7 @@ namespace Battlezone
         /// </summary>
         void SetParticleRenderStates(RenderState renderState)
         {
+
             // Enable point sprites.
             renderState.PointSpriteEnable = true;
             renderState.PointSizeMax = 256;
@@ -497,6 +498,7 @@ namespace Battlezone
             // (so particles will not obscure other particles).
             renderState.DepthBufferEnable = true;
             renderState.DepthBufferWriteEnable = false;
+
         }
 
 

@@ -217,6 +217,14 @@ namespace Battlezone
             }
         }
 
+        public bool AnyKey
+        {
+            get
+            {
+                return Keyboard.GetState().GetPressedKeys().Length > 0;
+            }
+        }
+
 
         #endregion
 

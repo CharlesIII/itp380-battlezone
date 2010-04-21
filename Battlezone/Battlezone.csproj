@@ -99,6 +99,10 @@
     <Compile Include="BattlezoneObjects\Screens\MessageBoxScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\OptionsMenuScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\PauseMenuScreen.cs" />
+    <Compile Include="BattlezoneObjects\Screens\TitleBackgroundScreen.cs" />
+    <Compile Include="BattlezoneObjects\Screens\TitleEntry.cs" />
+    <Compile Include="BattlezoneObjects\Screens\TitleMenuScreen.cs" />
+    <Compile Include="BattlezoneObjects\Screens\TitleScreen.cs" />
     <Compile Include="BattlezoneObjects\SpawnManager.cs" />
     <Compile Include="BattlezoneObjects\PlayerTank.cs" />
     <Compile Include="Engine\Actor.cs" />

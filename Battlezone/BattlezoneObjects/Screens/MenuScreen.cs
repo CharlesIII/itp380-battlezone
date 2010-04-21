@@ -56,7 +56,7 @@ namespace Battlezone
             this.menuTitle = menuTitle;
 
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
-            TransitionOffTime = TimeSpan.FromSeconds(0.5);
+            TransitionOffTime = TimeSpan.FromSeconds(1);
         }
 
 
@@ -171,7 +171,7 @@ namespace Battlezone
             else
                 position.X += transitionOffset * 512;
 
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
+            spriteBatch.Begin();
 
             // Draw each menu entry in turn.
             for (int i = 0; i < menuEntries.Count; i++)
@@ -197,6 +197,9 @@ namespace Battlezone
                                    titleOrigin, titleScale, SpriteEffects.None, 0);
 
             spriteBatch.End();
+            ScreenManager.GraphicsDevice.RenderState.DepthBufferEnable = true;
+            ScreenManager.GraphicsDevice.RenderState.AlphaBlendEnable = false;
+            ScreenManager.GraphicsDevice.RenderState.AlphaTestEnable = false;
         }
 
 

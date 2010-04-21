@@ -28,7 +28,6 @@ namespace Battlezone
         const float trailParticlesPerSecond = 200;
         const int numExplosionParticles = 30;
         const int numExplosionSmokeParticles = 50;
-        const float projectileLifespan = 5.5f;
         const float sidewaysVelocityRange = 60;
         const float verticalVelocityRange = 40;
         const float gravity = 0;//15;
@@ -37,13 +36,15 @@ namespace Battlezone
 
         #region Fields
 
-        ParticleSystem explosionParticles;
-        ParticleSystem explosionSmokeParticles;
-        ParticleEmitter trailEmitter;
+       public ParticleSystem explosionParticles;
+       public ParticleSystem explosionSmokeParticles;
+       public ParticleSystem projectileTrailParticles;
+       public ParticleEmitter trailEmitter;
 
         Vector3 position;
         Vector3 velocity;
         float age;
+        float projectileLifespan;
 
         static Random random = new Random();
 
@@ -55,17 +56,39 @@ namespace Battlezone
         /// </summary>
         public Projectile(ParticleSystem explosionParticles,
                           ParticleSystem explosionSmokeParticles,
-                          ParticleSystem projectileTrailParticles)
+                          ParticleSystem projectileTrailParticles,
+                          Vector3 cameraPosition,
+                          Vector3 cameraDirection, int screenNum  )
         {
             this.explosionParticles = explosionParticles;
             this.explosionSmokeParticles = explosionSmokeParticles;
+            this.projectileTrailParticles = projectileTrailParticles;
 
             // Start at the origin, firing in a random (but roughly upward) direction.
-            position = new Vector3(-90, 40, 2000);
 
-            velocity.X = -50.0f;
-            velocity.Y = 0;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
-            velocity.Z = 0;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
+            position = cameraPosition;
+
+            if (screenNum == 0)
+            {
+                velocity.X = 0;
+                velocity.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
+                velocity.Z = 0;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
+                projectileLifespan = 0.0f;
+            }
+            else if (screenNum == 1)
+            {
+                velocity.X = cameraDirection.X * 500.0f;
+                velocity.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
+                velocity.Z = cameraDirection.Z * 500.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
+                projectileLifespan = (float)random.Next(2, 5);
+            }
+            else if (screenNum == 2)
+            {
+                velocity.X = cameraDirection.X * 500.0f;
+                velocity.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
+                velocity.Z = cameraDirection.Z * 500.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
+                projectileLifespan = 10;
+            }
 
             // Use the particle emitter helper to output our trail particles.
             trailEmitter = new ParticleEmitter(projectileTrailParticles,

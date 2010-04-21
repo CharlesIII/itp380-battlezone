@@ -56,8 +56,8 @@ namespace Battlezone
             Components.Add(screenManager);
 
             // Activate the first screens.
-            screenManager.AddScreen(new BackgroundScreen());
-            screenManager.AddScreen(new MainMenuScreen());
+            screenManager.AddScreen(new TitleBackgroundScreen());
+            screenManager.AddScreen(new TitleMenuScreen());
 
             m_kFrameRate = new Utils.FrameRateCounter(this, new Vector2(750.0f, 600.0f));
             Components.Add(m_kFrameRate);
@@ -125,7 +125,7 @@ namespace Battlezone
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
 

@@ -41,6 +41,7 @@ namespace Battlezone
             MenuEntries.Add(playGameMenuEntry);
             MenuEntries.Add(optionsMenuEntry);
             MenuEntries.Add(exitMenuEntry);
+
         }
 
 
@@ -56,7 +57,7 @@ namespace Battlezone
         {
             try
             {
-                LoadingScreen.Load(ScreenManager, true, new GameplayScreen());
+                LoadingScreen.Load(ScreenManager, true, GameplayScreen.Instance);
             }
             catch (Exception exception)
             {
@@ -96,6 +97,16 @@ namespace Battlezone
         void ConfirmExitMessageBoxAccepted(object sender, EventArgs e)
         {
             ScreenManager.Game.Exit();
+        }
+
+        public static void LoadMenu(ScreenManager screenManager)
+        {
+            // Tell all the current screens to transition off.
+            foreach (GameScreen screen in screenManager.GetScreens())
+                screen.ExitScreen();
+
+            screenManager.AddScreen(new BackgroundScreen());
+            screenManager.AddScreen(new MainMenuScreen());
         }
 
 
