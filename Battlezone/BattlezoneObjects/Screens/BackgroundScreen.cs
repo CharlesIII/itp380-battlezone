@@ -190,7 +190,7 @@ namespace Battlezone
 
             ScreenManager.Game.Components.Add(tank);
             /* Debug usage for AI Tank testing*/
-            tank.Initialize();
+            //tank.Initialize();
 
             smokePlumeParticles = new SmokePlumeParticleSystem(ScreenManager.Game, content);
             ScreenManager.Game.Components.Add(smokePlumeParticles);
@@ -239,6 +239,8 @@ namespace Battlezone
         /// </summary>
         public override void UnloadContent()
         {
+            //base.UnloadContent();
+            Console.Out.WriteLine("Background screen unloading content");
             content.Unload();
             ScreenManager.Game.Components.Remove(tank);
             ScreenManager.Game.Components.Remove(explosionParticles);

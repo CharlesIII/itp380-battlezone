@@ -182,6 +182,7 @@ namespace Battlezone
         protected override void UnloadContent()
         {
             meshLoader.Unload();
+            GameplayScreen.Instance.removeActor(this);
             base.UnloadContent();
         }
 
@@ -195,7 +196,6 @@ namespace Battlezone
 
                 WorldBounds.Center = m_vWorldPosition;
                 WorldBounds.Radius = ModelBounds.Radius * m_fScale;
-
                 m_bChanged = false;
             }
         }
