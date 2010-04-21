@@ -56,5 +56,38 @@ namespace Battlezone
             settings.MinEndSize = 9;
             settings.MaxEndSize = 19;
         }
+
+        public void InitializeSettings(int MaxParticles, double time, float DurationRandomness,
+                                            int MinHorizontalVelocity, int MaxHorizontalVelocity, int MinVerticalVelocity,
+                                            int MaxVerticalVelocity, int MinStartSize, int MaxStartSize, int MinEndSize, int MaxEndSize)
+        {
+            settings.TextureName = "smoke";
+
+            settings.MaxParticles = MaxParticles;
+
+            settings.Duration = TimeSpan.FromSeconds(time);
+
+            settings.DurationRandomness = DurationRandomness;
+
+            settings.EmitterVelocitySensitivity = 0.1f;
+
+            settings.MinHorizontalVelocity = MinHorizontalVelocity;
+            settings.MaxHorizontalVelocity = MaxHorizontalVelocity;
+
+            settings.MinVerticalVelocity = MinVerticalVelocity;
+            settings.MaxVerticalVelocity = MaxVerticalVelocity;
+
+            settings.MinColor = new Color(64, 96, 128, 255);
+            settings.MaxColor = new Color(255, 255, 255, 128);
+
+            settings.MinRotateSpeed = -4;
+            settings.MaxRotateSpeed = 4;
+
+            settings.MinStartSize = MinStartSize;
+            settings.MaxStartSize = MaxStartSize;
+
+            settings.MinEndSize = MinEndSize;
+            settings.MaxEndSize = MaxEndSize;
+        }
     }
 }

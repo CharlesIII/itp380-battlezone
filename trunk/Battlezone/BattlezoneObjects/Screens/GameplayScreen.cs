@@ -18,6 +18,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using Battlezone.Engine;
 using Battlezone.BattlezoneObjects;
+using System.Timers;
 #endregion
 
 namespace Battlezone
@@ -81,11 +82,17 @@ namespace Battlezone
         private ParticleSystem explosionParticles;
         private ParticleSystem explosionSmokeParticles;
         private ParticleSystem projectileTrailParticles;
-        private ParticleSystem smokePlumeParticles;
+        private SmokePlumeParticleSystem tankExaustPlumeParticles;
         private ParticleSystem fireParticles;
 
         private float spdBoost = 1.0f;
         private Boolean spdBoostAvail = true;
+
+        private System.Timers.Timer fireTimer;
+
+        private bool justFired = false;
+
+        private bool tankExaust = true;
 
         #endregion
 
@@ -216,6 +223,10 @@ namespace Battlezone
                 throw new Exception("There should only be one GameplayeScreen object in existence.");
 
 
+            fireTimer = new System.Timers.Timer(3000);
+            fireTimer.Elapsed += new ElapsedEventHandler(FireEvent);
+
+
         }
 
         /// <summary>
@@ -255,29 +266,31 @@ namespace Battlezone
             //Building b = new Building(ScreenManager.Game);
             //ScreenManager.Game.Components.Add(b);
 
-            /*
+            
             // Construct our particle system components.
             explosionParticles = new ExplosionParticleSystem(ScreenManager.Game, content);
             explosionSmokeParticles = new ExplosionSmokeParticleSystem(ScreenManager.Game, content);
             projectileTrailParticles = new ProjectileTrailParticleSystem(ScreenManager.Game, content);
-            smokePlumeParticles = new SmokePlumeParticleSystem(ScreenManager.Game, content);
+            tankExaustPlumeParticles = new SmokePlumeParticleSystem(ScreenManager.Game, content);
             fireParticles = new FireParticleSystem(ScreenManager.Game, content);
 
             // Set the draw order so the explosions and fire
             // will appear over the top of the smoke.
-            smokePlumeParticles.DrawOrder = 100;
+            tankExaustPlumeParticles.DrawOrder = 100;
             explosionSmokeParticles.DrawOrder = 200;
             projectileTrailParticles.DrawOrder = 300;
             explosionParticles.DrawOrder = 400;
             fireParticles.DrawOrder = 500;
 
+            tankExaustPlumeParticles.setGravity(new Vector3(0, 50, -40));
+
             // Register the particle system components.
             ScreenManager.Game.Components.Add(explosionParticles);
             ScreenManager.Game.Components.Add(explosionSmokeParticles);
             ScreenManager.Game.Components.Add(projectileTrailParticles);
-            ScreenManager.Game.Components.Add(smokePlumeParticles);
+            ScreenManager.Game.Components.Add(tankExaustPlumeParticles);
             ScreenManager.Game.Components.Add(fireParticles);
-             * */
+ 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -340,6 +353,7 @@ namespace Battlezone
                     }*/
                     //UpdateExplosions(gameTime);
                     //UpdateProjectiles(gameTime);
+                    UpdateTankExaust();
 
                     //perform activeActors maintenance
                     updateActors();
@@ -401,6 +415,7 @@ namespace Battlezone
                         m_kPlayer.LWheelRotation -= (deltaTime);
                         m_kPlayer.RWheelRotation += (deltaTime);
                         m_kPlayer.TurretRotation -= ((float)Math.PI / 5) * deltaTime;
+                        m_kPlayer.RotAngle -= ((float)Math.PI / 5) * deltaTime;
                         m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), ((float)Math.PI / 5) * deltaTime);
                     }
 
@@ -411,6 +426,7 @@ namespace Battlezone
                         m_kPlayer.LWheelRotation += (deltaTime);
                         m_kPlayer.RWheelRotation -= (deltaTime);
                         m_kPlayer.TurretRotation += ((float)Math.PI / 5) * deltaTime;
+                        m_kPlayer.RotAngle += ((float)Math.PI / 5) * deltaTime;
                         m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, -1.0f, 0.0f), ((float)Math.PI / 5) * deltaTime);
                     }
 
@@ -441,6 +457,42 @@ namespace Battlezone
                     {
                         m_kPlayer.SteerRotation = 0.0f;
                     }
+
+                    if (input.Fire)
+                    {
+                        if(!justFired)
+                        {
+                            Matrix temp = m_kPlayer.worldTransform * m_kPlayer.turretBone.Transform;
+                            ChaseDirection = (temp.Forward * -1);
+
+                            Vector3 offSet = new Vector3(0, 100, 40);
+                            Vector3 pos = m_kPlayer.WorldPosition + offSet;
+
+                            ExplosionParticleSystem explosionParticles = new ExplosionParticleSystem(ScreenManager.Game, content);
+                            ExplosionSmokeParticleSystem explosionSmokeParticles = new ExplosionSmokeParticleSystem(ScreenManager.Game, content);
+                            ProjectileTrailParticleSystem projectileTrailParticles = new ProjectileTrailParticleSystem(ScreenManager.Game, content);
+
+                            // Set the draw order so the explosions and fire
+                            // will appear over the top of the smoke.
+                            explosionSmokeParticles.DrawOrder = 200;
+                            projectileTrailParticles.DrawOrder = 300;
+                            explosionParticles.DrawOrder = 400;
+
+
+                            // Register the particle system components.
+                            ScreenManager.Game.Components.Add(explosionParticles);
+                            ScreenManager.Game.Components.Add(explosionSmokeParticles);
+                            ScreenManager.Game.Components.Add(projectileTrailParticles);
+
+                            Projectile pro = new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles, pos, ChaseDirection, 2, ScreenManager.Game);
+                            pro.Initialize(100,150,90,100,100,0);
+
+                            ScreenManager.Game.Components.Add(pro);
+                            fireTimer.Start();
+                            justFired = true;
+                            //activeActors.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles,pos,temp,2,ScreenManager.Game));
+                        }
+                    }
                 }
             }
         }
@@ -454,11 +506,11 @@ namespace Battlezone
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
                                                Color.Black, 0, 0);
 
+            tankExaustPlumeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             /*
             explosionParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             explosionSmokeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             projectileTrailParticles.SetCamera(CameraMatrix, ProjectionMatrix);
-            smokePlumeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             fireParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             */
             // If the game is transitioning on or off, fade it out to black.
@@ -490,45 +542,9 @@ namespace Battlezone
         }
 
 
-
-        void UpdateExplosions(GameTime gameTime)
-        {
-            timeToNextProjectile -= gameTime.ElapsedGameTime;
-
-            if (timeToNextProjectile <= TimeSpan.Zero)
-            {
-                // Create a new projectile once per second. The real work of moving
-                // and creating particles is handled inside the Projectile class.
-                //projectiles.Add(new Projectile(explosionParticles,
-                //                               explosionSmokeParticles,
-                //                               projectileTrailParticles));
-
-                timeToNextProjectile += TimeSpan.FromSeconds(3);
-            }
-        }
-
-
         /// <summary>
         /// Helper for updating the list of active projectiles.
         /// </summary>
-        void UpdateProjectiles(GameTime gameTime)
-        {
-            int i = 0;
-
-            while (i < projectiles.Count)
-            {
-                if (!projectiles[i].Update(gameTime))
-                {
-                    // Remove projectiles at the end of their life.
-                    projectiles.RemoveAt(i);
-                }
-                else
-                {
-                    // Advance to the next projectile.
-                    i++;
-                }
-            }
-        }
 
         #endregion
 
@@ -570,6 +586,27 @@ namespace Battlezone
                 activeActors.Remove(a);
             }
             actorsToRemove.Clear();
+        }
+        void UpdateTankExaust()
+        {
+            // This is trivial: we just create one new smoke particle per frame.
+
+
+            if (tankExaust)
+            {
+                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle));
+                temp = m_kPlayer.WorldPosition + temp;
+                tankExaustPlumeParticles.AddParticle(temp, Vector3.Zero);
+                tankExaust = false;
+            }
+            else
+            {
+                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle - (Math.PI / 3)), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle - (Math.PI / 3)));
+                temp = m_kPlayer.WorldPosition + temp;
+
+                tankExaustPlumeParticles.AddParticle(temp, Vector3.Zero);
+                tankExaust = true;
+            }
         }
 
 
@@ -621,6 +658,11 @@ namespace Battlezone
         {
             spdBoostAvail = true;
             m_kTimer.RemoveTimer("BoostCD");
+        }
+        public void FireEvent(object sender, EventArgs eArgs)
+        {
+            justFired = false;
+
         }
 
 

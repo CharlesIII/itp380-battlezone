@@ -36,10 +36,10 @@ namespace Battlezone
             settings.DurationRandomness = 1;
 
             settings.MinHorizontalVelocity = 20;
-            settings.MaxHorizontalVelocity = 30;
+            settings.MaxHorizontalVelocity = 100;
 
             settings.MinVerticalVelocity = -10;
-            settings.MaxVerticalVelocity = 100;
+            settings.MaxVerticalVelocity = 200;
 
             settings.EndVelocity = 0;
 
@@ -49,8 +49,8 @@ namespace Battlezone
             settings.MinRotateSpeed = -1;
             settings.MaxRotateSpeed = 1;
 
-            settings.MinStartSize = 10;
-            settings.MaxStartSize = 10;
+            settings.MinStartSize = 100;
+            settings.MaxStartSize = 100;
 
             settings.MinEndSize = 100;
             settings.MaxEndSize = 200;
@@ -61,8 +61,8 @@ namespace Battlezone
         }
 
         public void InitializeSettings(int MaxParticles, int time, int DurationRandomness,
-                                                    int MinHorizontalVelocity, int MaxHorizontalVelocity, int MinVerticalVelocity, 
-                                                    int MaxVerticalVelocity)
+                                                    int MinHorizontalVelocity, int MaxHorizontalVelocity, int MinVerticalVelocity,
+                                                    int MaxVerticalVelocity, int MinStartSize, int MaxStartSize, int MinEndSize, int MaxEndSize)
         {
             settings.TextureName = "explosion";
 
@@ -85,11 +85,11 @@ namespace Battlezone
             settings.MinRotateSpeed = -1;
             settings.MaxRotateSpeed = 1;
 
-            settings.MinStartSize = 10;
-            settings.MaxStartSize = 10;
+            settings.MinStartSize = MinStartSize;
+            settings.MaxStartSize = MaxStartSize;
 
-            settings.MinEndSize = 100;
-            settings.MaxEndSize = 200;
+            settings.MinEndSize = MinEndSize;
+            settings.MaxEndSize = MaxEndSize;
 
             // Use additive blending.
             settings.SourceBlend = Blend.SourceAlpha;

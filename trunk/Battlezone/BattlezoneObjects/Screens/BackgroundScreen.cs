@@ -390,11 +390,9 @@ namespace Battlezone
                     fired = true;
                 }
 
-                projectiles.Add(new Projectile(explosionParticles,
-                                               explosionSmokeParticles,
-                                               projectileTrailParticles,
-                                               temp1,
-                                               ChaseDirection,1));
+                Projectile pro = new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles, temp1, ChaseDirection, 1, ScreenManager.Game);
+                //pro.Initialize(90, 90, 50, 100, 100, 0);
+                projectiles.Add(pro);
 
                 timeToNextProjectile += TimeSpan.FromSeconds(random.Next(4, 5));
             }
@@ -410,7 +408,7 @@ namespace Battlezone
 
             while (i < projectiles.Count)
             {
-                if (!projectiles[i].Update(gameTime))
+                if (!projectiles[i].Update(gameTime,0))
                 {
                     // Remove projectiles at the end of their life.
                     projectiles.RemoveAt(i);

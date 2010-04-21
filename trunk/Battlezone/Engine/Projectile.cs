@@ -21,16 +21,16 @@ namespace Battlezone
     /// steady stream of trail particles behind it. After a while it explodes,
     /// creating a sudden burst of explosion and smoke particles.
     /// </summary>
-    class Projectile
+    class Projectile : Actor
     {
         #region Constants
 
-        const float trailParticlesPerSecond = 200;
-        const int numExplosionParticles = 30;
-        const int numExplosionSmokeParticles = 50;
-        const float sidewaysVelocityRange = 60;
-        const float verticalVelocityRange = 40;
-        const float gravity = 0;//15;
+        float trailParticlesPerSecond = 30;
+        int numExplosionParticles = 30;
+        int numExplosionSmokeParticles = 30;
+        float sidewaysVelocityRange = 60;
+        float verticalVelocityRange = 40;
+        float gravity = 0;//15;
 
         #endregion
 
@@ -46,6 +46,8 @@ namespace Battlezone
         float age;
         float projectileLifespan;
 
+        bool dead = false;
+
         static Random random = new Random();
 
         #endregion
@@ -58,15 +60,18 @@ namespace Battlezone
                           ParticleSystem explosionSmokeParticles,
                           ParticleSystem projectileTrailParticles,
                           Vector3 cameraPosition,
-                          Vector3 cameraDirection, int screenNum  )
+                          Vector3 cameraDirection, int screenNum, Game game  ) : base(game)
         {
             this.explosionParticles = explosionParticles;
             this.explosionSmokeParticles = explosionSmokeParticles;
             this.projectileTrailParticles = projectileTrailParticles;
 
+            sMeshToLoad = "Missile";
+
             // Start at the origin, firing in a random (but roughly upward) direction.
 
             position = cameraPosition;
+            
 
             if (screenNum == 0)
             {
@@ -87,7 +92,7 @@ namespace Battlezone
                 velocity.X = cameraDirection.X * 500.0f;
                 velocity.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
                 velocity.Z = cameraDirection.Z * 500.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
-                projectileLifespan = 10;
+                projectileLifespan = 1;
             }
 
             // Use the particle emitter helper to output our trail particles.
@@ -95,11 +100,64 @@ namespace Battlezone
                                                trailParticlesPerSecond, position);
         }
 
+        public void Initialize(float trailParticlesPerSecond, int numExplosionParticles, int numExplosionSmokeParticles,
+                               float sidewaysVelocityRange, float verticalVelocityRange, float gravity)
+        {
+            this.trailParticlesPerSecond = trailParticlesPerSecond;
+            this.numExplosionParticles = numExplosionParticles;
+            this.numExplosionSmokeParticles = numExplosionSmokeParticles;
+            this.sidewaysVelocityRange = sidewaysVelocityRange;
+            this.verticalVelocityRange = verticalVelocityRange;
+            this.gravity = gravity;//15;
+        }
+
 
         /// <summary>
         /// Updates the projectile.
         /// </summary>
-        public bool Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
+        {
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Simple projectile physics.
+            position += velocity * elapsedTime;
+            velocity.Y -= elapsedTime * gravity;
+            age += elapsedTime;
+
+            // Update the particle emitter, which will create our particle trail.
+            trailEmitter.Update(gameTime, position);
+
+            WorldPosition = position;
+
+            // If enough time has passed, explode! Note how we pass our velocity
+            // in to the AddParticle method: this lets the explosion be influenced
+            // by the speed and direction of the projectile which created it.
+            if (age > projectileLifespan && !dead)
+            {
+                for (int i = 0; i < numExplosionParticles; i++)
+                    explosionParticles.AddParticle(position, velocity);
+
+                for (int i = 0; i < numExplosionSmokeParticles; i++)
+                    explosionSmokeParticles.AddParticle(position, velocity);
+                dead = true;
+            }
+
+            explosionParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
+            explosionSmokeParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
+            projectileTrailParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
+                
+        }
+
+        public void Explode()
+        {
+            for (int i = 0; i < numExplosionParticles; i++)
+                explosionParticles.AddParticle(position, velocity);
+
+            for (int i = 0; i < numExplosionSmokeParticles; i++)
+                explosionSmokeParticles.AddParticle(position, velocity);
+        }
+
+        public bool Update(GameTime gameTime, int type)
         {
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -124,7 +182,7 @@ namespace Battlezone
 
                 return false;
             }
-                
+
             return true;
         }
     }

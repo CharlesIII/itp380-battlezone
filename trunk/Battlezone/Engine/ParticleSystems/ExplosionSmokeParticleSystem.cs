@@ -30,17 +30,17 @@ namespace Battlezone
         {
             settings.TextureName = "smoke";
 
-            settings.MaxParticles = 500;
+            settings.MaxParticles = 700;
 
             settings.Duration = TimeSpan.FromSeconds(4);
 
-            settings.MinHorizontalVelocity = 0;
-            settings.MaxHorizontalVelocity = 50;
+            settings.MinHorizontalVelocity = 50;
+            settings.MaxHorizontalVelocity = 70;
 
-            settings.MinVerticalVelocity = 70;
-            settings.MaxVerticalVelocity = 130;
+            settings.MinVerticalVelocity = 200;
+            settings.MaxVerticalVelocity = 230;
 
-            settings.Gravity = new Vector3(0, -20, 0);
+            settings.Gravity = new Vector3(0, -10, 0);
 
             settings.EndVelocity = 0;
 
@@ -58,7 +58,9 @@ namespace Battlezone
         }
 
         public void InitializeSettings(int MaxParticles, int time, int MinHorizontalVelocity,
-                                       int MaxHorizontalVelocity, int MinVerticalVelocity, int MaxVerticalVelocity, Vector3 Gravity)
+                                       int MaxHorizontalVelocity, int MinVerticalVelocity, 
+                                       int MaxVerticalVelocity, Vector3 Gravity, int MinStartSize, 
+                                       int MaxStartSize, int MinEndSize, int MaxEndSize)
         {
             settings.TextureName = "smoke";
 
@@ -82,11 +84,11 @@ namespace Battlezone
             settings.MinRotateSpeed = -2;
             settings.MaxRotateSpeed = 2;
 
-            settings.MinStartSize = 10;
-            settings.MaxStartSize = 10;
+            settings.MinStartSize = MinStartSize;
+            settings.MaxStartSize = MaxStartSize;
 
-            settings.MinEndSize = 100;
-            settings.MaxEndSize = 200;
+            settings.MinEndSize = MinEndSize;
+            settings.MaxEndSize = MaxEndSize;
         }
     }
 }
