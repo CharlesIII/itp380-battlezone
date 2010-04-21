@@ -188,7 +188,7 @@ namespace Battlezone
             tank = new PlayerTank(ScreenManager.Game);
             tank.gamePlay = false;
 
-            //ScreenManager.Game.Components.Add(tank);
+            ScreenManager.Game.Components.Add(tank);
             /* Debug usage for AI Tank testing*/
             tank.Initialize();
 
