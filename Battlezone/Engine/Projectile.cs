@@ -112,7 +112,7 @@ namespace Battlezone
                                                trailParticlesPerSecond, position);
         }
 
-        public Projectile(ContentManager content, Vector3 cameraPosition, Vector3 cameraDirection, int screenNum, Game Game)
+        public Projectile(ContentManager content, Vector3 Position, Vector3 Direction, Game Game)
             : base(Game)
         {
 
@@ -140,30 +140,13 @@ namespace Battlezone
 
             // Start at the origin, firing in a random (but roughly upward) direction.
 
-            position = cameraPosition;
+            position = Position;
 
 
-            if (screenNum == 0)
-            {
-                velocity.X = 0;
-                velocity.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
-                velocity.Z = 0;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
-                projectileLifespan = 0.0f;
-            }
-            else if (screenNum == 1)
-            {
-                velocity.X = cameraDirection.X * 500.0f;
-                velocity.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
-                velocity.Z = cameraDirection.Z * 500.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
-                projectileLifespan = (float)random.Next(1, 4);
-            }
-            else if (screenNum == 2)
-            {
-                velocity.X = cameraDirection.X * 500.0f;
-                velocity.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
-                velocity.Z = cameraDirection.Z * 500.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
-                projectileLifespan = 1;
-            }
+            velocity.X = Direction.X * 500.0f;
+            velocity.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
+            velocity.Z = Direction.Z * 500.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
+            projectileLifespan = 1;
 
             // Use the particle emitter helper to output our trail particles.
             trailEmitter = new ParticleEmitter(projectileTrailParticles,
