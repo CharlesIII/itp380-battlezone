@@ -169,7 +169,7 @@ namespace Battlezone
             trailEmitter = new ParticleEmitter(projectileTrailParticles,
                                                trailParticlesPerSecond, position);
 
-            explodeTimer = new System.Timers.Timer(2500);
+            explodeTimer = new System.Timers.Timer(3000);
             explodeTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
         }
 
