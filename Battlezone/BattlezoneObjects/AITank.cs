@@ -360,7 +360,7 @@ namespace Battlezone.BattlezoneObjects
                 if (CheckPlayerSighted())
                 {
                     //do attack
-                    Console.Out.WriteLine("Can see tank in ATTACK");
+                    //Console.Out.WriteLine("Can see tank in ATTACK");
                 }
                 else
                 {
@@ -410,12 +410,12 @@ namespace Battlezone.BattlezoneObjects
         //Helper functions to keep the Update method clean
         private bool CheckPlayerSighted()
         {
-            Ray sightRay = new Ray(cannonBone.Transform.Translation, GetWorldFacing());
+            Ray sightRay = new Ray(cannonBone.Transform.Translation, cannonBone.Transform.Forward);
             bool seePlayer = false;
 
             foreach (Actor a in GameplayScreen.Instance.activeActors)
             {
-                Console.Out.WriteLine(GameplayScreen.Instance.activeActors.Count);
+                //Console.Out.WriteLine(GameplayScreen.Instance.activeActors.Count);
                 if (a.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING)
                 {
                     if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING) 
