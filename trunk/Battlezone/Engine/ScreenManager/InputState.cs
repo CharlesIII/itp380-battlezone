@@ -145,6 +145,21 @@ namespace Battlezone
         }
 
         /*
+         * Goes vroom vroom
+         */
+        public bool Boost
+        {
+            get
+            {
+                return IsNewKeyPress(Keys.G) ||
+                       IsNewButtonPress(Buttons.DPadLeft) ||
+                       IsKeyHeld(Keys.G) ||
+                       IsButtonHeld(Buttons.DPadLeft);
+            }
+        }
+
+
+        /*
          * Turns the tank left
          */
         public bool TurnLeft
