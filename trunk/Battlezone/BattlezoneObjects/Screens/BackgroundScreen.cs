@@ -243,6 +243,7 @@ namespace Battlezone
             Console.Out.WriteLine("Background screen unloading content");
             content.Unload();
             ScreenManager.Game.Components.Remove(tank);
+            GameplayScreen.Instance.removeActor(tank);
             ScreenManager.Game.Components.Remove(explosionParticles);
             ScreenManager.Game.Components.Remove(explosionSmokeParticles);
             ScreenManager.Game.Components.Remove(projectileTrailParticles);

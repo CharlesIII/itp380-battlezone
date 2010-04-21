@@ -154,7 +154,6 @@ namespace Battlezone
             vForce = new Vector3(0.0f, 0.0f, 0.0f);
             vAcceleration = new Vector3(0.0f, 0.0f, 0.0f);
             COLLISION_IDENTIFIER = CollisionIdentifier.NONCOLLIDING;
-            GameplayScreen.Instance.addActor(this);
             base.Initialize();
         }
 
@@ -173,6 +172,8 @@ namespace Battlezone
                 ModelBounds = BoundingSphere.CreateMerged(ModelBounds, mesh.BoundingSphere);
             }
 
+            GameplayScreen.Instance.addActor(this);
+
             base.LoadContent();
         }
 
@@ -182,7 +183,6 @@ namespace Battlezone
         protected override void UnloadContent()
         {
             meshLoader.Unload();
-            GameplayScreen.Instance.removeActor(this);
             base.UnloadContent();
         }
 

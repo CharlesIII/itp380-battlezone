@@ -546,7 +546,7 @@ namespace Battlezone
         /// <param name="a"></param>
         public void removeActor(Actor a)
         {
-            actorsToRemove.Remove(a);
+            actorsToRemove.Add(a);
         }
 
         /// <summary>
