@@ -17,8 +17,8 @@ Global Settings
     Header File = BackgroundSound.h;
     Exclude Category Names = 0;
     Exclude Variable Names = 0;
-    Last Modified Low = 2720001921;
-    Last Modified High = 30073079;
+    Last Modified Low = 30073079;
+    Last Modified High = 2720001921;
 
     Category
     {
@@ -226,8 +226,10 @@ Wave Bank
     Windows Bank Path Edited = 1;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 3217525075;
-    Bank Last Revised High = 30073081;
+    Header Last Modified Low = 0;
+    Header Last Modified High = 0;
+    Bank Last Revised Low = 542267968;
+    Bank Last Revised High = 30073120;
 
     Wave
     {
@@ -260,15 +262,13 @@ Sound Bank
     Windows File = Win\BackgroundSound.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
-    Bank Last Modified Low = 2068540871;
-    Bank Last Modified High = 30073079;
     Header Last Modified High = 0;
     Header Last Modified Low = 0;
 
     Sound
     {
         Name = TheEcstacyOfGold;
-        Volume = -1200;
+        Volume = 0;
         Pitch = 0;
         Priority = 0;
 
