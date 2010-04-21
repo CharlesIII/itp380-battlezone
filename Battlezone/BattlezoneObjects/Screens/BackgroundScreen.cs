@@ -286,7 +286,7 @@ namespace Battlezone
                 tank.LWheelRotation += (2 * deltaTime);
                 tank.RWheelRotation += (2 * deltaTime);
 
-                //tank.TurretRotation += (0.50f * deltaTime);
+                tank.TurretRotation += (0.50f * deltaTime);
 
                 UpdateWorldPositions();
                 ChasePosition = tank.WorldPosition;
@@ -398,14 +398,14 @@ namespace Battlezone
             // This is trivial: we just create one new smoke particle per frame.
             if (SmokePlume)
             {
-                Vector3 temp = new Vector3(27, 40, -45);
+                Vector3 temp = new Vector3(50, 85, -90);
                 temp = tank.WorldPosition + temp;
                 smokePlumeParticles.AddParticle(temp, Vector3.Zero);
                 SmokePlume = false;
             }
             else
             {
-                Vector3 temp = new Vector3(-27, 40, -45);
+                Vector3 temp = new Vector3(-50, 85, -90);
                 temp = tank.WorldPosition + temp;
                 smokePlumeParticles.AddParticle(temp, Vector3.Zero);
                 SmokePlume = true;
