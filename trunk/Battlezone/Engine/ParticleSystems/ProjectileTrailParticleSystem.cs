@@ -50,11 +50,11 @@ namespace Battlezone
             settings.MinRotateSpeed = -4;
             settings.MaxRotateSpeed = 4;
 
-            settings.MinStartSize = 2;
-            settings.MaxStartSize = 4;
+            settings.MinStartSize = 6;
+            settings.MaxStartSize = 8;
 
-            settings.MinEndSize = 5;
-            settings.MaxEndSize = 15;
+            settings.MinEndSize = 9;
+            settings.MaxEndSize = 19;
         }
     }
 }

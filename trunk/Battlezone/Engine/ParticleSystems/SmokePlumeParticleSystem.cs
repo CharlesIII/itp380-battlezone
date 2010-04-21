@@ -32,7 +32,7 @@ namespace Battlezone
 
             settings.MaxParticles = 200;
 
-            settings.Duration = TimeSpan.FromSeconds(1);
+            settings.Duration = TimeSpan.FromSeconds(1.5);
 
             settings.MinHorizontalVelocity = 0;
             settings.MaxHorizontalVelocity = 5;
