@@ -360,6 +360,7 @@ namespace Battlezone.BattlezoneObjects
                 if (CheckPlayerSighted())
                 {
                     //do attack
+                    Console.Out.WriteLine("Can see tank in ATTACK");
                 }
                 else
                 {
@@ -414,6 +415,7 @@ namespace Battlezone.BattlezoneObjects
 
             foreach (Actor a in GameplayScreen.Instance.activeActors)
             {
+                Console.Out.WriteLine(GameplayScreen.Instance.activeActors.Count);
                 if (a.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING)
                 {
                     if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING) 
@@ -425,7 +427,10 @@ namespace Battlezone.BattlezoneObjects
                     else if (sightRay.Intersects(a.WorldBounds) != null)
                     {
                         if (a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK)
+                        {
+                            Console.Out.WriteLine(a.WorldBounds);
                             seePlayer = true;
+                        }
                         else
                             return false;
                     }
