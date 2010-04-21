@@ -41,7 +41,7 @@ namespace Battlezone
             settings.MaxVerticalVelocity = 20;
 
             // Create a wind effect by tilting the gravity vector sideways.
-            settings.Gravity = new Vector3(0, 50, -40);
+            settings.Gravity = new Vector3(0, 50, 0);
 
             settings.EndVelocity = 0.75f;
 
@@ -53,6 +53,11 @@ namespace Battlezone
 
             settings.MinEndSize = 50;
             settings.MaxEndSize = 100;
+        }
+
+        public void setGravity(Vector3 grav)
+        {
+            settings.Gravity = grav;
         }
     }
 }

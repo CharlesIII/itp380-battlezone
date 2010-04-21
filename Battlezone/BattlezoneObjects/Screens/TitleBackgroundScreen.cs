@@ -185,8 +185,8 @@ namespace Battlezone
             projectileTrailParticles = new ProjectileTrailParticleSystem(ScreenManager.Game, content);
             fireParticles = new FireParticleSystem(ScreenManager.Game, content);
 
-            explosionParticles.InitializeSettings(200, 2, 1,-20,20, -20, 20);
-            explosionSmokeParticles.InitializeSettings(200, 3,-50, 50, -10, 10, Vector3.Zero);
+            explosionParticles.InitializeSettings(200, 2, 1,-20,20, -20, 20, 10, 10 , 100, 200);
+            explosionSmokeParticles.InitializeSettings(200, 3,-50, 50, -10, 10, Vector3.Zero, 10, 10, 100, 200);
 
             // Set the draw order so the explosions and fire
             // will appear over the top of the smoke.
@@ -330,11 +330,11 @@ namespace Battlezone
                     fired = true;
                 }
 
-                projectiles.Add(new Projectile(explosionParticles,
-                                               explosionSmokeParticles,
-                                               projectileTrailParticles,
-                                               temp1,
-                                               ChaseDirection,0));
+               
+
+                Projectile pro = new Projectile(explosionParticles,explosionSmokeParticles, projectileTrailParticles,temp1,ChaseDirection,1,ScreenManager.Game);
+                //pro.Initialize(140, 90, 50, 100, 100, 0);
+                projectiles.Add(pro);
 
                 timeToNextProjectile += TimeSpan.FromSeconds(random.Next(3,5));
             }
@@ -350,7 +350,7 @@ namespace Battlezone
 
             while (i < projectiles.Count)
             {
-                if (!projectiles[i].Update(gameTime))
+                if (!projectiles[i].Update(gameTime,0))
                 {
                     // Remove projectiles at the end of their life.
                     projectiles.RemoveAt(i);
