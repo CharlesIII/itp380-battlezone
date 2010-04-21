@@ -156,7 +156,7 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your initialization code here
 
             base.Initialize();
-            Scale = 0.15f;
+            Scale = 0.30f;
          
             COLLISION_IDENTIFIER = CollisionIdentifier.PLAYER_TANK;
         }

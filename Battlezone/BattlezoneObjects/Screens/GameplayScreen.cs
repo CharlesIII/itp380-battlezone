@@ -84,6 +84,8 @@ namespace Battlezone
         private ParticleSystem smokePlumeParticles;
         private ParticleSystem fireParticles;
 
+        private float spdBoost = 1.0f;
+        private Boolean spdBoostAvail = true;
 
         #endregion
 
@@ -140,7 +142,7 @@ namespace Battlezone
             get { return desiredPositionOffset; }
             set { desiredPositionOffset = value; }
         }
-        private Vector3 desiredPositionOffset = new Vector3(0.0f, 130.0f, 1200.0f);
+        private Vector3 desiredPositionOffset = new Vector3(0.0f, 220.0f, 1500.0f);
 
         /// <summary>
         /// Desired camera position in world space.
@@ -164,7 +166,7 @@ namespace Battlezone
             get { return lookAtOffset; }
             set { lookAtOffset = value; }
         }
-        private Vector3 lookAtOffset = new Vector3(0.0f, 10.0f, -10.0f);
+        private Vector3 lookAtOffset = new Vector3(0.0f, 5.0f, -50.0f);
 
         /// <summary>
         /// Look at point in world space.
@@ -241,13 +243,13 @@ namespace Battlezone
             m_kPlayer = new PlayerTank(ScreenManager.Game);
             ScreenManager.Game.Components.Add(m_kPlayer);
             /* Debug usage for AI Tank testing*/
-            m_kPlayer.Initialize();
+            //m_kPlayer.Initialize();
 
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
 
-            //AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3());
-            //ScreenManager.Game.Components.Add(test);
+            AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3());
+            ScreenManager.Game.Components.Add(test);
 
             //Building b = new Building(ScreenManager.Game);
             //ScreenManager.Game.Components.Add(b);
@@ -391,8 +393,8 @@ namespace Battlezone
                     {
                         //m_kPlayer.TurretRotation += ((float)Math.PI / 5) * deltaTime;
                         //m_kPlayer.SteerRotation = (float)Math.PI / 5;
-                        m_kPlayer.LWheelRotation -= (2 * deltaTime);
-                        m_kPlayer.RWheelRotation += (2 * deltaTime);
+                        m_kPlayer.LWheelRotation -= (deltaTime);
+                        m_kPlayer.RWheelRotation += (deltaTime);
                         m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), ((float)Math.PI / 5) * deltaTime);
                     }
 
@@ -400,21 +402,33 @@ namespace Battlezone
                     {
                         //m_kPlayer.TurretRotation -= ((float)Math.PI / 5) * deltaTime;
                         //m_kPlayer.SteerRotation = -(float)Math.PI / 5;
-                        m_kPlayer.LWheelRotation += (2 * deltaTime);
-                        m_kPlayer.RWheelRotation -= (2 * deltaTime);
+                        m_kPlayer.LWheelRotation += (deltaTime);
+                        m_kPlayer.RWheelRotation -= (deltaTime);
                         m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, -1.0f, 0.0f), ((float)Math.PI / 5) * deltaTime);
                     }
 
                     if (input.Move)
                     {
-                        m_kPlayer.LWheelRotation += (2 * deltaTime);
-                        m_kPlayer.RWheelRotation += (2 * deltaTime);
+                        m_kPlayer.LWheelRotation += (1.8f * deltaTime * spdBoost);
+                        m_kPlayer.RWheelRotation += (1.8f * deltaTime * spdBoost);
+                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * -250.0f * spdBoost;
+                    }
+
+                    if (!input.Move)
+                    {
+                        m_kPlayer.Velocity = new Vector3(0.0f, 0.0f, 0.0f);
+                    }
+
+                    if (input.Boost)
+                    {
+                        useBoost();
                     }
 
                     if (input.Reverse)
                     {
-                        m_kPlayer.LWheelRotation -= (2 * deltaTime);
-                        m_kPlayer.RWheelRotation -= (2 * deltaTime);
+                        m_kPlayer.LWheelRotation -= (2 * deltaTime * spdBoost);
+                        m_kPlayer.RWheelRotation -= (2 * deltaTime * spdBoost);
+                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * 250.0f * spdBoost;
                     }
                     if (!input.TurnLeft && !input.TurnRight)
                     {
@@ -577,6 +591,31 @@ namespace Battlezone
                 }
             }
         }
+
+        #endregion
+
+        #region Timer Functions
+
+        public void useBoost()
+        {
+            spdBoost = 2.5f;
+            spdBoostAvail = false;
+            m_kTimer.AddTimer("Boost", 5.0f, new Utils.TimerDelegate(BoostOver), false);
+        }
+
+        public void BoostOver()
+        {
+            spdBoost = 1.0f;
+            m_kTimer.RemoveTimer("Boost");
+            m_kTimer.AddTimer("BoostCD", 30.0f, new Utils.TimerDelegate(BoostReady), false);
+        }
+
+        public void BoostReady()
+        {
+            spdBoostAvail = true;
+            m_kTimer.RemoveTimer("BoostCD");
+        }
+
 
         #endregion
     }
