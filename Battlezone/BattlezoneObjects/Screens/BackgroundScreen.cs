@@ -115,7 +115,7 @@ namespace Battlezone
             get { return desiredPositionOffset; }
             set { desiredPositionOffset = value; }
         }
-        private Vector3 desiredPositionOffset = new Vector3(0.0f, 130.0f, 1200.0f);
+        private Vector3 desiredPositionOffset = new Vector3(0.0f, 220.0f, 1000.0f);
 
         /// <summary>
         /// Desired camera position in world space.
@@ -139,7 +139,7 @@ namespace Battlezone
             get { return lookAtOffset; }
             set { lookAtOffset = value; }
         }
-        private Vector3 lookAtOffset = new Vector3(0.0f, 50.0f, -10.0f);
+        private Vector3 lookAtOffset = new Vector3(0.0f, 50.0f, -50.0f);
 
         /// <summary>
         /// Look at point in world space.
