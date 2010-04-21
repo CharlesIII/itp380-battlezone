@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Battlezone.Engine;
 using Microsoft.Xna.Framework.Audio;
 using Battlezone.BattlezoneObjects;
+using System.Timers;
 #endregion
 
 namespace Battlezone
@@ -57,8 +58,14 @@ namespace Battlezone
         public static WaveBank waveBank;
         public static SoundBank soundBank;
 
+        Cue cue;
+
         private bool SmokePlume = true;
         private bool fired = true;
+
+        private System.Timers.Timer myTimer;
+
+        private bool fireMusic = false;
 
         #endregion
 
@@ -226,10 +233,17 @@ namespace Battlezone
             waveBank = new WaveBank(audioEngine, "Content/BackgroundSound.xwb");
             soundBank = new SoundBank(audioEngine, "Content/BackgroundSound.xsb");
 
+            cue = soundBank.GetCue("TheEcstacyOfGold");
+
+            cue.Play();
+
             audioEngine.Update();
-            soundBank.PlayCue("TheEcstacyOfGold");
 
             ScreenManager.Game.ResetElapsedTime();
+
+            myTimer = new System.Timers.Timer(48000);
+            myTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            myTimer.Start();
 
         }
 
@@ -248,6 +262,8 @@ namespace Battlezone
             ScreenManager.Game.Components.Remove(explosionSmokeParticles);
             ScreenManager.Game.Components.Remove(projectileTrailParticles);
             ScreenManager.Game.Components.Remove(smokePlumeParticles);
+            cue.Stop(AudioStopOptions.Immediate);
+            
         }
 
 
@@ -277,8 +293,11 @@ namespace Battlezone
                 projectileTrailParticles.SetCamera(CameraMatrix, ProjectionMatrix);
                 smokePlumeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
 
-                UpdateExplosions(gameTime);
-                UpdateProjectiles(gameTime);
+                if (fireMusic)
+                {
+                    UpdateExplosions(gameTime);
+                    UpdateProjectiles(gameTime);
+                }
                 UpdateSmokePlume();
 
                 //tank.Scale = 1.5f;
@@ -294,6 +313,16 @@ namespace Battlezone
                 ChaseDirection = (temp.Forward * 1f);
                 Up = Vector3.UnitY;
                 CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
+
+                audioEngine.Update();
+
+                if (cue.IsStopped)
+                {
+                    cue = soundBank.GetCue("TheEcstacyOfGold");
+                    cue.Play();
+                    myTimer.Start();
+                    fireMusic = false;
+                }
 
             }
              
@@ -410,6 +439,12 @@ namespace Battlezone
                 smokePlumeParticles.AddParticle(temp, Vector3.Zero);
                 SmokePlume = true;
             }
+        }
+        public void OnTimedEvent(object sender, EventArgs eArgs)
+        {
+            fireMusic = true;
+
+
         }
 
         
