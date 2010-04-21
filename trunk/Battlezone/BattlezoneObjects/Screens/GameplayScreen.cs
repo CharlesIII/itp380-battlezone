@@ -244,6 +244,7 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(m_kPlayer);
             /* Debug usage for AI Tank testing*/
             //m_kPlayer.Initialize();
+            m_kPlayer.gamePlay = true;
 
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
