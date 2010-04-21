@@ -112,7 +112,7 @@ namespace Battlezone
             ContentManager content = Game.Content;
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            font = content.Load<SpriteFont>("menufont");
+            font = content.Load<SpriteFont>("Xirod");
             blankTexture = content.Load<Texture2D>("blank");
 
             // Tell each of the screens to load their content.
@@ -307,7 +307,7 @@ namespace Battlezone
         {
             Viewport viewport = GraphicsDevice.Viewport;
 
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
+            spriteBatch.Begin();
 
             spriteBatch.Draw(blankTexture,
                              new Rectangle(0, 0, viewport.Width, viewport.Height),

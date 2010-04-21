@@ -149,9 +149,12 @@ namespace Battlezone
                 Color color = new Color(255, 255, 255, TransitionAlpha);
 
                 // Draw the text.
-                spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
+                spriteBatch.Begin();
                 spriteBatch.DrawString(font, message, textPosition, color);
                 spriteBatch.End();
+                ScreenManager.GraphicsDevice.RenderState.DepthBufferEnable = true;
+                ScreenManager.GraphicsDevice.RenderState.AlphaBlendEnable = false;
+                ScreenManager.GraphicsDevice.RenderState.AlphaTestEnable = false;
             }
         }
 

@@ -69,6 +69,8 @@ namespace Battlezone.BattlezoneObjects
         float hatchRotationValue;
         public float turnDirection = 1.0f;
 
+        public bool gamePlay = false;
+
         #endregion
 
         #region Bone Properties
@@ -231,8 +233,16 @@ namespace Battlezone.BattlezoneObjects
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.World = boneTransforms[mesh.ParentBone.Index];
-                    effect.View = GameplayScreen.CameraMatrix;
-                    effect.Projection = GameplayScreen.ProjectionMatrix;
+                    if (gamePlay)
+                    {
+                        effect.View = GameplayScreen.CameraMatrix;
+                        effect.Projection = GameplayScreen.ProjectionMatrix;
+                    }
+                    else
+                    {
+                        effect.View = BackgroundScreen.CameraMatrix;
+                        effect.Projection = BackgroundScreen.ProjectionMatrix;
+                    }
 
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;

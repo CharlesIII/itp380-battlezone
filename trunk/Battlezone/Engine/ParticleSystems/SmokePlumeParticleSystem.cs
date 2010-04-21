@@ -30,18 +30,18 @@ namespace Battlezone
         {
             settings.TextureName = "smoke";
 
-            settings.MaxParticles = 600;
+            settings.MaxParticles = 200;
 
-            settings.Duration = TimeSpan.FromSeconds(10);
+            settings.Duration = TimeSpan.FromSeconds(1);
 
             settings.MinHorizontalVelocity = 0;
-            settings.MaxHorizontalVelocity = 15;
+            settings.MaxHorizontalVelocity = 5;
 
             settings.MinVerticalVelocity = 10;
             settings.MaxVerticalVelocity = 20;
 
             // Create a wind effect by tilting the gravity vector sideways.
-            settings.Gravity = new Vector3(-20, -5, 0);
+            settings.Gravity = new Vector3(0, 50, -40);
 
             settings.EndVelocity = 0.75f;
 
@@ -52,7 +52,7 @@ namespace Battlezone
             settings.MaxStartSize = 10;
 
             settings.MinEndSize = 50;
-            settings.MaxEndSize = 200;
+            settings.MaxEndSize = 100;
         }
     }
 }
