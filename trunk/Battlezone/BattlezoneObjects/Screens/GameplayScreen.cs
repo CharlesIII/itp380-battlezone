@@ -351,6 +351,7 @@ namespace Battlezone
                     ChaseDirection = (temp.Forward * -1);
                     Up = Vector3.UnitY;
                     CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
+                    m_kTimer.Update(gameTime);
                 }
             }
         }
@@ -396,6 +397,7 @@ namespace Battlezone
                         //m_kPlayer.SteerRotation = (float)Math.PI / 5;
                         m_kPlayer.LWheelRotation -= (deltaTime);
                         m_kPlayer.RWheelRotation += (deltaTime);
+                        m_kPlayer.TurretRotation -= ((float)Math.PI / 5) * deltaTime;
                         m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), ((float)Math.PI / 5) * deltaTime);
                     }
 
@@ -405,14 +407,15 @@ namespace Battlezone
                         //m_kPlayer.SteerRotation = -(float)Math.PI / 5;
                         m_kPlayer.LWheelRotation += (deltaTime);
                         m_kPlayer.RWheelRotation -= (deltaTime);
+                        m_kPlayer.TurretRotation += ((float)Math.PI / 5) * deltaTime;
                         m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, -1.0f, 0.0f), ((float)Math.PI / 5) * deltaTime);
                     }
 
                     if (input.Move)
                     {
-                        m_kPlayer.LWheelRotation += (1.8f * deltaTime * spdBoost);
-                        m_kPlayer.RWheelRotation += (1.8f * deltaTime * spdBoost);
-                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * -250.0f * spdBoost;
+                        m_kPlayer.LWheelRotation += (2.0f * deltaTime * spdBoost);
+                        m_kPlayer.RWheelRotation += (2.0f * deltaTime * spdBoost);
+                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * -275.0f * spdBoost;
                     }
 
                     if (!input.Move)
@@ -429,7 +432,7 @@ namespace Battlezone
                     {
                         m_kPlayer.LWheelRotation -= (2 * deltaTime * spdBoost);
                         m_kPlayer.RWheelRotation -= (2 * deltaTime * spdBoost);
-                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * 250.0f * spdBoost;
+                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * 275.0f * spdBoost;
                     }
                     if (!input.TurnLeft && !input.TurnRight)
                     {
