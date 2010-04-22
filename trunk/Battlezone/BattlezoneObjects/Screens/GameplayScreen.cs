@@ -82,7 +82,7 @@ namespace Battlezone
         private ParticleSystem explosionParticles;
         private ParticleSystem explosionSmokeParticles;
         private ParticleSystem projectileTrailParticles;
-        private SmokePlumeParticleSystem tankExaustPlumeParticles;
+        private ParticleSystem tankExaustPlumeParticles;
         private ParticleSystem fireParticles;
 
         private float spdBoost = 1.0f;
@@ -269,10 +269,10 @@ namespace Battlezone
             
             // Construct our particle system components.
             explosionParticles = new ExplosionParticleSystem(ScreenManager.Game, content);
-            explosionSmokeParticles = new ExplosionSmokeParticleSystem(ScreenManager.Game, content);
-            projectileTrailParticles = new ProjectileTrailParticleSystem(ScreenManager.Game, content);
-            tankExaustPlumeParticles = new SmokePlumeParticleSystem(ScreenManager.Game, content);
-            fireParticles = new FireParticleSystem(ScreenManager.Game, content);
+            explosionSmokeParticles = new ExplosionSmokeParticleSystemGameplay(ScreenManager.Game, content);
+            projectileTrailParticles = new ProjectileTrailParticleSystemGameplay(ScreenManager.Game, content);
+            tankExaustPlumeParticles = new SmokePlumeParticleSystemGameplay(ScreenManager.Game, content);
+            fireParticles = new FireParticleSystemGameplay(ScreenManager.Game, content);
 
             // Set the draw order so the explosions and fire
             // will appear over the top of the smoke.
@@ -282,7 +282,6 @@ namespace Battlezone
             explosionParticles.DrawOrder = 400;
             fireParticles.DrawOrder = 500;
 
-            tankExaustPlumeParticles.setGravity(new Vector3(0, 50, -40));
 
             // Register the particle system components.
             ScreenManager.Game.Components.Add(explosionParticles);
@@ -465,11 +464,11 @@ namespace Battlezone
                             Matrix temp = m_kPlayer.worldTransform * m_kPlayer.turretBone.Transform;
                             ChaseDirection = (temp.Forward * -1);
 
-                            Vector3 offSet = new Vector3(0, 100, 40);
+                            Vector3 offSet = new Vector3(0, 100, 5);
                             Vector3 pos = m_kPlayer.WorldPosition + offSet;
 
                             Projectile pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game);
-                            pro.Initialize(100,150,90,100,100,0);
+                            pro.Initialize(400,250,190,100,100,0);
 
                             ScreenManager.Game.Components.Add(pro);
                             fireTimer.Start();
