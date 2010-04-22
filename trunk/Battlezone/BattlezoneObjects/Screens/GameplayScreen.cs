@@ -64,6 +64,9 @@ namespace Battlezone
         
         private BattlezoneObjects.PlayerTank m_kPlayer;
 
+
+        private BattlezoneObjects.SkyDome m_kSkyDome;
+
         ContentManager content;
         SpriteFont gameFont;
 
@@ -84,6 +87,16 @@ namespace Battlezone
         private ParticleSystem projectileTrailParticles;
         private ParticleSystem tankExaustPlumeParticles;
         private ParticleSystem fireParticles;
+
+        //bool alphaBlendEnable;
+        //Blend sourceBlend;
+        //Blend destinationBlend;
+        CullMode cullMode;
+        bool depthBufferEnable;
+        bool depthBufferWriteEnable;
+        //bool alphaTestEnable;
+        //TextureAddressMode addressU;
+        //TextureAddressMode addressV;
 
         private float spdBoost = 1.0f;
         private Boolean spdBoostAvail = true;
@@ -256,6 +269,9 @@ namespace Battlezone
             /* Debug usage for AI Tank testing*/
             //m_kPlayer.Initialize();
             m_kPlayer.gamePlay = true;
+
+            m_kSkyDome = new SkyDome(ScreenManager.Game, ScreenManager.GraphicsDevice);
+            ScreenManager.Game.Components.Add(m_kSkyDome);
 
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
@@ -591,6 +607,32 @@ namespace Battlezone
                 tankExaust = true;
             }
         }
+        private void SaveGraphicsDeviceState()
+        {
+            //alphaBlendEnable = device.RenderState.AlphaBlendEnable;
+            //sourceBlend = device.RenderState.SourceBlend;
+            //destinationBlend = device.RenderState.DestinationBlend;
+            cullMode = ScreenManager.GraphicsDevice.RenderState.CullMode;
+            depthBufferEnable = ScreenManager.GraphicsDevice.RenderState.DepthBufferEnable;
+            depthBufferWriteEnable = ScreenManager.GraphicsDevice.RenderState.DepthBufferWriteEnable;
+            //alphaTestEnable = device.RenderState.AlphaTestEnable;
+            //addressU = device.SamplerStates[0].AddressU;
+            //addressV = device.SamplerStates[0].AddressV;
+        }
+
+        private void RestoreGraphicsDeviceState()
+        {
+            //device.RenderState.AlphaBlendEnable = alphaBlendEnable;
+            //device.RenderState.SourceBlend = sourceBlend;
+            //device.RenderState.DestinationBlend = destinationBlend;
+            ScreenManager.GraphicsDevice.RenderState.CullMode = cullMode;
+            ScreenManager.GraphicsDevice.RenderState.DepthBufferEnable = depthBufferEnable;
+            ScreenManager.GraphicsDevice.RenderState.DepthBufferWriteEnable = depthBufferWriteEnable;
+            //device.RenderState.AlphaTestEnable = alphaTestEnable;
+            //device.SamplerStates[0].AddressU = addressU;
+            //device.SamplerStates[0].AddressV = addressV;
+        }
+
 
 
 
