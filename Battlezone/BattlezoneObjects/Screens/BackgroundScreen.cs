@@ -65,7 +65,7 @@ namespace Battlezone
 
         private System.Timers.Timer myTimer;
 
-        private bool fireMusic = false;
+        private bool fireMusic = true;
 
         #endregion
 
@@ -199,12 +199,12 @@ namespace Battlezone
             /* Debug usage for AI Tank testing*/
             //tank.Initialize();
 
-            smokePlumeParticles = new SmokePlumeParticleSystem(ScreenManager.Game, content);
+            smokePlumeParticles = new SmokePlumeParticleSystemBackground(ScreenManager.Game, content);
             ScreenManager.Game.Components.Add(smokePlumeParticles);
 
-            explosionParticles = new ExplosionParticleSystem(ScreenManager.Game, content);
-            explosionSmokeParticles = new ExplosionSmokeParticleSystem(ScreenManager.Game, content);
-            projectileTrailParticles = new ProjectileTrailParticleSystem(ScreenManager.Game, content);
+            explosionParticles = new ExplosionParticleSystemBackground(ScreenManager.Game, content);
+            explosionSmokeParticles = new ExplosionSmokeParticleSystemBackground(ScreenManager.Game, content);
+            projectileTrailParticles = new ProjectileTrailParticleSystemBackground(ScreenManager.Game, content);
 
             // Set the draw order so the explosions and fire
             // will appear over the top of the smoke.
@@ -220,14 +220,6 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(projectileTrailParticles);
             //ScreenManager.Game.Components.Add(smokePlumeParticles);
             //ScreenManager.Game.Components.Add(fireParticles);
-
-            //Background = content.Load<SoundEffect>("TheEcstacyOfGold"); //Background in .wav format
-
-            float volume = 1.0f;
-            //Background.Play(volume, 0.0f, 0.0f); // volume is a float between 0.0f and 1.0f
-            //instance = Background.CreateInstance();
-            //instance.IsLooped = true;
-            //instance.Play();
 
             audioEngine = new AudioEngine("Content/BackgroundSound.xgs");
             waveBank = new WaveBank(audioEngine, "Content/BackgroundSound.xwb");
@@ -391,10 +383,9 @@ namespace Battlezone
                 }
 
                 Projectile pro = new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles, temp1, ChaseDirection, 1, ScreenManager.Game);
-                //pro.Initialize(90, 90, 50, 100, 100, 0);
                 projectiles.Add(pro);
 
-                timeToNextProjectile += TimeSpan.FromSeconds(random.Next(4, 5));
+                timeToNextProjectile += TimeSpan.FromSeconds(random.Next(5, 6));
             }
         }
 

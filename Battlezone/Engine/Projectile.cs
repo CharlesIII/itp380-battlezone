@@ -34,9 +34,9 @@ namespace Battlezone
     {
         #region Constants
 
-        float trailParticlesPerSecond = 30;
+        float trailParticlesPerSecond = 200;
         int numExplosionParticles = 30;
-        int numExplosionSmokeParticles = 30;
+        int numExplosionSmokeParticles = 50;
         float sidewaysVelocityRange = 60;
         float verticalVelocityRange = 40;
         float gravity = 0;//15;
@@ -52,6 +52,7 @@ namespace Battlezone
 
         Vector3 position;
         Vector3 velocity;
+        Vector3 fireDirection;
         float age;
         float projectileLifespan;
 
@@ -59,6 +60,8 @@ namespace Battlezone
         static Random random = new Random();
 
         private System.Timers.Timer explodeTimer;
+
+        private bool justMade = true;
 
         #endregion
 
@@ -116,9 +119,9 @@ namespace Battlezone
             : base(Game)
         {
 
-            ExplosionParticleSystem explosionParticles = new ExplosionParticleSystem(Game, content);
-            ExplosionSmokeParticleSystem explosionSmokeParticles = new ExplosionSmokeParticleSystem(Game, content);
-            ProjectileTrailParticleSystem projectileTrailParticles = new ProjectileTrailParticleSystem(Game, content);
+            ParticleSystem explosionParticles = new ExplosionParticleSystem(Game, content);
+            ParticleSystem explosionSmokeParticles = new ExplosionSmokeParticleSystemGameplay(Game, content);
+            ParticleSystem projectileTrailParticles = new ProjectileTrailParticleSystemGameplay(Game, content);
 
             // Set the draw order so the explosions and fire
             // will appear over the top of the smoke.
@@ -154,6 +157,9 @@ namespace Battlezone
 
             explodeTimer = new System.Timers.Timer(3000);
             explodeTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+
+            fireDirection = Direction;
+
         }
 
         public void Initialize(float trailParticlesPerSecond, int numExplosionParticles, int numExplosionSmokeParticles,
@@ -167,6 +173,12 @@ namespace Battlezone
             this.gravity = gravity;//15;
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            Quat *= Quaternion.CreateFromYawPitchRoll(fireDirection.X, fireDirection.Y, fireDirection.Z);
+        }
 
         /// <summary>
         /// Updates the projectile.
@@ -177,6 +189,7 @@ namespace Battlezone
 
             if (!dead)
             {
+
                 // Simple projectile physics.
                 position += velocity * elapsedTime;
                 velocity.Y -= elapsedTime * gravity;
@@ -184,9 +197,7 @@ namespace Battlezone
 
                 // Update the particle emitter, which will create our particle trail.
                 trailEmitter.Update(gameTime, position);
-
-                WorldPosition = position;
-
+              
                 // If enough time has passed, explode! Note how we pass our velocity
                 // in to the AddParticle method: this lets the explosion be influenced
                 // by the speed and direction of the projectile which created it.

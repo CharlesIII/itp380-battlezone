@@ -41,10 +41,9 @@ namespace Battlezone
         // air, so we need to keep track of all the active projectiles.
         List<Projectile> projectiles = new List<Projectile>();
 
-        private ExplosionParticleSystem explosionParticles;
-        private ExplosionSmokeParticleSystem explosionSmokeParticles;
+        private ParticleSystem explosionParticles;
+        private ParticleSystem explosionSmokeParticles;
         private ParticleSystem projectileTrailParticles;
-        private ParticleSystem smokePlumeParticles;
         private ParticleSystem fireParticles;
 
         TimeSpan timeToNextProjectile = TimeSpan.Zero;
@@ -178,19 +177,15 @@ namespace Battlezone
         {
             if (content == null)
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
+        
+            explosionParticles = new ExplosionParticleSystemTitleBackground(ScreenManager.Game, content);
+            explosionSmokeParticles = new ExplosionSmokeParticleSystemTitleBackground(ScreenManager.Game, content);
+            projectileTrailParticles = new ProjectileTrailParticleSystemTitleBackground(ScreenManager.Game, content);
+            fireParticles = new FireParticleSystemTitleBackground(ScreenManager.Game, content);
 
-            smokePlumeParticles = new SmokePlumeParticleSystem(ScreenManager.Game, content);          
-            explosionParticles = new ExplosionParticleSystem(ScreenManager.Game, content);
-            explosionSmokeParticles = new ExplosionSmokeParticleSystem(ScreenManager.Game, content);
-            projectileTrailParticles = new ProjectileTrailParticleSystem(ScreenManager.Game, content);
-            fireParticles = new FireParticleSystem(ScreenManager.Game, content);
-
-            explosionParticles.InitializeSettings(200, 2, 1,-20,20, -20, 20, 10, 10 , 100, 200);
-            explosionSmokeParticles.InitializeSettings(200, 3,-50, 50, -10, 10, Vector3.Zero, 10, 10, 100, 200);
 
             // Set the draw order so the explosions and fire
             // will appear over the top of the smoke.
-            smokePlumeParticles.DrawOrder = 100;
             explosionSmokeParticles.DrawOrder = 200;
             projectileTrailParticles.DrawOrder = 300;
             explosionParticles.DrawOrder = 400;
@@ -200,7 +195,6 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(explosionParticles);
             ScreenManager.Game.Components.Add(explosionSmokeParticles);
             ScreenManager.Game.Components.Add(projectileTrailParticles);
-            ScreenManager.Game.Components.Add(smokePlumeParticles);
             //ScreenManager.Game.Components.Add(smokePlumeParticles);
             //ScreenManager.Game.Components.Add(fireParticles);
 
@@ -218,7 +212,6 @@ namespace Battlezone
             ScreenManager.Game.Components.Remove(explosionParticles);
             ScreenManager.Game.Components.Remove(explosionSmokeParticles);
             ScreenManager.Game.Components.Remove(projectileTrailParticles);
-            ScreenManager.Game.Components.Remove(smokePlumeParticles);
         }
 
 
@@ -246,7 +239,6 @@ namespace Battlezone
                 explosionParticles.SetCamera(CameraMatrix, ProjectionMatrix);
                 explosionSmokeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
                 projectileTrailParticles.SetCamera(CameraMatrix, ProjectionMatrix);
-                smokePlumeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
 
                 UpdateExplosions(gameTime);
                 UpdateProjectiles(gameTime);
@@ -332,8 +324,8 @@ namespace Battlezone
 
                
 
-                Projectile pro = new Projectile(explosionParticles,explosionSmokeParticles, projectileTrailParticles,temp1,ChaseDirection,1,ScreenManager.Game);
-                //pro.Initialize(140, 90, 50, 100, 100, 0);
+                Projectile pro = new Projectile(explosionParticles,explosionSmokeParticles, projectileTrailParticles,temp1,ChaseDirection,0,ScreenManager.Game);
+                //pro.Initialize(140, 190, 150, 200, 200, 0);
                 projectiles.Add(pro);
 
                 timeToNextProjectile += TimeSpan.FromSeconds(random.Next(3,5));
