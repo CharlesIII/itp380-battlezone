@@ -103,6 +103,7 @@
     <Compile Include="BattlezoneObjects\Screens\TitleEntry.cs" />
     <Compile Include="BattlezoneObjects\Screens\TitleMenuScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\TitleScreen.cs" />
+    <Compile Include="BattlezoneObjects\SkyDome.cs" />
     <Compile Include="BattlezoneObjects\SpawnManager.cs" />
     <Compile Include="BattlezoneObjects\PlayerTank.cs" />
     <Compile Include="Engine\Actor.cs" />
