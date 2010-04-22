@@ -35,6 +35,7 @@ namespace Battlezone
 
         SpriteBatch spriteBatch;
         SpriteFont font;
+        SpriteFont gameTitleFont;
         Texture2D blankTexture;
 
         bool isInitialized;
@@ -113,6 +114,7 @@ namespace Battlezone
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = content.Load<SpriteFont>("Xirod");
+            gameTitleFont = content.Load<SpriteFont>("ethno");
             blankTexture = content.Load<Texture2D>("blank");
 
             // Tell each of the screens to load their content.
