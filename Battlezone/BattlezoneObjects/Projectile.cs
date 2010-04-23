@@ -107,7 +107,7 @@ namespace Battlezone
                 velocity.X = cameraDirection.X * 500.0f;
                 velocity.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
                 velocity.Z = cameraDirection.Z * 500.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
-                projectileLifespan = 1.0f;
+                projectileLifespan = 1;
             }
 
             // Use the particle emitter helper to output our trail particles.
