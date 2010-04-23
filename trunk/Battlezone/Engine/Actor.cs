@@ -124,6 +124,13 @@ namespace Battlezone
 
         protected Utils.Timer timer;
 
+        public float maxHealth = 100.0f;
+        public float CurrentHealth
+        {
+            set { _health = value; }
+            get { return _health; }
+        }
+        private float _health = 100.0f;
         protected bool dead = false;
 
         /// <summary>
