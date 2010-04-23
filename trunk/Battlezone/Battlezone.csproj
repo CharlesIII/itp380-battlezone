@@ -117,7 +117,7 @@
     <Compile Include="Engine\ParticleSystems\ProjectileTrailParticleSystemTitleBackground.cs" />
     <Compile Include="Engine\ParticleSystems\SmokePlumeParticleSystemGameplay.cs" />
     <Compile Include="Engine\PathFinder.cs" />
-    <Compile Include="Engine\Projectile.cs" />
+    <Compile Include="BattlezoneObjects\Projectile.cs" />
     <Compile Include="Engine\ScreenManager\GameScreen.cs" />
     <Compile Include="Engine\ScreenManager\InputState.cs" />
     <Compile Include="Engine\ScreenManager\ScreenManager.cs" />
