@@ -76,6 +76,8 @@ namespace Battlezone
 
         SpawnManager m_kSpawnManager;
 
+        HealthBar m_kHealthBar;
+
         TimeSpan timeToNextProjectile = TimeSpan.Zero;
 
         // The explosions effect works by firing projectiles up into the
@@ -269,9 +271,12 @@ namespace Battlezone
             /* Debug usage for AI Tank testing*/
             //m_kPlayer.Initialize();
             m_kPlayer.gamePlay = true;
-
+            
             m_kSkyDome = new SkyDome(ScreenManager.Game, ScreenManager.GraphicsDevice);
             ScreenManager.Game.Components.Add(m_kSkyDome);
+
+            m_kHealthBar = new HealthBar(ScreenManager.Game);
+            ScreenManager.Game.Components.Add(m_kHealthBar);
 
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
@@ -459,7 +464,7 @@ namespace Battlezone
 
                     if (input.Boost)
                     {
-                        useBoost();
+                        if (spdBoostAvail) useBoost();
                     }
 
                     if (input.Reverse)
@@ -504,7 +509,7 @@ namespace Battlezone
         {
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
                                                Color.Black, 0, 0);
-
+            
             tankExaustPlumeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             /*
             explosionParticles.SetCamera(CameraMatrix, ProjectionMatrix);
@@ -690,6 +695,15 @@ namespace Battlezone
 
         }
 
+
+        #endregion
+
+        #region misc methods
+
+        public PlayerTank getPlayer()
+        {
+            return m_kPlayer;
+        }
 
         #endregion
     }
