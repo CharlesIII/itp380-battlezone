@@ -107,7 +107,7 @@ namespace Battlezone.BattlezoneObjects
                 Matrix.CreateScale(200) *
                 //Matrix.CreateRotationX(-MathHelper.PiOver2) *
                 Matrix.CreateRotationY(rotationY) *
-                Matrix.CreateTranslation(750.0f, 0.0f, 1500.0f);
+                Matrix.CreateTranslation(GameplayScreen.Instance.Position);
         }
 
         private void SaveGraphicsDeviceState()

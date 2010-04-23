@@ -144,18 +144,19 @@ namespace Battlezone
             // Start at the origin, firing in a random (but roughly upward) direction.
 
             position = Position;
+            WorldPosition = position;
 
 
-            velocity.X = Direction.X * 500.0f;
+            velocity.X = Direction.X * 1000.0f;
             velocity.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
-            velocity.Z = Direction.Z * 500.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
-            projectileLifespan = 1;
+            velocity.Z = Direction.Z * 1000.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
+            projectileLifespan = 6;
 
             // Use the particle emitter helper to output our trail particles.
             trailEmitter = new ParticleEmitter(projectileTrailParticles,
                                                trailParticlesPerSecond, position);
 
-            explodeTimer = new System.Timers.Timer(3000);
+            explodeTimer = new System.Timers.Timer(5000);
             explodeTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
 
             fireDirection = Direction;
@@ -177,7 +178,20 @@ namespace Battlezone
         {
             base.Initialize();
 
-            Quat *= Quaternion.CreateFromYawPitchRoll(fireDirection.X, fireDirection.Y, fireDirection.Z);
+            Vector3 temp = ActorModel.Bones[0].Transform.Forward;
+            temp.Normalize();
+            temp.Z *= -1;
+            fireDirection.Normalize();
+            if (Vector3.Cross(temp, fireDirection).Y > 0)
+            {
+                Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, (float)Math.Acos((double)Vector3.Dot(fireDirection, temp)));
+                //Quat *= Quaternion.CreateFromYawPitchRoll(fireDirection.X, fireDirection.Y, fireDirection.Z);
+            }
+            else
+            {
+                Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, -1*(float)Math.Acos((double)Vector3.Dot(fireDirection, temp)));
+            }
+            WorldPosition = position;
         }
 
         /// <summary>
@@ -186,6 +200,8 @@ namespace Battlezone
         public override void Update(GameTime gameTime)
         {
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            WorldPosition = position;
 
             if (!dead)
             {
@@ -207,10 +223,11 @@ namespace Battlezone
                     dead = true;
                 }
 
-                explosionParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
-                explosionSmokeParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
-                projectileTrailParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
             }
+
+            explosionParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
+            explosionSmokeParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
+            projectileTrailParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
                 
         }
 

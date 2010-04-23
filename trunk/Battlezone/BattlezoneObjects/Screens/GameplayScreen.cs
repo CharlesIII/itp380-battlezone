@@ -485,7 +485,7 @@ namespace Battlezone
                             Matrix temp = m_kPlayer.worldTransform * m_kPlayer.turretBone.Transform;
                             ChaseDirection = (temp.Forward * -1);
 
-                            Vector3 offSet = new Vector3(0, 100, 5);
+                            Vector3 offSet = new Vector3(0, 100, 0);
                             Vector3 pos = m_kPlayer.WorldPosition + offSet;
 
                             Projectile pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game);

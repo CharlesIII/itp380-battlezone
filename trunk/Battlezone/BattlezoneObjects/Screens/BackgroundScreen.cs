@@ -65,7 +65,7 @@ namespace Battlezone
 
         private System.Timers.Timer myTimer;
 
-        private bool fireMusic = true;
+        private bool fireMusic = false;
 
         #endregion
 

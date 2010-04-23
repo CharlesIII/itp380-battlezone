@@ -37,8 +37,8 @@ namespace Battlezone
             settings.MinHorizontalVelocity = 50;
             settings.MaxHorizontalVelocity = 70;
 
-            settings.MinVerticalVelocity = 200;
-            settings.MaxVerticalVelocity = 230;
+            settings.MinVerticalVelocity = 130;
+            settings.MaxVerticalVelocity = 200;
 
             settings.Gravity = new Vector3(0, -10, 0);
 
