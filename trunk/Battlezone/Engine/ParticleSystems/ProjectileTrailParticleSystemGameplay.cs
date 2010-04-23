@@ -32,7 +32,7 @@ namespace Battlezone
 
             settings.MaxParticles = 2000;
 
-            settings.Duration = TimeSpan.FromSeconds(5);
+            settings.Duration = TimeSpan.FromSeconds(1.5);
 
             settings.DurationRandomness = 1.5f;
 
