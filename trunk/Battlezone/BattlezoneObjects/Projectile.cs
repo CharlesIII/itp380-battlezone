@@ -57,6 +57,7 @@ namespace Battlezone
         float age;
         float projectileLifespan;
 
+        PROJECTILE_TYPE type;
 
         static Random random = new Random();
 
@@ -140,6 +141,7 @@ namespace Battlezone
             Game.Components.Add(this.explosionSmokeParticles);
             Game.Components.Add(this.projectileTrailParticles);
 
+            this.type = type;
             if (type == PROJECTILE_TYPE.MISSILE)
                 sMeshToLoad = "Missile";
             else if (type == PROJECTILE_TYPE.SHELL)
@@ -184,7 +186,8 @@ namespace Battlezone
 
             Vector3 temp = ActorModel.Bones[0].Transform.Forward;
             temp.Normalize();
-            temp.Z *= -1;
+            if (type == PROJECTILE_TYPE.MISSILE)
+                temp.Z *= -1;
             fireDirection.Normalize();
             if (Vector3.Cross(temp, fireDirection).Y > 0)
             {

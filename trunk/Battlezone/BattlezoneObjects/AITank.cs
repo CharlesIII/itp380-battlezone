@@ -178,34 +178,35 @@ namespace Battlezone.BattlezoneObjects
             float fDelta = gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f;
             timer.Update(gameTime);
 
-            //first update the tank's position
-            if ((m_vCurrentPathTarget - WorldPosition).Length() < 5.0f)
+            //make sure we're facing the right direction before we start moving
+            if (RotAngle < targetTankRotationValue)
             {
-                //we're close enough so stop moving and snap position
-                Velocity = new Vector3(0.0f);
-                WorldPosition = m_vCurrentPathTarget;
+                //we need to rotate CCW
+                RotAngle += TANK_ROTATION_SPEED * fDelta;
+                
+                //clamp RotAngle to target if close enough
+                if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.10f)
+                    RotAngle = targetTankRotationValue;
+                Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
+            }
+            else if (RotAngle > targetTankRotationValue)
+            {
+                //we need to rotate CW
+                RotAngle -= TANK_ROTATION_SPEED * fDelta;
+
+                //clamp RotAngle to target if close enough
+                if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.10f)
+                    RotAngle = targetTankRotationValue;
+                Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
             }
             else
             {
-                if (RotAngle < targetTankRotationValue)
+                //we're facing the right direction do movement logic
+                if ((m_vCurrentPathTarget - WorldPosition).Length() < 5.0f)
                 {
-                    //we need to rotate CCW
-                    RotAngle += TANK_ROTATION_SPEED * fDelta;
-                    
-                    //clamp RotAngle to target if close enough
-                    if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.10f)
-                        RotAngle = targetTankRotationValue;
-                    Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
-                }
-                else if (RotAngle > targetTankRotationValue)
-                {
-                    //we need to rotate CW
-                    RotAngle -= TANK_ROTATION_SPEED * fDelta;
-
-                    //clamp RotAngle to target if close enough
-                    if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.10f)
-                        RotAngle = targetTankRotationValue;
-                    Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
+                    //we're close enough so stop moving and snap position
+                    Velocity = new Vector3(0.0f);
+                    WorldPosition = m_vCurrentPathTarget;
                 }
                 else
                 {
