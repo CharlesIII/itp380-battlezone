@@ -57,7 +57,17 @@ namespace Battlezone
         float age;
         float projectileLifespan;
 
+
+        private float dmg;
+        public float Damage
+        {
+            get { return dmg; }
+            set { dmg = value; }
+        }
+
         PROJECTILE_TYPE type;
+
+
 
         static Random random = new Random();
 
@@ -143,10 +153,15 @@ namespace Battlezone
 
             this.type = type;
             if (type == PROJECTILE_TYPE.MISSILE)
+            {
                 sMeshToLoad = "Missile";
+                Damage = 30.0f;
+            }
             else if (type == PROJECTILE_TYPE.SHELL)
+            {
                 sMeshToLoad = "tank_shell";
-
+                Damage = 10.0f;
+            }
             // Start at the origin, firing in a random (but roughly upward) direction.
 
             position = Position;

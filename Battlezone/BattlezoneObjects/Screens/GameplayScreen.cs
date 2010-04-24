@@ -80,6 +80,9 @@ namespace Battlezone
 
         TimeSpan timeToNextProjectile = TimeSpan.Zero;
 
+        //Weapon Selection: 1 Shell (defualt), 2 Missile
+        private int selectedWeapon = 1;
+
         // The explosions effect works by firing projectiles up into the
         // air, so we need to keep track of all the active projectiles.
         List<Projectile> projectiles = new List<Projectile>();
@@ -104,6 +107,7 @@ namespace Battlezone
         private Boolean spdBoostAvail = true;
 
         private System.Timers.Timer fireTimer;
+        private System.Timers.Timer missileTimer;
 
         private bool justFired = false;
 
@@ -242,6 +246,8 @@ namespace Battlezone
 
             fireTimer = new System.Timers.Timer(3000);
             fireTimer.Elapsed += new ElapsedEventHandler(FireEvent);
+            missileTimer = new System.Timers.Timer(5000);
+            missileTimer.Elapsed += new ElapsedEventHandler(FireEvent);
 
 
         }
@@ -422,6 +428,14 @@ namespace Battlezone
             {
                 if (m_kPlayer != null)
                 {
+                    if (input.ShellSelect)
+                    {
+                        selectedWeapon = 1;
+                    }
+                    if (input.MissileSelect)
+                    {
+                        selectedWeapon = 2;
+                    }
                     if (input.TurretLeft)
                     {
                         m_kPlayer.TurretRotation += (2 * deltaTime);
@@ -495,9 +509,20 @@ namespace Battlezone
                             ChaseDirection = (temp.Forward * -1);
 
                             Vector3 offSet = new Vector3(0, 100, -10f);
+                            Projectile pro;
                             Vector3 pos = m_kPlayer.WorldPosition + offSet;
-
-                            Projectile pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL);
+                            switch(selectedWeapon){
+                                case 1:
+                                    pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL);
+                                    break;
+                                case 2:
+                                    pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.MISSILE);
+                                    break;
+                                default:
+                                    System.Console.WriteLine("Hmm, Seems there's a bug a crawlin - selectedWeapon was neither 1 or 2.  Defaulted to Shell");
+                                    pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL);
+                                    break;
+                            }
                             pro.Initialize(400,250,190,100,100,0);
 
                             ScreenManager.Game.Components.Add(pro);

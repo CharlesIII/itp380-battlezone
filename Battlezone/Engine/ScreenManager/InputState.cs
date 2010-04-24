@@ -145,6 +145,35 @@ namespace Battlezone
         }
 
         /*
+         * Check out mah missile
+         */
+        public bool MissileSelect
+        {
+            get
+            {
+                return IsNewKeyPress(Keys.D2) ||
+                       IsNewButtonPress(Buttons.LeftShoulder) ||
+                       IsKeyHeld(Keys.D2) ||
+                       IsButtonHeld(Buttons.LeftShoulder);
+            }
+        }
+
+        /*
+         * The ladies say I have a big gun
+         */
+        public bool ShellSelect
+        {
+            get
+            {
+                return IsNewKeyPress(Keys.D1) ||
+                       IsNewButtonPress(Buttons.RightShoulder) ||
+                       IsKeyHeld(Keys.D1) ||
+                       IsButtonHeld(Buttons.RightShoulder);
+            }
+        }
+
+
+        /*
          * Goes vroom vroom
          */
         public bool Boost
