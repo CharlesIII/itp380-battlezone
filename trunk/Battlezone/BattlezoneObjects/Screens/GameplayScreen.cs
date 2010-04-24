@@ -245,12 +245,6 @@ namespace Battlezone
                 throw new Exception("There should only be one GameplayeScreen object in existence.");
 
 
-            fireTimer = new System.Timers.Timer(3000);
-            fireTimer.Elapsed += new ElapsedEventHandler(FireEvent);
-            missileTimer = new System.Timers.Timer(10000);
-            missileTimer.Elapsed += new ElapsedEventHandler(MissileEvent);
-
-
         }
 
         /// <summary>
@@ -530,14 +524,14 @@ namespace Battlezone
 
                             if (!missileFired)
                             {
-                                pro.Initialize(400, 250, 190, 100, 100, 0);
+                                pro.Initialize(400.0f, 250, 190, 100.0f, 100.0f, 0.0f);
                                 ScreenManager.Game.Components.Add(pro);
-                                fireTimer.Start();
+                                m_kTimer.AddTimer("FireTimer", 3.0f, new Utils.TimerDelegate(FireEvent), false);
                                 justFired = true;
                             }
                             if (selectedWeapon == 2)
                             {
-                                missileTimer.Start();
+                                m_kTimer.AddTimer("MissileTimer", 10.0f, new Utils.TimerDelegate(MissileEvent), false);
                                 missileFired = true;
                             }
                             //activeActors.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles,pos,temp,2,ScreenManager.Game));
@@ -762,15 +756,16 @@ namespace Battlezone
             m_kTimer.RemoveTimer("BoostCD");
         }
 
-        public void FireEvent(object sender, EventArgs eArgs)
+        public void FireEvent()
         {
             justFired = false;
-
+            m_kTimer.RemoveTimer("FireTimer");
         }
 
-        public void MissileEvent(object sender, EventArgs eArgs)
+        public void MissileEvent()
         {
             missileFired = false;
+            m_kTimer.RemoveTimer("MissileTimer");
         }
 
 
