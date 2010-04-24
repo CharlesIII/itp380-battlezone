@@ -151,6 +151,8 @@ namespace Battlezone
             Game.Components.Add(this.explosionSmokeParticles);
             Game.Components.Add(this.projectileTrailParticles);
 
+            base.COLLISION_IDENTIFIER = CollisionIdentifier.SHELL;
+
             this.type = type;
             if (type == PROJECTILE_TYPE.MISSILE)
             {
@@ -250,7 +252,9 @@ namespace Battlezone
             explosionParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
             explosionSmokeParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
             projectileTrailParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
-                
+
+            WorldBounds.Center = WorldPosition;
+            WorldBounds.Radius = ModelBounds.Radius * Scale;
         }
 
         public void Explode()
@@ -313,7 +317,17 @@ namespace Battlezone
         /// <param name="a">Actor with which it is currently colliding.</param>
         public override void collide(Actor a)
         {
-
+            if (a is AITank)
+            {
+                Explode();
+                dead = true;
+                System.Console.Out.WriteLine("It's a Hit!");
+            } 
+            else if (a is PlayerTank)
+            {
+                Explode();
+                dead = true;
+            }
         }
     }
 }
