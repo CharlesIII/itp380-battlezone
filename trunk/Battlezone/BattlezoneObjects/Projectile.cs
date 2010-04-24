@@ -55,7 +55,7 @@ namespace Battlezone
         Vector3 velocity;
         Vector3 fireDirection;
         float age;
-        float projectileLifespan;
+        float projectileLifespan = 1;
 
 
         private float dmg;
@@ -170,9 +170,9 @@ namespace Battlezone
             WorldPosition = position;
 
 
-            velocity.X = Direction.X * 1000.0f;
-            velocity.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
-            velocity.Z = Direction.Z * 1000.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
+            Force = Direction * 1000000.0f;
+            //Force.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
+            //Force.Z = Direction.Z * 1000.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
             projectileLifespan = 6;
 
             // Use the particle emitter helper to output our trail particles.
@@ -183,6 +183,7 @@ namespace Battlezone
             explodeTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
 
             fireDirection = Direction;
+            bPhysicsDriven = true;
 
         }
 
@@ -203,9 +204,20 @@ namespace Battlezone
 
             Vector3 temp = ActorModel.Bones[0].Transform.Forward;
             temp.Normalize();
+            fMass = 3000;
+            fTerminalVelocity = 10000.0f;
+            Force = fireDirection * 10000000.0f;
             if (type == PROJECTILE_TYPE.MISSILE)
+            {
                 temp.Z *= -1;
+                fMass = 3000;
+                fTerminalVelocity = 1000.0f;
+                Force = fireDirection * 10000000.0f;
+            }
+
             fireDirection.Normalize();
+            bPhysicsDriven = true;
+            projectileLifespan = 6;
             if (Vector3.Cross(temp, fireDirection).Y > 0)
             {
                 Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, (float)Math.Acos((double)Vector3.Dot(fireDirection, temp)));
@@ -216,6 +228,7 @@ namespace Battlezone
                 Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, -1*(float)Math.Acos((double)Vector3.Dot(fireDirection, temp)));
             }
             WorldPosition = position;
+            dead = false;
         }
 
         /// <summary>
@@ -223,20 +236,21 @@ namespace Battlezone
         /// </summary>
         public override void Update(GameTime gameTime)
         {
+            //base.Update(gameTime);
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            WorldPosition = position;
+             
 
             if (!dead)
             {
-
+                base.Update(gameTime);
                 // Simple projectile physics.
-                position += velocity * elapsedTime;
-                velocity.Y -= elapsedTime * gravity;
-                age += elapsedTime;
+                //position += velocity * elapsedTime;
+                //velocity.Y -= elapsedTime * gravity;
+                //age += elapsedTime;
 
                 // Update the particle emitter, which will create our particle trail.
-                trailEmitter.Update(gameTime, position);
+                trailEmitter.Update(gameTime, WorldPosition);
               
                 // If enough time has passed, explode! Note how we pass our velocity
                 // in to the AddParticle method: this lets the explosion be influenced
