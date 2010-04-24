@@ -144,7 +144,6 @@ namespace Battlezone.BattlezoneObjects
             : base(game)
         {
             sMeshToLoad = "playerTank";
-            // TODO: Construct any child components here
         }
 
         /// <summary>
