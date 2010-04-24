@@ -410,7 +410,7 @@ namespace Battlezone.BattlezoneObjects
                     currentState = AIStates.NEED_PURSUE;
                 }
             }
-            //Console.Out.WriteLine("Current state: " + currentState);
+            Console.Out.WriteLine("Current state: " + currentState);
             /*
             //check to see if we're close to the target position
             if ((m_vTarget - WorldPosition).Length() > 0.5f)
