@@ -522,7 +522,7 @@ namespace Battlezone
                                     break;
                             }
 
-                            if (!missileFired)
+                            if ((selectedWeapon == 1) || !missileFired)
                             {
                                 pro.Initialize(400.0f, 250, 190, 100.0f, 100.0f, 0.0f);
                                 ScreenManager.Game.Components.Add(pro);
