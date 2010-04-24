@@ -269,7 +269,7 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(m_kSpawnManager);
 
             //Load Player Tank
-            m_kPlayer = new PlayerTank(ScreenManager.Game);
+            m_kPlayer = new PlayerTank(ScreenManager.Game, new Vector3(0.0f, 0.0f, -500.0f));
             ScreenManager.Game.Components.Add(m_kPlayer);
             /* Debug usage for AI Tank testing*/
             //m_kPlayer.Initialize();
@@ -715,17 +715,18 @@ namespace Battlezone
             //terrible brute force method
             foreach (Actor a in activeActors)
             {
-                foreach (Actor b in activeActors)
+                if (a.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING)
                 {
-                    //don't try to collide an object with itself and make sure they can collide
-                    if (a != b 
-                        && a.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING 
-                        && b.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING)
+                    foreach (Actor b in activeActors)
                     {
-                        if (a.checkCollision(b))
+                        //don't try to collide an object with itself and make sure they can collide
+                        if (a != b && b.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING)
                         {
-                            a.collide(b);
-                            b.collide(a);
+                            if (a.checkCollision(b))
+                            {
+                                a.collide(b);
+                                b.collide(a);
+                            }
                         }
                     }
                 }

@@ -192,7 +192,7 @@ namespace Battlezone
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
 
             //backgroundTexture = content.Load<Texture2D>("background");
-            tank = new PlayerTank(ScreenManager.Game);
+            tank = new PlayerTank(ScreenManager.Game, new Vector3(0.0f, 0.0f, 0.0f));
             tank.gamePlay = false;
 
             ScreenManager.Game.Components.Add(tank);

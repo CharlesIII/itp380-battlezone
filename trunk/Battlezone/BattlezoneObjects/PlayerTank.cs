@@ -71,6 +71,8 @@ namespace Battlezone.BattlezoneObjects
 
         public bool gamePlay = false;
 
+        private Vector3 startingPos;
+
         #endregion
 
         #region Bone Properties
@@ -140,10 +142,11 @@ namespace Battlezone.BattlezoneObjects
 
 
 
-        public PlayerTank(Game game)
+        public PlayerTank(Game game, Vector3 spawnPos)
             : base(game)
         {
             sMeshToLoad = "playerTank";
+            startingPos = spawnPos;
         }
 
         /// <summary>
@@ -156,6 +159,7 @@ namespace Battlezone.BattlezoneObjects
 
             base.Initialize();
             Scale = 0.30f;
+            WorldPosition = startingPos;
          
             COLLISION_IDENTIFIER = CollisionIdentifier.PLAYER_TANK;
         }
