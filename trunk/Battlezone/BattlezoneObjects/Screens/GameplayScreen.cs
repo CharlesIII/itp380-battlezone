@@ -497,7 +497,7 @@ namespace Battlezone
                             Vector3 offSet = new Vector3(0, 100, -10f);
                             Vector3 pos = m_kPlayer.WorldPosition + offSet;
 
-                            Projectile pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game);
+                            Projectile pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL);
                             pro.Initialize(400,250,190,100,100,0);
 
                             ScreenManager.Game.Components.Add(pro);
