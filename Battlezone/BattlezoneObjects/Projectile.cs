@@ -306,5 +306,14 @@ namespace Battlezone
         {
             this.removeSelf();
         }
+
+        /// <summary>
+        /// Resolves collision based on defined behaviors.
+        /// </summary>
+        /// <param name="a">Actor with which it is currently colliding.</param>
+        public override void collide(Actor a)
+        {
+
+        }
     }
 }
