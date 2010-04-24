@@ -110,6 +110,7 @@ namespace Battlezone
         private System.Timers.Timer missileTimer;
 
         private bool justFired = false;
+        private bool missileFired = false;
 
         private bool tankExaust = true;
 
@@ -246,8 +247,8 @@ namespace Battlezone
 
             fireTimer = new System.Timers.Timer(3000);
             fireTimer.Elapsed += new ElapsedEventHandler(FireEvent);
-            missileTimer = new System.Timers.Timer(5000);
-            missileTimer.Elapsed += new ElapsedEventHandler(FireEvent);
+            missileTimer = new System.Timers.Timer(10000);
+            missileTimer.Elapsed += new ElapsedEventHandler(MissileEvent);
 
 
         }
@@ -509,25 +510,36 @@ namespace Battlezone
                             ChaseDirection = (temp.Forward * -1);
 
                             Vector3 offSet = new Vector3(0, 100, -10f);
-                            Projectile pro;
+                            Projectile pro = null;
                             Vector3 pos = m_kPlayer.WorldPosition + offSet;
                             switch(selectedWeapon){
                                 case 1:
                                     pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL);
                                     break;
                                 case 2:
-                                    pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.MISSILE);
+                                    if (!missileFired)
+                                    {
+                                        pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.MISSILE);
+                                    }
                                     break;
                                 default:
                                     System.Console.WriteLine("Hmm, Seems there's a bug a crawlin - selectedWeapon was neither 1 or 2.  Defaulted to Shell");
                                     pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL);
                                     break;
                             }
-                            pro.Initialize(400,250,190,100,100,0);
 
-                            ScreenManager.Game.Components.Add(pro);
-                            fireTimer.Start();
-                            justFired = true;
+                            if (!missileFired)
+                            {
+                                pro.Initialize(400, 250, 190, 100, 100, 0);
+                                ScreenManager.Game.Components.Add(pro);
+                                fireTimer.Start();
+                                justFired = true;
+                            }
+                            if (selectedWeapon == 2)
+                            {
+                                missileTimer.Start();
+                                missileFired = true;
+                            }
                             //activeActors.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles,pos,temp,2,ScreenManager.Game));
                         }
                     }
@@ -749,10 +761,16 @@ namespace Battlezone
             spdBoostAvail = true;
             m_kTimer.RemoveTimer("BoostCD");
         }
+
         public void FireEvent(object sender, EventArgs eArgs)
         {
             justFired = false;
 
+        }
+
+        public void MissileEvent(object sender, EventArgs eArgs)
+        {
+            missileFired = false;
         }
 
 
