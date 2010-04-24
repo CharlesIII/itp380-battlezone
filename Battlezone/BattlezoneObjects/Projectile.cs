@@ -304,7 +304,7 @@ namespace Battlezone
 
         public void OnTimedEvent(object sender, EventArgs eArgs)
         {
-            removeSelf();
+            this.removeSelf();
         }
     }
 }
