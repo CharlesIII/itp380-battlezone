@@ -275,7 +275,6 @@ namespace Battlezone
                                                        bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, false);
-
             if (gameTime.ElapsedGameTime.Ticks != 0)
             {
 
@@ -312,6 +311,7 @@ namespace Battlezone
                 {
                     cue = soundBank.GetCue("TheEcstacyOfGold");
                     cue.Play();
+                    myTimer.Interval = 48000;
                     myTimer.Start();
                     fireMusic = false;
                 }

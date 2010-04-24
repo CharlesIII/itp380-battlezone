@@ -109,6 +109,8 @@ namespace Battlezone
 
         private bool tankExaust = true;
 
+        private bool tankExaustFire = true;
+
         #endregion
 
         #region Chased object properties (set externally each frame)
@@ -375,6 +377,11 @@ namespace Battlezone
                     //UpdateProjectiles(gameTime);
                     UpdateTankExaust();
 
+                    if (spdBoost >= 2.5f)
+                    {
+                        UpdateFireExaust();
+                    }
+
                     //perform activeActors maintenance
                     updateActors();
 
@@ -455,6 +462,7 @@ namespace Battlezone
                         m_kPlayer.LWheelRotation += (2.0f * deltaTime * spdBoost);
                         m_kPlayer.RWheelRotation += (2.0f * deltaTime * spdBoost);
                         m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * -275.0f * spdBoost;
+                        UpdateTankExaust();
                     }
 
                     if (!input.Move)
@@ -472,6 +480,7 @@ namespace Battlezone
                         m_kPlayer.LWheelRotation -= (2 * deltaTime * spdBoost);
                         m_kPlayer.RWheelRotation -= (2 * deltaTime * spdBoost);
                         m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * 275.0f * spdBoost;
+                        UpdateTankExaust();
                     }
                     if (!input.TurnLeft && !input.TurnRight)
                     {
@@ -511,11 +520,11 @@ namespace Battlezone
                                                Color.Black, 0, 0);
             
             tankExaustPlumeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
+            fireParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             /*
             explosionParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             explosionSmokeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             projectileTrailParticles.SetCamera(CameraMatrix, ProjectionMatrix);
-            fireParticles.SetCamera(CameraMatrix, ProjectionMatrix);
             */
             // If the game is transitioning on or off, fade it out to black.
             if (TransitionPosition > 0)
@@ -610,6 +619,33 @@ namespace Battlezone
 
                 tankExaustPlumeParticles.AddParticle(temp, Vector3.Zero);
                 tankExaust = true;
+            }
+        }
+
+        void UpdateFireExaust()
+        {
+            // This is trivial: we just create one new smoke particle per frame.
+            const int fireParticlesPerFrame = 20;
+
+            if (tankExaustFire)
+            {
+                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle));
+                temp = m_kPlayer.WorldPosition + temp;
+                for (int i = 0; i < fireParticlesPerFrame; i++)
+                {
+                    fireParticles.AddParticle(temp, Vector3.Zero);
+                }
+                tankExaustFire = false;
+            }
+            else
+            {
+                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle - (Math.PI / 3)), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle - (Math.PI / 3)));
+                temp = m_kPlayer.WorldPosition + temp;
+                for (int i = 0; i < fireParticlesPerFrame; i++)
+                {
+                    fireParticles.AddParticle(temp, Vector3.Zero);
+                }
+                tankExaustFire = true;
             }
         }
         private void SaveGraphicsDeviceState()

@@ -28,33 +28,35 @@ namespace Battlezone
 
         protected override void InitializeSettings(ParticleSettings settings)
         {
-            settings.TextureName = "smoke";
+            settings.TextureName = "fire";
 
-            settings.MaxParticles = 2000;
+            settings.MaxParticles = 2400;
 
-            settings.Duration = TimeSpan.FromSeconds(5);
+            settings.Duration = TimeSpan.FromSeconds(2);
 
-            settings.DurationRandomness = 1.5f;
-
-            settings.EmitterVelocitySensitivity = 0.1f;
+            settings.DurationRandomness = 1;
 
             settings.MinHorizontalVelocity = 0;
-            settings.MaxHorizontalVelocity = 1;
+            settings.MaxHorizontalVelocity = 20;
 
-            settings.MinVerticalVelocity = -1;
-            settings.MaxVerticalVelocity = 1;
+            settings.MinVerticalVelocity = 0;
+            settings.MaxVerticalVelocity = 50;
 
-            settings.MinColor = new Color(64, 96, 128, 255);
-            settings.MaxColor = new Color(255, 255, 255, 128);
+            // Set gravity upside down, so the flames will 'fall' upward.
+            settings.Gravity = new Vector3(0, 15, 0);
 
-            settings.MinRotateSpeed = -4;
-            settings.MaxRotateSpeed = 4;
+            settings.MinColor = new Color(255, 255, 255, 10);
+            settings.MaxColor = new Color(255, 255, 255, 40);
 
-            settings.MinStartSize = 2;
-            settings.MaxStartSize = 4;
+            settings.MinStartSize = 5;
+            settings.MaxStartSize = 10;
 
-            settings.MinEndSize = 6;
-            settings.MaxEndSize = 16;
+            settings.MinEndSize = 10;
+            settings.MaxEndSize = 40;
+
+            // Use additive blending.
+            settings.SourceBlend = Blend.SourceAlpha;
+            settings.DestinationBlend = Blend.One;
         }
     }
 }
