@@ -560,46 +560,7 @@ namespace Battlezone
         /// </summary>
 
         #endregion
-
-        #region Collision Detection Logistics
-
-        /// <summary>
-        /// Adds a new actor to the list of actorsToAdd.
-        /// </summary>
-        /// <param name="a"></param>
-        public void addActor(Actor a)
-        {
-            actorsToAdd.Add(a);
-        }
-
-        /// <summary>
-        /// Adds an actor to the list of actorsToRemove.
-        /// </summary>
-        /// <param name="a"></param>
-        public void removeActor(Actor a)
-        {
-            actorsToRemove.Add(a);
-        }
-
-        /// <summary>
-        /// Performs maintenance on activeActors.
-        /// </summary>
-        private void updateActors()
-        {
-            //add in all the new actors
-            foreach (Actor a in actorsToAdd)
-            {
-                activeActors.Add(a);
-            }
-            actorsToAdd.Clear();
-
-            //remove all the actors that need to be removed
-            foreach (Actor a in actorsToRemove)
-            {
-                activeActors.Remove(a);
-            }
-            actorsToRemove.Clear();
-        }
+        #region Particle Effects and Related Functions
         void UpdateTankExaust()
         {
             // This is trivial: we just create one new smoke particle per frame.
@@ -673,9 +634,47 @@ namespace Battlezone
             //device.SamplerStates[0].AddressU = addressU;
             //device.SamplerStates[0].AddressV = addressV;
         }
+        #endregion
 
+        #region Collision Detection Logistics
 
+        /// <summary>
+        /// Adds a new actor to the list of actorsToAdd.
+        /// </summary>
+        /// <param name="a"></param>
+        public void addActor(Actor a)
+        {
+            actorsToAdd.Add(a);
+        }
 
+        /// <summary>
+        /// Adds an actor to the list of actorsToRemove.
+        /// </summary>
+        /// <param name="a"></param>
+        public void removeActor(Actor a)
+        {
+            actorsToRemove.Add(a);
+        }
+
+        /// <summary>
+        /// Performs maintenance on activeActors.
+        /// </summary>
+        private void updateActors()
+        {
+            //add in all the new actors
+            foreach (Actor a in actorsToAdd)
+            {
+                activeActors.Add(a);
+            }
+            actorsToAdd.Clear();
+
+            //remove all the actors that need to be removed
+            foreach (Actor a in actorsToRemove)
+            {
+                activeActors.Remove(a);
+            }
+            actorsToRemove.Clear();
+        }
 
         /// <summary>
         /// Checks collisions between objects in game.
@@ -692,7 +691,7 @@ namespace Battlezone
                         && a.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING 
                         && b.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING)
                     {
-                        if (a.WorldBounds.Intersects(b.WorldBounds))
+                        if (a.checkCollision(b))
                         {
                             a.collide(b);
                             b.collide(a);

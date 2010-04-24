@@ -330,7 +330,15 @@ namespace Battlezone
             Game.Components.Remove(this);
             GameplayScreen.Instance.removeActor(this);
         }
-
+        /// <summary>
+        /// Checks collision between this actor and the given actor.
+        /// </summary>
+        /// <param name="a">Actor to check collision with.</param>
+        /// <returns>True if the two actors are colliding.</returns>
+        public virtual bool checkCollision(Actor a)
+        {
+            return false;
+        }
         /// <summary>
         /// Resolves collision based on defined behaviors.
         /// </summary>
