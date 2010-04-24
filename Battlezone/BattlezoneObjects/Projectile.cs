@@ -33,6 +33,7 @@ namespace Battlezone
     class Projectile : Actor
     {
         #region Constants
+        public static enum PROJECTILE_TYPE {MISSILE, SHELL};
 
         float trailParticlesPerSecond = 200;
         int numExplosionParticles = 30;
@@ -115,7 +116,7 @@ namespace Battlezone
                                                trailParticlesPerSecond, position);
         }
 
-        public Projectile(ContentManager content, Vector3 Position, Vector3 Direction, Game Game)
+        public Projectile(ContentManager content, Vector3 Position, Vector3 Direction, Game Game, PROJECTILE_TYPE type)
             : base(Game)
         {
 
@@ -139,7 +140,10 @@ namespace Battlezone
             Game.Components.Add(this.explosionSmokeParticles);
             Game.Components.Add(this.projectileTrailParticles);
 
-            sMeshToLoad = "Missile";
+            if (type = PROJECTILE_TYPE.MISSILE)
+                sMeshToLoad = "Missile";
+            else if (type = PROJECTILE_TYPE.SHELL)
+                sMeshToLoad = "tank_shell";
 
             // Start at the origin, firing in a random (but roughly upward) direction.
 
