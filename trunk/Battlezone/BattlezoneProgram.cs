@@ -1,3 +1,14 @@
+#region File Description
+//------------------------------------------------------------------------------
+// BattlezonProgram.cs
+//
+// BATTLEZONE ENTRY POINT
+//
+// Copyright (C) Double XL, Graham Cracka, Old Jamison Irish Whiskey, & C-Cubed.
+// All rights reserved.
+//------------------------------------------------------------------------------
+#endregion
+
 using System;
 using System.Collections;
 using Microsoft.Xna.Framework;
