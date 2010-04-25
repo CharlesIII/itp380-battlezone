@@ -522,9 +522,10 @@ namespace Battlezone
                                     break;
                             }
 
-                            ScreenManager.Game.Components.Add(pro);
+                            
                             if ((selectedWeapon == 1) || !missileFired)
                             {
+                                ScreenManager.Game.Components.Add(pro);
                                 pro.Initialize(400.0f, 250, 190, 100.0f, 100.0f, 0.0f);
                                 m_kTimer.AddTimer("FireTimer", 3.0f, new Utils.TimerDelegate(FireEvent), false);
                                 justFired = true;
