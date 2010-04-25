@@ -158,13 +158,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackgroundSound.xap">
-      <Name>BackgroundSound</Name>
-      <Importer>XactImporter</Importer>
-      <Processor>XactProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="ethno.bmp">
       <Name>ethno</Name>
       <Importer>TextureImporter</Importer>
@@ -197,6 +190,13 @@
       <Name>tank_shell</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BattlezoneMusic.xap">
+      <Name>BattlezoneMusic</Name>
+      <Importer>XactImporter</Importer>
+      <Processor>XactProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

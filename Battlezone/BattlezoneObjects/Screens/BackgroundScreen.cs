@@ -63,8 +63,6 @@ namespace Battlezone
         private bool SmokePlume = true;
         private bool fired = true;
 
-        private System.Timers.Timer myTimer;
-
         private bool fireMusic = false;
 
         #endregion
@@ -221,21 +219,16 @@ namespace Battlezone
             //ScreenManager.Game.Components.Add(smokePlumeParticles);
             //ScreenManager.Game.Components.Add(fireParticles);
 
-            audioEngine = new AudioEngine("Content/BackgroundSound.xgs");
-            waveBank = new WaveBank(audioEngine, "Content/BackgroundSound.xwb");
-            soundBank = new SoundBank(audioEngine, "Content/BackgroundSound.xsb");
+            audioEngine = new AudioEngine("Content/BattlezoneMusic.xgs");
+            waveBank = new WaveBank(audioEngine, "Content/BattlezoneMusicWaveBank.xwb",0, 4);
+            soundBank = new SoundBank(audioEngine, "Content/BattlezoneMusicSoundBank.xsb");
+            audioEngine.Update();
 
-            cue = soundBank.GetCue("TheEcstacyOfGold");
-
+            cue = soundBank.GetCue("BattlezoneMenu");
             cue.Play();
-
             audioEngine.Update();
 
             ScreenManager.Game.ResetElapsedTime();
-
-            myTimer = new System.Timers.Timer(48000);
-            myTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            myTimer.Start();
 
         }
 
@@ -289,11 +282,8 @@ namespace Battlezone
                 projectileTrailParticles.SetCamera(CameraMatrix, ProjectionMatrix);
                 smokePlumeParticles.SetCamera(CameraMatrix, ProjectionMatrix);
 
-                if (fireMusic)
-                {
-                    UpdateExplosions(gameTime);
-                    UpdateProjectiles(gameTime);
-                }
+                UpdateExplosions(gameTime);
+                UpdateProjectiles(gameTime);
                 UpdateSmokePlume();
 
                 //tank.Scale = 1.5f;
@@ -314,11 +304,8 @@ namespace Battlezone
 
                 if (cue.IsStopped)
                 {
-                    cue = soundBank.GetCue("TheEcstacyOfGold");
+                    cue = soundBank.GetCue("BattlezoneMenu");
                     cue.Play();
-                    myTimer.Interval = 48000;
-                    myTimer.Start();
-                    fireMusic = false;
                 }
 
             }
@@ -434,13 +421,6 @@ namespace Battlezone
                 SmokePlume = true;
             }
         }
-        public void OnTimedEvent(object sender, EventArgs eArgs)
-        {
-            fireMusic = true;
-
-
-        }
-
         
 
         #endregion
