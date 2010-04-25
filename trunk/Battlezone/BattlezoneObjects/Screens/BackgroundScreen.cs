@@ -51,12 +51,6 @@ namespace Battlezone
 
         TimeSpan timeToNextProjectile = TimeSpan.Zero;
 
-        SoundEffect Background;
-        SoundEffectInstance instance;
-
-        public static AudioEngine audioEngine;
-        public static WaveBank waveBank;
-        public static SoundBank soundBank;
 
         Cue cue;
 
@@ -219,14 +213,10 @@ namespace Battlezone
             //ScreenManager.Game.Components.Add(smokePlumeParticles);
             //ScreenManager.Game.Components.Add(fireParticles);
 
-            audioEngine = new AudioEngine("Content/BattlezoneMusic.xgs");
-            waveBank = new WaveBank(audioEngine, "Content/BattlezoneMusicWaveBank.xwb",0, 4);
-            soundBank = new SoundBank(audioEngine, "Content/BattlezoneMusicSoundBank.xsb");
-            audioEngine.Update();
+            ScreenManager.musicAudioEngine.Update();
 
-            cue = soundBank.GetCue("BattlezoneMenu");
+            cue = ScreenManager.musicSoundBank.GetCue("BattlezoneMenu");
             cue.Play();
-            audioEngine.Update();
 
             ScreenManager.Game.ResetElapsedTime();
 
@@ -300,11 +290,11 @@ namespace Battlezone
                 Up = Vector3.UnitY;
                 CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
 
-                audioEngine.Update();
+                ScreenManager.musicAudioEngine.Update();
 
                 if (cue.IsStopped)
                 {
-                    cue = soundBank.GetCue("BattlezoneMenu");
+                    cue = ScreenManager.musicSoundBank.GetCue("BattlezoneMenu");
                     cue.Play();
                 }
 
