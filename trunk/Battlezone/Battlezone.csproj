@@ -89,7 +89,8 @@
   <ItemGroup>
     <Compile Include="BattlezoneObjects\AITank.cs" />
     <Compile Include="BattlezoneObjects\Building.cs" />
-    <Compile Include="BattlezoneObjects\HealthBar.cs" />
+    <Compile Include="BattlezoneObjects\HUD\HealthBar.cs" />
+    <Compile Include="BattlezoneObjects\HUD\Radar.cs" />
     <Compile Include="BattlezoneObjects\Level.cs" />
     <Compile Include="BattlezoneObjects\Screens\BackgroundScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\GameplayScreen.cs" />
