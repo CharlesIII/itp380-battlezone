@@ -277,10 +277,10 @@ namespace Battlezone
         public void Explode()
         {
             for (int i = 0; i < numExplosionParticles; i++)
-                explosionParticles.AddParticle(position, velocity);
+                explosionParticles.AddParticle(WorldPosition, velocity);
 
             for (int i = 0; i < numExplosionSmokeParticles; i++)
-                explosionSmokeParticles.AddParticle(position, velocity);
+                explosionSmokeParticles.AddParticle(WorldPosition, velocity);
 
             timer.AddTimer("Remove Projectile", 5, OnTimedEvent, false);
         }
