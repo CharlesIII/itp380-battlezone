@@ -479,7 +479,6 @@ namespace Battlezone.BattlezoneObjects
                         collidingAITanks.Remove(removedTank);
                     }
                 }
-                Console.Out.WriteLine("Current state: " + currentState);
 
                 //TODO: Add World Bound check so the player doesn't fall off the world
 
@@ -488,6 +487,7 @@ namespace Battlezone.BattlezoneObjects
                 //AI tank has a 20 degree viewing angle for checking? maybe?
             }
             //Console.Out.WriteLine(WorldBounds);
+            Console.Out.WriteLine("Current state: " + currentState);
         }
 
         //Helper functions to keep the Update method clean
@@ -673,11 +673,14 @@ namespace Battlezone.BattlezoneObjects
                 Building b = (Building)a;
                 return WorldBounds.Intersects(b.WorldBoundsBox);
             }
-            else
+            else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK || a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
             {
                 return WorldBounds.Intersects(a.WorldBounds);
             }
-            //return false;
+            else
+            {
+                return false;
+            }
         }
 
     }
