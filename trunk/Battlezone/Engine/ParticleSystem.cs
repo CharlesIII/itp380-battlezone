@@ -200,6 +200,10 @@ namespace Battlezone
                                                    BufferUsage.Points);
         }
 
+        public void ManualUnload()
+        {
+            UnloadContent();
+        }
 
         /// <summary>
         /// Helper for loading and initializing the particle effect.
