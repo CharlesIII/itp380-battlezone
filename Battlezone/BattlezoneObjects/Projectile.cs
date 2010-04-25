@@ -330,7 +330,6 @@ namespace Battlezone
         public void OnTimedEvent()
         {
             Console.Out.WriteLine("calling remove self");
-            removeSelf();
             explosionParticles.Dispose();
             explosionSmokeParticles.Dispose();
             projectileTrailParticles.Dispose();
@@ -346,11 +345,13 @@ namespace Battlezone
             if ((a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK) && !dead)
             {
                 Explode();
+                GameplayScreen.Instance.removeActor(this);
                 dead = true;
             }
             else if ((a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK) && !dead)
             {
                 Explode();
+                GameplayScreen.Instance.removeActor(this);
                 dead = true;
             }
         }
