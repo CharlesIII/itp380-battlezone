@@ -232,7 +232,6 @@ namespace Battlezone
             explosionSmokeParticles.ManualUnload();
             projectileTrailParticles.ManualUnload();
             trailEmitter = null;
-            GC.Collect();
             base.UnloadContent();
         }
 
@@ -310,10 +309,10 @@ namespace Battlezone
             if (age > projectileLifespan)
             {
                 for (int i = 0; i < numExplosionParticles; i++)
-                    explosionParticles.AddParticle(position, velocity);
+                    explosionParticles.AddParticle(WorldPosition, velocity);
 
                 for (int i = 0; i < numExplosionSmokeParticles; i++)
-                    explosionSmokeParticles.AddParticle(position, velocity);
+                    explosionSmokeParticles.AddParticle(WorldPosition, velocity);
 
                 return false;
             }
