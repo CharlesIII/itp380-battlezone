@@ -511,10 +511,11 @@ namespace Battlezone
                         {
                             Matrix temp = m_kPlayer.worldTransform * m_kPlayer.turretBone.Transform;
                             ChaseDirection = (temp.Forward * -1);
+                            ChaseDirection.Normalize();
                             Vector3 offSet = new Vector3(0, 90, 0);
                             Projectile pro = null;
                             //Vector3 pos = m_kPlayer.WorldPosition + offSet;
-                            Vector3 pos = (m_kPlayer.turretBone.Transform * m_kPlayer.worldTransform).Translation;
+                            Vector3 pos = (m_kPlayer.turretBone.Transform * m_kPlayer.worldTransform).Translation + ChaseDirection * 4;
                             switch(selectedWeapon){
                                 case 1:
                                     pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.PLAYER_TANK);
