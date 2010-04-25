@@ -65,8 +65,8 @@ namespace Battlezone
         }
 
         PROJECTILE_TYPE type;
-
-
+        
+        int source;
 
         static Random random = new Random();
 
@@ -124,11 +124,9 @@ namespace Battlezone
                                                trailParticlesPerSecond, position);
         }
 
-        public Projectile(Vector3 Position, Vector3 Direction, Game Game, PROJECTILE_TYPE type)
+        public Projectile(Vector3 Position, Vector3 Direction, Game Game, PROJECTILE_TYPE type, int src)
             : base(Game)
         {
-            base.COLLISION_IDENTIFIER = CollisionIdentifier.SHELL;
-
             this.type = type;
             if (type == PROJECTILE_TYPE.MISSILE)
             {
@@ -151,6 +149,8 @@ namespace Battlezone
             fireDirection = Direction;
             bPhysicsDriven = true;
 
+            source = src;
+
         }
 
         public void Initialize(float trailParticlesPerSecond, int numExplosionParticles, int numExplosionSmokeParticles,
@@ -167,6 +167,8 @@ namespace Battlezone
         public override void Initialize()
         {
             base.Initialize();
+
+            COLLISION_IDENTIFIER = CollisionIdentifier.SHELL;
 
             Vector3 temp = ActorModel.Bones[0].Transform.Forward;
             temp.Normalize();
@@ -333,13 +335,13 @@ namespace Battlezone
         /// <param name="a">Actor with which it is currently colliding.</param>
         public override void collide(Actor a)
         {
-            if (a is AITank)
+            if (a is AITank && (source != CollisionIdentifier.AI_TANK) && !dead)
             {
                 Explode();
                 dead = true;
                 System.Console.Out.WriteLine("It's a Hit!");
             } 
-            else if (a is PlayerTank)
+            else if (a is PlayerTank && (source != CollisionIdentifier.PLAYER_TANK) && !dead)
             {
                 Explode();
                 dead = true;
@@ -362,17 +364,15 @@ namespace Battlezone
             bool collision = false;
             float? intersection = ray.Intersects(a.WorldBounds);
             if (intersection != null)
-            {
                 if (intersection <= distanceCovered)
                 {
                     System.Console.Out.WriteLine("It's a Hit!");
                     collision = true;
                 }
-            }
-            else
-            {
-                System.Console.Out.WriteLine("Detection Returned NULL");
-            }
+                else
+                {
+                    System.Console.Out.WriteLine("Apparently not a Hit...");
+                }
 
             return collision;
         }
