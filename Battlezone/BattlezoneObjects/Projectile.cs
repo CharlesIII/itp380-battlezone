@@ -327,7 +327,10 @@ namespace Battlezone
         {
             Console.Out.WriteLine("calling remove self");
             removeSelf();
-            UnloadContent();
+            explosionParticles.Dispose();
+            explosionSmokeParticles.Dispose();
+            projectileTrailParticles.Dispose();
+            Dispose(true);
         }
 
         /// <summary>
@@ -373,7 +376,7 @@ namespace Battlezone
             float? intersection = ray.Intersects(a.WorldBounds);
             if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
             {
-                Console.Out.WriteLine("Checking against AI tank");
+                //Console.Out.WriteLine("Checking against AI tank");
                 if (WorldBounds.Intersects(a.WorldBounds))
                 {
                     return true;

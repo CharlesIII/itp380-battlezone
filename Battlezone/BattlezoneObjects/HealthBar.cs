@@ -58,8 +58,6 @@ namespace Battlezone.BattlezoneObjects
         {
             Color myC;
 
-
-
             //Draw Health Bar
             mBatch.Begin();
             if (GameplayScreen.Instance.getPlayer().CurrentHealth < (0.25f * GameplayScreen.Instance.getPlayer().maxHealth))
