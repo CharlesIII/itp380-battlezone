@@ -53,6 +53,7 @@ namespace Battlezone
 
         private bool SmokePlume = true;
         private bool fired = true;
+        Vector2 leterPosition;
 
         #endregion
 
@@ -198,6 +199,8 @@ namespace Battlezone
             //ScreenManager.Game.Components.Add(smokePlumeParticles);
             //ScreenManager.Game.Components.Add(fireParticles);
 
+            leterPosition = new Vector2(0, 0);
+
             ScreenManager.Game.ResetElapsedTime();
 
         }
@@ -260,6 +263,29 @@ namespace Battlezone
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
             Rectangle fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
             byte fade = TransitionAlpha;
+
+            // Draw the selected entry in yellow, otherwise white.
+            Color color = Color.Blue;
+
+            // Pulsate the size of the selected menu entry.
+            double time = gameTime.TotalGameTime.TotalSeconds;
+
+            float pulsate = (float)Math.Sin(time * 6) + 1;
+
+            float scale = 1 + pulsate * 0.05f;
+
+            // Modify the alpha to fade text out during transitions.
+            color = new Color(color.R, color.G, color.B);
+
+            // Draw text, centered on the middle of each line.
+            //SpriteFont font = screenManager.gameTitleFont;
+
+            Vector2 origin = new Vector2(0, 0);
+
+            String text = "B";
+
+            //spriteBatch.DrawString(font, text, position, color, 0,
+            //                       origin, scale, SpriteEffects.None, 0);
             ScreenManager.GraphicsDevice.RenderState.DepthBufferEnable = true;
             ScreenManager.GraphicsDevice.RenderState.AlphaBlendEnable = false;
             ScreenManager.GraphicsDevice.RenderState.AlphaTestEnable = false;

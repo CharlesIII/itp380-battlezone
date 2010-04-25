@@ -35,7 +35,7 @@ namespace Battlezone
 
         SpriteBatch spriteBatch;
         SpriteFont font;
-        SpriteFont gameTitleFont;
+        public SpriteFont gameTitleFont;
         Texture2D blankTexture;
 
         bool isInitialized;

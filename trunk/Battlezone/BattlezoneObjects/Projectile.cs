@@ -312,10 +312,10 @@ namespace Battlezone
             if (age > projectileLifespan)
             {
                 for (int i = 0; i < numExplosionParticles; i++)
-                    explosionParticles.AddParticle(WorldPosition, velocity);
+                    explosionParticles.AddParticle(position, velocity);
 
                 for (int i = 0; i < numExplosionSmokeParticles; i++)
-                    explosionSmokeParticles.AddParticle(WorldPosition, velocity);
+                    explosionSmokeParticles.AddParticle(position, velocity);
 
                 return false;
             }
