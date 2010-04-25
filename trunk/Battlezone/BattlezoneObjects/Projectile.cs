@@ -196,6 +196,7 @@ namespace Battlezone
                 Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, -1*(float)Math.Acos((double)Vector3.Dot(fireDirection, temp)));
             }
             WorldPosition = position;
+            m_vPreviousWorldPosition = position;
             dead = false;
         }
 
@@ -335,16 +336,17 @@ namespace Battlezone
         /// <param name="a">Actor with which it is currently colliding.</param>
         public override void collide(Actor a)
         {
-            if (a is AITank && (source != CollisionIdentifier.AI_TANK) && !dead)
+            if ((a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK) && !dead)
             {
                 Explode();
                 dead = true;
                 System.Console.Out.WriteLine("It's a Hit!");
-            } 
-            else if (a is PlayerTank && (source != CollisionIdentifier.PLAYER_TANK) && !dead)
+            }
+            else if ((a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK) && !dead)
             {
                 Explode();
                 dead = true;
+                System.Console.Out.WriteLine("Something's Screwy");
             }
         }
 
@@ -355,6 +357,8 @@ namespace Battlezone
         /// <returns>True if the two actors are colliding.</returns>
         public override bool checkCollision(Actor a)
         {
+            if (a.COLLISION_IDENTIFIER == source) return false;
+            if (WorldPosition == m_vPreviousWorldPosition) return false;
             Vector3 direction = WorldPosition - m_vPreviousWorldPosition;
             float distanceCovered = direction.Length();
             direction.Normalize();
@@ -364,6 +368,7 @@ namespace Battlezone
             bool collision = false;
             float? intersection = ray.Intersects(a.WorldBounds);
             if (intersection != null)
+            {
                 if (intersection <= distanceCovered)
                 {
                     System.Console.Out.WriteLine("It's a Hit!");
@@ -373,7 +378,7 @@ namespace Battlezone
                 {
                     System.Console.Out.WriteLine("Apparently not a Hit...");
                 }
-
+            }
             return collision;
         }
     }
