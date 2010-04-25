@@ -425,13 +425,13 @@ namespace Battlezone.BattlezoneObjects
                         if (turretTargetRotationValue < 0)
                         {
                             turretRotationValue -= fDelta * TURRET_ROTATION_SPEED;
-                            turretTargetRotationValue += fDelta * turretTargetRotationValue;
+                            turretTargetRotationValue += fDelta * TURRET_ROTATION_SPEED;
                             if (turretTargetRotationValue >= 0)
                                 turretTargetRotationValue = 0;
                         }
                         else
                         {
-                            turretTargetRotationValue += fDelta * TURRET_ROTATION_SPEED;
+                            turretRotationValue += fDelta * TURRET_ROTATION_SPEED;
                             turretTargetRotationValue -= fDelta * TURRET_ROTATION_SPEED;
                             if (turretTargetRotationValue <= 0)
                                 turretTargetRotationValue = 0;
@@ -474,7 +474,7 @@ namespace Battlezone.BattlezoneObjects
                         collidingAITanks.Remove(removedTank);
                     }
                 }
-                //Console.Out.WriteLine("Current state: " + currentState);
+                Console.Out.WriteLine("Current state: " + currentState);
 
                 //TODO: Add World Bound check so the player doesn't fall off the world
 
@@ -491,6 +491,7 @@ namespace Battlezone.BattlezoneObjects
             Ray sightRay = new Ray(cannonBone.Transform.Translation, GetCannonFacing());
             //Console.Out.WriteLine(sightRay.Direction);
             bool seePlayer = false;
+            Actor player = new Actor(Game);
             
             foreach (Actor a in GameplayScreen.Instance.activeActors)
             {
@@ -511,13 +512,25 @@ namespace Battlezone.BattlezoneObjects
                             //Console.Out.WriteLine("Can see player");
                             //m_vPlayerLastKnownPosition = new Vector3(a.WorldPosition.X, a.WorldPosition.Y, a.WorldPosition.Z);
                             seePlayer = true;
+                            player = a;
                         }
                         else
                             return false;
                     }
                 }
             }
-                    
+
+            if (seePlayer == true)
+            {
+                Vector3 correctFacing = player.WorldPosition - WorldPosition;
+                correctFacing.Normalize();
+                turretTargetRotationValue = (float)Math.Acos((double)Vector3.Dot(correctFacing, GetCannonFacing()));
+                if (turretTargetRotationValue < 0.015f)
+                    turretTargetRotationValue = 0;
+                Vector3 cross = Vector3.Cross(GetCannonFacing(), correctFacing);
+                if (cross.Y < 0)
+                    turretTargetRotationValue *= -1;
+            }
             return seePlayer;
         }
 
