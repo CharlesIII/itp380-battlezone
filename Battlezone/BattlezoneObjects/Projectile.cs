@@ -355,16 +355,30 @@ namespace Battlezone
         /// <returns>True if the two actors are colliding.</returns>
         public override bool checkCollision(Actor a)
         {
-            if (a.COLLISION_IDENTIFIER == source) return false;
-            if (WorldPosition == m_vPreviousWorldPosition) return false;
+            if (a.COLLISION_IDENTIFIER == source || a.COLLISION_IDENTIFIER == CollisionIdentifier.SHELL)
+            {
+                return false;
+            }
+            if (WorldPosition == m_vPreviousWorldPosition)
+            {
+                return false;
+            }
             Vector3 direction = WorldPosition - m_vPreviousWorldPosition;
             float distanceCovered = direction.Length();
             direction.Normalize();
 
-            Ray ray = new Ray(m_vPreviousWorldPosition, direction);
+            Ray ray = new Ray(m_vPreviousWorldPosition, worldTransform.Forward);
 
             bool collision = false;
             float? intersection = ray.Intersects(a.WorldBounds);
+            if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
+            {
+                Console.Out.WriteLine("Checking against AI tank");
+                if (WorldBounds.Intersects(a.WorldBounds))
+                {
+                    return true;
+                }
+            }
             if (intersection != null)
             {
                 if (intersection <= distanceCovered)

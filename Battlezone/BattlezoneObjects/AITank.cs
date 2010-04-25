@@ -111,7 +111,7 @@ namespace Battlezone.BattlezoneObjects
             
             currentState = AIStates.PATROL;
 
-            Scale = 54.0f;
+            Scale = 59.0f;
 
             canFire = true;
             COLLISION_IDENTIFIER = CollisionIdentifier.AI_TANK;         
@@ -409,7 +409,10 @@ namespace Battlezone.BattlezoneObjects
                     {
                         //do attack
                         //Console.Out.WriteLine("Can see tank in ATTACK");
-                        timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early
+                        /*Projectile pro = new Projectile(cannonTransform.Translation, GetCannonFacing(), Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.AI_TANK);
+                        canFire = false;
+                        timer.AddTimer("Enable Cannon", 3, AllowFire, false);
+                        timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early*/
                     }
                     else
                     {
@@ -417,7 +420,7 @@ namespace Battlezone.BattlezoneObjects
                         currentState = AIStates.NEED_PURSUE;
                     }
                 }
-
+                Console.Out.WriteLine("Current state: " + currentState);
                 /*
                 //check to see if we're close to the target position
                 if ((m_vTarget - WorldPosition).Length() > 0.5f)
@@ -459,7 +462,6 @@ namespace Battlezone.BattlezoneObjects
                     currentState = AIStates.NEED_PURSUE;
                 }
             }
-            //Console.Out.WriteLine("Current state: " + currentState);
             /*
             //check to see if we're close to the target position
             if ((m_vTarget - WorldPosition).Length() > 0.5f)
@@ -474,7 +476,7 @@ namespace Battlezone.BattlezoneObjects
                 //if the player is within a minimum detection distance, the AI will instantly "discover" the player
                 //AI tank has a 20 degree viewing angle for checking? maybe?
             }
-            //Console.Out.WriteLine("Current state: " + currentState);
+            //Console.Out.WriteLine(WorldBounds);
         }
 
         //Helper functions to keep the Update method clean
@@ -487,7 +489,7 @@ namespace Battlezone.BattlezoneObjects
             foreach (Actor a in GameplayScreen.Instance.activeActors)
             {
                 //Console.Out.WriteLine(GameplayScreen.Instance.activeActors.Count);
-                if (a.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING)
+                if (a.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING && a.COLLISION_IDENTIFIER != CollisionIdentifier.AI_TANK)
                 {
                     if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING) 
                     {
@@ -601,6 +603,15 @@ namespace Battlezone.BattlezoneObjects
                     currentState = AIStates.DEAD;
                 }
             }
+        }
+
+        public override bool checkCollision(Actor a)
+        {
+            if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
+            {
+
+            }
+            return false;
         }
 
     }
