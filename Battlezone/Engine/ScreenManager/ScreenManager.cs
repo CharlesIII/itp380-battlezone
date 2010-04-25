@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 #endregion
 
 namespace Battlezone
@@ -41,6 +42,10 @@ namespace Battlezone
         bool isInitialized;
 
         bool traceEnabled;
+
+        public static AudioEngine musicAudioEngine;
+        public static WaveBank musicWaveBank;
+        public static SoundBank musicSoundBank;
 
         #endregion
 
@@ -116,6 +121,10 @@ namespace Battlezone
             font = content.Load<SpriteFont>("Xirod");
             gameTitleFont = content.Load<SpriteFont>("ethno");
             blankTexture = content.Load<Texture2D>("blank");
+
+            musicAudioEngine = new AudioEngine("Content/BattlezoneMusic.xgs");
+            musicWaveBank = new WaveBank(ScreenManager.musicAudioEngine, "Content/BattlezoneMusicWaveBank.xwb", 0, 4);
+            musicSoundBank = new SoundBank(ScreenManager.musicAudioEngine, "Content/BattlezoneMusicSoundBank.xsb");
 
             // Tell each of the screens to load their content.
             foreach (GameScreen screen in screens)
