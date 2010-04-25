@@ -336,7 +336,7 @@ namespace Battlezone
         /// </summary>
         /// <param name="a">Actor to check collision with.</param>
         /// <returns>True if the two actors are colliding.</returns>
-        public bool checkCollision(Actor a)
+        public virtual bool checkCollision(Actor a)
         {
             if (WorldBounds.Intersects(a.WorldBounds))
                 return true;

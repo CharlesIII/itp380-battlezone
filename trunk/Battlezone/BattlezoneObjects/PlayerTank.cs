@@ -197,6 +197,7 @@ namespace Battlezone.BattlezoneObjects
 
             // Allocate the transform matrix array.
             boneTransforms = new Matrix[tankModel.Bones.Count];
+
         }
 
         protected override void UnloadContent()
@@ -277,9 +278,34 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your update code here
 
             base.Update(gameTime);
+            WorldBounds.Center = WorldPosition;
+            WorldBounds.Radius = ModelBounds.Radius * Scale;
         }
 
+        /// <summary>
+        /// Checks collision between this actor and the given actor.
+        /// </summary>
+        /// <param name="a">Actor to check collision with.</param>
+        /// <returns>True if the two actors are colliding.</returns>
+        public override bool checkCollision(Actor a)
+        {
+            if (WorldBounds.Intersects(a.WorldBounds))
+                return true;
+            else return false;
+        }
 
+        /// <summary>
+        /// Resolves collision based on defined behaviors.
+        /// </summary>
+        /// <param name="a">Actor with which it is currently colliding.</param>
+        public override void collide(Actor a)
+        {
+            if (a is AITank)
+            {
+                Velocity = new Vector3(0.0f, 0.0f, 0.0f);
+                System.Console.Out.WriteLine("CRASH!");
+            }
+        }
 
     }
 }

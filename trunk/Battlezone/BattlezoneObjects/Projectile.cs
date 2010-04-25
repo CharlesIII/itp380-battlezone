@@ -346,5 +346,36 @@ namespace Battlezone
                 dead = true;
             }
         }
+
+        /// <summary>
+        /// Checks collision between this actor and the given actor.
+        /// </summary>
+        /// <param name="a">Actor to check collision with.</param>
+        /// <returns>True if the two actors are colliding.</returns>
+        public override bool checkCollision(Actor a)
+        {
+            Vector3 direction = WorldPosition - m_vPreviousWorldPosition;
+            float distanceCovered = direction.Length();
+            direction.Normalize();
+
+            Ray ray = new Ray(m_vPreviousWorldPosition, direction);
+
+            bool collision = false;
+            float? intersection = ray.Intersects(a.WorldBounds);
+            if (intersection != null)
+            {
+                if (intersection <= distanceCovered)
+                {
+                    System.Console.Out.WriteLine("It's a Hit!");
+                    collision = true;
+                }
+            }
+            else
+            {
+                System.Console.Out.WriteLine("Detection Returned NULL");
+            }
+
+            return collision;
+        }
     }
 }

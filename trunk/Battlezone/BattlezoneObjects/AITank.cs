@@ -111,7 +111,7 @@ namespace Battlezone.BattlezoneObjects
             
             currentState = AIStates.PATROL;
 
-            Scale = 50.0f;
+            Scale = 54.0f;
 
             canFire = true;
             COLLISION_IDENTIFIER = CollisionIdentifier.AI_TANK;         
@@ -136,6 +136,8 @@ namespace Battlezone.BattlezoneObjects
             chassisTransform = chassisBone.Transform;
             turretTransform = turretBone.Transform;
             cannonTransform = cannonBone.Transform;
+
+            
         }
 
         public override void Draw(GameTime gameTime)
