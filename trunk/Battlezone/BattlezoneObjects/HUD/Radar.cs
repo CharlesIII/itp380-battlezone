@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Storage;
 namespace Battlezone.BattlezoneObjects.HUD
 {
     /// <summary>
-    /// This is a game component that implements IUpdateable & IDrawable.
+    /// This is a game component that implements IDrawable.
     /// </summary>
     public class Radar : DrawableGameComponent
     {
@@ -37,12 +37,18 @@ namespace Battlezone.BattlezoneObjects.HUD
         // This is the center position of the radar hud on the screen. 
         static Vector2 RadarCenterPos = new Vector2(900.0f, 75.0f);
 
+        /// <summary>
+        /// Constructs the Radar on the HUD.
+        /// </summary>
+        /// <param name="game"> A reference to the Game.</param>
         public Radar(Game game)
             : base(game)
         {
             
         }
-
+        /// <summary>
+        /// Initialize Function
+        /// </summary>
         public override void Initialize()
         {
             base.Initialize();
@@ -59,6 +65,10 @@ namespace Battlezone.BattlezoneObjects.HUD
             System.Console.Out.WriteLine(RadarImage.Width);
         }
 
+        /// <summary>
+        /// Draw Function
+        /// </summary>
+        /// <param name="gameTime">Game time.</param>
         public override void Draw(GameTime gameTime)
         {
             Vector3 playerFwd = GameplayScreen.Instance.getPlayer().GetWorldFacing();
@@ -68,11 +78,11 @@ namespace Battlezone.BattlezoneObjects.HUD
             // The last parameter of the color determines how transparent the radar circle will be
             mBatch.Draw(RadarImage, RadarCenterPos, null, new Color(100, 100, 100, 150), 0.0f, RadarImageCenter, 1.0f, SpriteEffects.None, 0.0f);
 
-            float playerForwardRadians = (float)Math.Acos(Vector2.Dot(new Vector2(playerFwd.X, playerFwd.Z), new Vector2(0.0f, 1.0f)));
+            float playerForwardRadians = (float)Math.Acos(Vector2.Dot(new Vector2(playerFwd.Z, playerFwd.X), new Vector2(0.0f, 1.0f)));
             // If enemy is in range
             foreach (AITank thisEnemy in GameplayScreen.Instance.Enemies)
             {
-                Vector2 diffVect = new Vector2(thisEnemy.WorldPosition.X - playerPos.X, thisEnemy.WorldPosition.Z - playerPos.Z);
+                Vector2 diffVect = new Vector2(thisEnemy.WorldPosition.Z - playerPos.Z, thisEnemy.WorldPosition.X - playerPos.X);
                 float distance = diffVect.LengthSquared();
 
                 // Check if enemy is within RadarRange
