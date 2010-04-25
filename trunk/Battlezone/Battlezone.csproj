@@ -111,6 +111,7 @@
     <Compile Include="BattlezoneObjects\SpawnManager.cs" />
     <Compile Include="BattlezoneObjects\PlayerTank.cs" />
     <Compile Include="Engine\Actor.cs" />
+    <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\CollisionIdentifier.cs" />
     <Compile Include="Engine\ParticleSystems\ExplosionParticleSystemBackground.cs" />
     <Compile Include="Engine\ParticleSystems\ExplosionParticleSystemTitleBackground.cs" />

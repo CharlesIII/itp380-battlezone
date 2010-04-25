@@ -61,6 +61,8 @@ namespace Battlezone
         
         private BattlezoneObjects.PlayerTank m_kPlayer;
 
+        private Engine.Camera e_Camera;
+
         private BattlezoneObjects.SkyDome m_kSkyDome;
 
         ContentManager content;
@@ -120,101 +122,7 @@ namespace Battlezone
 
         #endregion
 
-        #region Chased object properties (set externally each frame)
-
-        /// <summary>
-        /// Position of object being chased.
-        /// </summary>
-        public Vector3 ChasePosition
-        {
-            get { return chasePosition; }
-            set { chasePosition = value; }
-        }
-        private Vector3 chasePosition;
-
-        /// <summary>
-        /// Direction the chased object is facing.
-        /// </summary>
-        public Vector3 ChaseDirection
-        {
-            get { return chaseDirection; }
-            set { chaseDirection = value; }
-        }
-        private Vector3 chaseDirection;
-
-        /// <summary>
-        /// Chased object's Up vector.
-        /// </summary>
-        public Vector3 Up
-        {
-            get { return up; }
-            set { up = value; }
-        }
-        private Vector3 up = Vector3.UnitY;
-
-        #endregion
-
-        #region Desired camera positioning (set when creating camera or changing view)
-
-        /// <summary>
-        /// Position of camera in world space.
-        /// </summary>
-        public Vector3 Position
-        {
-            get { return position; }
-        }
-        private Vector3 position;
-
-        /// <summary>
-        /// Desired camera position in the chased object's coordinate system.
-        /// </summary>
-        public Vector3 DesiredPositionOffset
-        {
-            get { return desiredPositionOffset; }
-            set { desiredPositionOffset = value; }
-        }
-        private Vector3 desiredPositionOffset = new Vector3(0.0f, 220.0f, 1500.0f);
-
-        /// <summary>
-        /// Desired camera position in world space.
-        /// </summary>
-        public Vector3 DesiredPosition
-        {
-            get
-            {
-                // Ensure correct value even if update has not been called this frame
-                UpdateWorldPositions();
-                return desiredPosition;
-            }
-        }
-        private Vector3 desiredPosition;
-
-        /// <summary>
-        /// Look at point in the chased object's coordinate system.
-        /// </summary>
-        public Vector3 LookAtOffset
-        {
-            get { return lookAtOffset; }
-            set { lookAtOffset = value; }
-        }
-        private Vector3 lookAtOffset = new Vector3(0.0f, 5.0f, -50.0f);
-
-        /// <summary>
-        /// Look at point in world space.
-        /// </summary>
-        public Vector3 LookAt
-        {
-            get
-            {
-                // Ensure correct value even if update has not been called this frame
-                UpdateWorldPositions();
-
-                return lookAt;
-            }
-        }
-        private Vector3 lookAt;
-
-        #endregion
+        
 
 
         #region Initialization
@@ -269,6 +177,10 @@ namespace Battlezone
             //load spawn manager
             m_kSpawnManager = new SpawnManager(ScreenManager.Game);
             ScreenManager.Game.Components.Add(m_kSpawnManager);
+
+            //load camera
+            e_Camera = new Camera(ScreenManager.Game);
+            ScreenManager.Game.Components.Add(e_Camera);
 
             //Load Player Tank
             m_kPlayer = new PlayerTank(ScreenManager.Game, new Vector3(0.0f, 0.0f, -500.0f));
@@ -400,13 +312,7 @@ namespace Battlezone
                     //check for collisions
                     checkCollision();
 
-                    //Update Camera
-                    UpdateWorldPositions();
-                    ChasePosition = m_kPlayer.WorldPosition;
-                    Matrix temp = m_kPlayer.worldTransform * m_kPlayer.turretBone.Transform;
-                    ChaseDirection = (temp.Forward * -1);
-                    Up = Vector3.UnitY;
-                    CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
+                    
 
 
                     m_kTimer.Update(gameTime);
@@ -510,7 +416,7 @@ namespace Battlezone
                         if(!justFired)
                         {
                             Matrix temp = m_kPlayer.worldTransform * m_kPlayer.turretBone.Transform;
-                            ChaseDirection = (temp.Forward * -1);
+                            Vector3 ChaseDirection = (temp.Forward * -1);
                             ChaseDirection.Normalize();
                             Vector3 offSet = new Vector3(0, 90, 0);
                             Projectile pro = null;
@@ -577,24 +483,7 @@ namespace Battlezone
             ScreenManager.GraphicsDevice.RenderState.AlphaTestEnable = false;
         }
 
-        /// <summary>
-        /// Rebuilds object space values in world space. Invoke before publicly
-        /// returning or privately accessing world space values.
-        /// </summary>
-        private void UpdateWorldPositions()
-        {
-            // Construct a matrix to transform from object space to worldspace
-            Matrix transform = Matrix.Identity;
-            transform.Forward = ChaseDirection;
-            transform.Up = Up;
-            transform.Right = Vector3.Cross(Up, ChaseDirection);
-
-            // Calculate desired camera properties in world space
-            desiredPosition = ChasePosition +
-                Vector3.TransformNormal(DesiredPositionOffset, transform);
-            lookAt = ChasePosition +
-                Vector3.TransformNormal(LookAtOffset, transform);
-        }
+        
 
 
         /// <summary>
