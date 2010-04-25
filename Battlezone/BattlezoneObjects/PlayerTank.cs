@@ -289,9 +289,21 @@ namespace Battlezone.BattlezoneObjects
         /// <returns>True if the two actors are colliding.</returns>
         public override bool checkCollision(Actor a)
         {
-            if (WorldBounds.Intersects(a.WorldBounds))
-                return true;
-            else return false;
+            if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
+            {
+                Building b = (Building)a;
+                if (b.WorldBoundsBox.Intersects(WorldBounds))
+                    return true;
+                return false;
+            }
+            else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
+            {
+                if (a.WorldBounds.Intersects(WorldBounds))
+                    return true;
+                return false;
+            }
+            else 
+                return false;
         }
 
         /// <summary>
