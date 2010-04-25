@@ -62,7 +62,7 @@ namespace Battlezone.BattlezoneObjects.HUD
             RadarImage = aLoader.Load<Texture2D>("blackDotLarge") as Texture2D;
 
             RadarImageCenter = new Vector2(RadarImage.Width * 0.5f, RadarImage.Height * 0.5f);
-            System.Console.Out.WriteLine(RadarImage.Width);
+
         }
 
         /// <summary>
