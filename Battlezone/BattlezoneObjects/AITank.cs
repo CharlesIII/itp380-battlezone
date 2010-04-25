@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -49,8 +50,9 @@ namespace Battlezone.BattlezoneObjects
         Vector3 m_vPatrolEnd;
         Vector3 m_vCurrentPathTarget;
 
-        enum AIStates {NEED_PURSUE, PURSUE, PATROL, NEED_PATROL, SCAN, ATTACK, DEAD};
+        enum AIStates {NEED_PURSUE, PURSUE, PATROL, NEED_PATROL, SCAN, ATTACK, DEAD, STOP};
         AIStates currentState;
+        AIStates previousState;
 
         float turretRotationValue;
         float turretTargetRotationValue;
@@ -59,6 +61,8 @@ namespace Battlezone.BattlezoneObjects
 
         bool canFire;
 
+        List<AITank> collidingAITanks;
+        
         Random rg = new Random();
 
         #endregion
@@ -114,6 +118,9 @@ namespace Battlezone.BattlezoneObjects
             Scale = 59.0f;
 
             canFire = true;
+            turretTargetRotationValue = 0;
+
+            collidingAITanks = new List<AITank>(10);
             COLLISION_IDENTIFIER = CollisionIdentifier.AI_TANK;         
         }
 
@@ -183,7 +190,25 @@ namespace Battlezone.BattlezoneObjects
             float fDelta = gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f;
             timer.Update(gameTime);
 
-            if (currentState != AIStates.DEAD)
+            if ((WorldPosition - m_vPlayerPosition).Length() < AUTOMATIC_DETECTION_RADIUS)
+            {
+                //player has been automatically detected so set PlayerLastKnownPosition
+                //m_vPlayerLastKnownPosition = new Vector3(m_vPlayerPosition.X, m_vPlayerPosition.Y, m_vPlayerPosition.Z);
+
+                //change action flow based on current state and modify state
+                //perform quick instant vision check
+                //if visible, set turretRotationTarget and stop moving and set state to attack
+                //if not visisble, find the closest nav node to the player position and navigate to it and set state to pursue
+                /*
+                if (currentState == AIStates.STOP)
+                {
+                    previousState = AIStates.NEED_PURSUE;
+                }
+                 */
+            }
+            if (currentState == AIStates.STOP)
+                return;
+            if (currentState != AIStates.DEAD)  //wrap around all the logic to stop the AI tank when its dead
             {
                 //make sure we're facing the right direction before we start moving
                 if (RotAngle < targetTankRotationValue)
@@ -253,16 +278,6 @@ namespace Battlezone.BattlezoneObjects
                  * collisions in paths of the AI tanks.
                  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                  ****************************************************************/
-                if ((WorldPosition - m_vPlayerPosition).Length() < AUTOMATIC_DETECTION_RADIUS)
-                {
-                    //player has been automatically detected so set PlayerLastKnownPosition
-                    //m_vPlayerLastKnownPosition = new Vector3(m_vPlayerPosition.X, m_vPlayerPosition.Y, m_vPlayerPosition.Z);
-
-                    //change action flow based on current state and modify state
-                    //perform quick instant vision check
-                    //if visible, set turretRotationTarget and stop moving and set state to attack
-                    //if not visisble, find the closest nav node to the player position and navigate to it and set state to pursue
-                }
 
                 if (currentState == AIStates.PATROL)
                 {
@@ -405,7 +420,24 @@ namespace Battlezone.BattlezoneObjects
                 }
                 else if (currentState == AIStates.ATTACK)
                 {
-                    if (CheckPlayerSighted())
+                    if (Math.Abs(turretTargetRotationValue) > 0)
+                    {
+                        if (turretTargetRotationValue < 0)
+                        {
+                            turretRotationValue -= fDelta * TURRET_ROTATION_SPEED;
+                            turretTargetRotationValue += fDelta * turretTargetRotationValue;
+                            if (turretTargetRotationValue >= 0)
+                                turretTargetRotationValue = 0;
+                        }
+                        else
+                        {
+                            turretTargetRotationValue += fDelta * TURRET_ROTATION_SPEED;
+                            turretTargetRotationValue -= fDelta * TURRET_ROTATION_SPEED;
+                            if (turretTargetRotationValue <= 0)
+                                turretTargetRotationValue = 0;
+                        }
+                    }
+                    else if (CheckPlayerSighted())
                     {
                         //do attack
                         //Console.Out.WriteLine("Can see tank in ATTACK");
@@ -420,57 +452,31 @@ namespace Battlezone.BattlezoneObjects
                         currentState = AIStates.NEED_PURSUE;
                     }
                 }
-                //Console.Out.WriteLine("Current state: " + currentState);
-                /*
-                //check to see if we're close to the target position
-                if ((m_vTarget - WorldPosition).Length() > 0.5f)
+
+                //check to see if we had collided with any AITanks previously and notify them if we're far away enough to avoid collision
+                if (collidingAITanks.Count > 0)
                 {
-                    Vector3 temp = m_vTarget - WorldPosition;
-                    Vector3 facing = GetWorldFacing();
-
-                    temp.Normalize();
-                    facing.Normalize();
-
-                    if (Vector3.Dot(facing, temp) != 1)
-                    Velocity =  temp * 5.0f;
-                }
-                else
-                {
-                
-
-                    //check to see if there's a new target that was set while we were moving to the current one
-                    if (!m_vNewTarget.Equals(m_vTarget))
+                    List<AITank> tanksToRemove = new List<AITank>(10);
+                    foreach (AITank tank in collidingAITanks)
                     {
-                        //there's another target to move to so set the current target to be that
-                        m_vTarget = m_vNewTarget;
+                        Vector3 distance = WorldPosition - tank.WorldPosition;
+                        float requiredDistanceApart = WorldBounds.Radius + tank.WorldBounds.Radius + 40;
+                        if (distance.Length() >= requiredDistanceApart)
+                        {
+                            tank.msgCollisionResolved(this);
+                            tanksToRemove.Add(tank);
+                        }
+                    }
+
+                    //remove any tanks we have resolved collision with
+                    foreach (AITank removedTank in tanksToRemove)
+                    {
+                        collidingAITanks.Remove(removedTank);
                     }
                 }
-            }
-            else if (currentState == AIStates.ATTACK)
-            {
-                if (CheckPlayerSighted())
-                {
-                    //do attack
-                    //Projectile pro = new Projectile(GameplayScreen.Instance.Content, cannonTransform.Translation, GetCannonFacing(), ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL);
-                    //canFire = false;
-                    //Console.Out.WriteLine("Can see tank in ATTACK");
-                    timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early
-                }
-                else
-                {
-                    //lost sight, begin pursuit
-                    currentState = AIStates.NEED_PURSUE;
-                }
-            }
-            /*
-            //check to see if we're close to the target position
-            if ((m_vTarget - WorldPosition).Length() > 0.5f)
-            {
-                Vector3 temp = m_vTarget - WorldPosition;
-                Vector3 facing = GetWorldFacing();
+                //Console.Out.WriteLine("Current state: " + currentState);
 
-                    //TODO: Add World Bound check so the player doesn't fall off the world
-                }*/
+                //TODO: Add World Bound check so the player doesn't fall off the world
 
                 //when the tank reaches its target, it performs a radial check for the player
                 //if the player is within a minimum detection distance, the AI will instantly "discover" the player
@@ -588,13 +594,27 @@ namespace Battlezone.BattlezoneObjects
             //Console.Out.WriteLine("Force: " +Force);
         }
 
+        public void msgWeAreColliding(AITank tank)
+        {
+            collidingAITanks.Add(tank);
+            previousState = currentState;
+            currentState = AIStates.STOP;
+            WorldPosition = m_vPreviousWorldPosition;
+        }
+
+        public void msgCollisionResolved(AITank tank)
+        {
+            collidingAITanks.Remove(tank);
+            currentState = previousState;
+        }
+
         /// <summary>
         /// Resolves collision based on defined behaviors.
         /// </summary>
         /// <param name="a">Actor with which it is currently colliding.</param>
         public override void collide(Actor a)
         {
-            if (a is Projectile)
+            if (a.COLLISION_IDENTIFIER == CollisionIdentifier.SHELL)
             {
                 Projectile temp = (Projectile)a;
                 CurrentHealth -= temp.Damage;
@@ -603,15 +623,43 @@ namespace Battlezone.BattlezoneObjects
                     currentState = AIStates.DEAD;
                 }
             }
+            else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
+            {
+                /*
+                 * When two tanks collide, one of them will have their collide method called first. This check 
+                 * prevents the later tank from causing the earlier tank to stop.
+                 */
+                AITank ai = (AITank)a;
+                if (!collidingAITanks.Contains(ai))
+                {
+                    collidingAITanks.Add(ai);
+                    ai.msgWeAreColliding(this);
+                }
+            }
+            else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK)
+            {
+                //this really shouldn't happen since AITank should have discovered the player tank due to minimum-detection-radius check
+                //I'm not sure if we really need to handle this case
+            }
+            else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
+            {
+                Console.Out.WriteLine("Colliding with a building, resolution undefined.");
+                currentState = AIStates.STOP;
+            }
         }
 
         public override bool checkCollision(Actor a)
         {
-            if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
+            if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
-
+                Building b = (Building)a;
+                return WorldBounds.Intersects(b.WorldBoundsBox);
             }
-            return false;
+            else
+            {
+                return WorldBounds.Intersects(a.WorldBounds);
+            }
+            //return false;
         }
 
     }
