@@ -340,13 +340,11 @@ namespace Battlezone
             {
                 Explode();
                 dead = true;
-                System.Console.Out.WriteLine("It's a Hit!");
             }
             else if ((a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK) && !dead)
             {
                 Explode();
                 dead = true;
-                System.Console.Out.WriteLine("Something's Screwy");
             }
         }
 
