@@ -1,3 +1,12 @@
+#region File Description
+//------------------------------------------------------------------------------
+// Actorn.cs
+//
+// Copyright (C) Double XL, Graham Cracka, Old Jamison Irish Whiskey, & C-Cubed.
+// All rights reserved.
+//------------------------------------------------------------------------------
+#endregion
+
 using System;
 using System.Collections;
 using System.Linq;

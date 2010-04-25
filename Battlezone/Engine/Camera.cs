@@ -1,3 +1,12 @@
+#region File Description
+//------------------------------------------------------------------------------
+// Camera.cs
+//
+// Copyright (C) Double XL, Graham Cracka, Old Jamison Irish Whiskey, & C-Cubed.
+// All rights reserved.
+//------------------------------------------------------------------------------
+#endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -163,6 +172,30 @@ namespace Battlezone.Engine
             lookAt = ChasePosition +
                 Vector3.TransformNormal(LookAtOffset, transform);
         }
+
+        private bool checkCamCollision(out float )
+        {
+            Vector3 dir;
+            Vector3 distance;
+            distance = GameplayScreen.Instance.getPlayer().WorldPosition - desiredPosition;
+            dir = distance;
+            dir.Normalize();
+
+            Ray colCheckRay = new Ray(GameplayScreen.Instance.getPlayer().WorldPosition, dir);
+            float? intersection;
+            foreach (Actor a in GameplayScreen.Instance.activeActors)
+            {
+                if (a.COLLISION_IDENTIFIER == 4)
+                {
+                    intersection = colCheckRay.Intersects(a.WorldBounds);
+                    if (intersection != null && ((intersection*intersection) <= distance.LengthSquared()){
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
 
     }
 }

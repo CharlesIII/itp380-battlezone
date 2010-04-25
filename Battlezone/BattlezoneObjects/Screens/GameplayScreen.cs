@@ -1,10 +1,10 @@
 #region File Description
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // GameplayScreen.cs
 //
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// Copyright (C) Double XL, Graham Cracka, Old Jamison Irish Whiskey, & C-Cubed.
+// All rights reserved.
+//------------------------------------------------------------------------------
 #endregion
 
 #region Using Statements
