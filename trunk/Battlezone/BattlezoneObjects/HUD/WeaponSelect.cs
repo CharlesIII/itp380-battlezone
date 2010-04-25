@@ -24,6 +24,9 @@ namespace Battlezone.BattlezoneObjects.HUD
 
         private Texture2D turretSelect;
         private Texture2D missileSelect;
+        private Texture2D selectionGlow;
+
+        private int wep = 1;  //1 for Turret, 2 for Missile
 
         //(
 
@@ -48,6 +51,7 @@ namespace Battlezone.BattlezoneObjects.HUD
 
             turretSelect = aLoader.Load<Texture2D>("TurretSelect") as Texture2D;
             missileSelect = aLoader.Load<Texture2D>("MissileSelect2") as Texture2D;
+            selectionGlow = aLoader.Load<Texture2D>("SelectGlow") as Texture2D;
         }
 
         /// <summary>
@@ -68,11 +72,27 @@ namespace Battlezone.BattlezoneObjects.HUD
         public override void Draw(GameTime gameTime)
         {
             mBatch.Begin();
-            mBatch.Draw(turretSelect, new Rectangle(392, 708, 120, 60), Color.White);
-            mBatch.Draw(missileSelect, new Rectangle(512, 708, 120, 60), Color.White);
+            
+            if (wep == 1)
+            {
+                mBatch.Draw(selectionGlow, new Rectangle(332, 668, 200, 100), Color.White);
+            }
+            else if (wep == 2)
+            {
+                mBatch.Draw(selectionGlow, new Rectangle(502, 668, 200, 100), Color.White);
+            }
+
+            mBatch.Draw(turretSelect, new Rectangle(372, 688, 120, 60), Color.White);
+            mBatch.Draw(missileSelect, new Rectangle(542, 688, 120, 60), Color.White);
+
             mBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public void selectWeapon(int sel)
+        {
+            wep = sel;
         }
     }
 }
