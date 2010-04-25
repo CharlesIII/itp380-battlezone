@@ -439,10 +439,12 @@ namespace Battlezone
                     if (input.ShellSelect)
                     {
                         selectedWeapon = 1;
+                        m_kWepSel.selectWeapon(selectedWeapon);
                     }
                     if (input.MissileSelect)
                     {
                         selectedWeapon = 2;
+                        m_kWepSel.selectWeapon(selectedWeapon);
                     }
                     if (input.TurretLeft)
                     {
