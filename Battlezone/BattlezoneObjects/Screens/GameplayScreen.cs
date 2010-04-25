@@ -61,7 +61,6 @@ namespace Battlezone
         
         private BattlezoneObjects.PlayerTank m_kPlayer;
 
-
         private BattlezoneObjects.SkyDome m_kSkyDome;
 
         ContentManager content;
@@ -73,9 +72,11 @@ namespace Battlezone
 
         SpawnManager m_kSpawnManager;
 
+        //HUD Objects
         BattlezoneObjects.HUD.HealthBar m_kHealthBar;
         BattlezoneObjects.HUD.Radar m_kRadar;
         public List<AITank> Enemies = new List<AITank>();
+        BattlezoneObjects.HUD.WeaponSelect m_kWepSel;
 
         TimeSpan timeToNextProjectile = TimeSpan.Zero;
 
@@ -286,11 +287,13 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(test);
             Enemies.Add(test);
 
+            //Load & Initialize HUD
             m_kHealthBar = new BattlezoneObjects.HUD.HealthBar(ScreenManager.Game);
             ScreenManager.Game.Components.Add(m_kHealthBar);
-
             m_kRadar = new Battlezone.BattlezoneObjects.HUD.Radar(ScreenManager.Game);
             ScreenManager.Game.Components.Add(m_kRadar);
+            m_kWepSel = new Battlezone.BattlezoneObjects.HUD.WeaponSelect(ScreenManager.Game);
+            ScreenManager.Game.Components.Add(m_kWepSel);
 
             //Building b = new Building(ScreenManager.Game);
             //ScreenManager.Game.Components.Add(b);
