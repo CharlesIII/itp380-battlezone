@@ -18,7 +18,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using Battlezone.Engine;
 using Battlezone.BattlezoneObjects;
-using System.Timers;
 #endregion
 
 namespace Battlezone
@@ -70,8 +69,6 @@ namespace Battlezone
 
 
         static Random random = new Random();
-
-        private System.Timers.Timer explodeTimer;
 
         private bool justMade = true;
 
@@ -127,30 +124,9 @@ namespace Battlezone
                                                trailParticlesPerSecond, position);
         }
 
-        public Projectile(ContentManager content, Vector3 Position, Vector3 Direction, Game Game, PROJECTILE_TYPE type)
+        public Projectile(Vector3 Position, Vector3 Direction, Game Game, PROJECTILE_TYPE type)
             : base(Game)
         {
-
-            ParticleSystem explosionParticles = new ExplosionParticleSystem(Game, content);
-            ParticleSystem explosionSmokeParticles = new ExplosionSmokeParticleSystemGameplay(Game, content);
-            ParticleSystem projectileTrailParticles = new ProjectileTrailParticleSystemGameplay(Game, content);
-
-            // Set the draw order so the explosions and fire
-            // will appear over the top of the smoke.
-            explosionSmokeParticles.DrawOrder = 200;
-            projectileTrailParticles.DrawOrder = 300;
-            explosionParticles.DrawOrder = 400;
-
-
-            this.explosionParticles = explosionParticles;
-            this.explosionSmokeParticles = explosionSmokeParticles;
-            this.projectileTrailParticles = projectileTrailParticles;
-
-            // Register the particle system components.
-            Game.Components.Add(this.explosionParticles);
-            Game.Components.Add(this.explosionSmokeParticles);
-            Game.Components.Add(this.projectileTrailParticles);
-
             base.COLLISION_IDENTIFIER = CollisionIdentifier.SHELL;
 
             this.type = type;
@@ -164,23 +140,13 @@ namespace Battlezone
                 sMeshToLoad = "tank_shell";
                 Damage = 10.0f;
             }
-            // Start at the origin, firing in a random (but roughly upward) direction.
-
             position = Position;
             WorldPosition = position;
-
 
             Force = Direction * 1000000.0f;
             //Force.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
             //Force.Z = Direction.Z * 1000.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
-            projectileLifespan = 6;
-
-            // Use the particle emitter helper to output our trail particles.
-            trailEmitter = new ParticleEmitter(projectileTrailParticles,
-                                               trailParticlesPerSecond, position);
-
-            explodeTimer = new System.Timers.Timer(5000);
-            explodeTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            projectileLifespan = 6;  
 
             fireDirection = Direction;
             bPhysicsDriven = true;
@@ -231,15 +197,54 @@ namespace Battlezone
             dead = false;
         }
 
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+            ParticleSystem explosionParticles = new ExplosionParticleSystem(Game, meshLoader);
+            ParticleSystem explosionSmokeParticles = new ExplosionSmokeParticleSystemGameplay(Game, meshLoader);
+            ParticleSystem projectileTrailParticles = new ProjectileTrailParticleSystemGameplay(Game, meshLoader);
+
+            // Set the draw order so the explosions and fire
+            // will appear over the top of the smoke.
+            explosionSmokeParticles.DrawOrder = 200;
+            projectileTrailParticles.DrawOrder = 300;
+            explosionParticles.DrawOrder = 400;
+
+
+            this.explosionParticles = explosionParticles;
+            this.explosionSmokeParticles = explosionSmokeParticles;
+            this.projectileTrailParticles = projectileTrailParticles;
+
+            // Register the particle system components.
+            Game.Components.Add(this.explosionParticles);
+            Game.Components.Add(this.explosionSmokeParticles);
+            Game.Components.Add(this.projectileTrailParticles);
+
+            // Use the particle emitter helper to output our trail particles.
+            trailEmitter = new ParticleEmitter(projectileTrailParticles,
+                                               trailParticlesPerSecond, position);
+        }
+
+        protected override void UnloadContent()
+        {
+            Console.Out.WriteLine("Projectile is unloading.");
+            explosionParticles.ManualUnload();
+            explosionSmokeParticles.ManualUnload();
+            projectileTrailParticles.ManualUnload();
+            trailEmitter = null;
+            GC.Collect();
+            base.UnloadContent();
+        }
+
         /// <summary>
         /// Updates the projectile.
         /// </summary>
         public override void Update(GameTime gameTime)
         {
-            //base.Update(gameTime);
-            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float fDelta = gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f;
+            age += fDelta;
 
-             
+            timer.Update(gameTime);
 
             if (!dead)
             {
@@ -266,9 +271,6 @@ namespace Battlezone
             explosionParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
             explosionSmokeParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
             projectileTrailParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
-
-            WorldBounds.Center = WorldPosition;
-            WorldBounds.Radius = ModelBounds.Radius * Scale;
         }
 
         public void Explode()
@@ -279,8 +281,7 @@ namespace Battlezone
             for (int i = 0; i < numExplosionSmokeParticles; i++)
                 explosionSmokeParticles.AddParticle(position, velocity);
 
-            explodeTimer.Start();
-
+            timer.AddTimer("Remove Projectile", 5, OnTimedEvent, false);
         }
 
         public override void removeSelf()
@@ -320,9 +321,11 @@ namespace Battlezone
             return true;
         }
 
-        public void OnTimedEvent(object sender, EventArgs eArgs)
+        public void OnTimedEvent()
         {
-            this.removeSelf();
+            Console.Out.WriteLine("calling remove self");
+            removeSelf();
+            UnloadContent();
         }
 
         /// <summary>

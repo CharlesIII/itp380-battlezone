@@ -57,6 +57,8 @@ namespace Battlezone.BattlezoneObjects
 
         float targetTankRotationValue;
 
+        bool canFire;
+
         Random rg = new Random();
 
         #endregion
@@ -111,6 +113,7 @@ namespace Battlezone.BattlezoneObjects
 
             Scale = 50.0f;
 
+            canFire = true;
             COLLISION_IDENTIFIER = CollisionIdentifier.AI_TANK;         
         }
 
@@ -437,11 +440,30 @@ namespace Battlezone.BattlezoneObjects
                         m_vTarget = m_vNewTarget;
                     }
                 }
-                */
-                /*
+            }
+            else if (currentState == AIStates.ATTACK)
+            {
+                if (CheckPlayerSighted())
+                {
+                    //do attack
+                    //Projectile pro = new Projectile(GameplayScreen.Instance.Content, cannonTransform.Translation, GetCannonFacing(), ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL);
+                    //canFire = false;
+                    //Console.Out.WriteLine("Can see tank in ATTACK");
+                    timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early
+                }
                 else
                 {
-                    m_vWorldPosition += Vector3.Multiply(m_vVelocity, gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f);
+                    //lost sight, begin pursuit
+                    currentState = AIStates.NEED_PURSUE;
+                }
+            }
+            //Console.Out.WriteLine("Current state: " + currentState);
+            /*
+            //check to see if we're close to the target position
+            if ((m_vTarget - WorldPosition).Length() > 0.5f)
+            {
+                Vector3 temp = m_vTarget - WorldPosition;
+                Vector3 facing = GetWorldFacing();
 
                     //TODO: Add World Bound check so the player doesn't fall off the world
                 }*/
@@ -450,7 +472,7 @@ namespace Battlezone.BattlezoneObjects
                 //if the player is within a minimum detection distance, the AI will instantly "discover" the player
                 //AI tank has a 20 degree viewing angle for checking? maybe?
             }
-            Console.Out.WriteLine("Current state: " + currentState);
+            //Console.Out.WriteLine("Current state: " + currentState);
         }
 
         //Helper functions to keep the Update method clean
@@ -513,6 +535,11 @@ namespace Battlezone.BattlezoneObjects
         private void StopPursuit()
         {
             currentState = AIStates.NEED_PATROL;
+        }
+
+        private void AllowFire()
+        {
+            canFire = true;
         }
 
         public override Vector3 GetWorldFacing()

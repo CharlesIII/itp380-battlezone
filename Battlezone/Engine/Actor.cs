@@ -329,6 +329,7 @@ namespace Battlezone
         {
             Game.Components.Remove(this);
             GameplayScreen.Instance.removeActor(this);
+            Console.Out.WriteLine("removing actor");
         }
         /// <summary>
         /// Checks collision between this actor and the given actor.

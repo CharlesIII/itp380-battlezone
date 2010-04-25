@@ -508,17 +508,17 @@ namespace Battlezone
                             Vector3 pos = m_kPlayer.WorldPosition + offSet;
                             switch(selectedWeapon){
                                 case 1:
-                                    pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL);
+                                    pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL);
                                     break;
                                 case 2:
                                     if (!missileFired)
                                     {
-                                        pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.MISSILE);
+                                        pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.MISSILE);
                                     }
                                     break;
                                 default:
                                     System.Console.WriteLine("Hmm, Seems there's a bug a crawlin - selectedWeapon was neither 1 or 2.  Defaulted to Shell");
-                                    pro = new Projectile(content, pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL);
+                                    pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL);
                                     break;
                             }
 

@@ -199,6 +199,17 @@ namespace Battlezone.BattlezoneObjects
             boneTransforms = new Matrix[tankModel.Bones.Count];
         }
 
+        protected override void UnloadContent()
+        {
+            Console.Out.WriteLine("Player_tank is unloading content");
+            base.UnloadContent();
+        }
+
+        public void ManualUnload()
+        {
+            UnloadContent();
+        }
+
         public override void Draw(GameTime gameTime)
         {
             base.updateWorldTransform();

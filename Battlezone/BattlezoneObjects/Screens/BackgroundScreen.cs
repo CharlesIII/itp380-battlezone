@@ -250,10 +250,15 @@ namespace Battlezone
             content.Unload();
             ScreenManager.Game.Components.Remove(tank);
             GameplayScreen.Instance.removeActor(tank);
+            tank.ManualUnload();
             ScreenManager.Game.Components.Remove(explosionParticles);
+            explosionParticles.ManualUnload();
             ScreenManager.Game.Components.Remove(explosionSmokeParticles);
+            explosionSmokeParticles.ManualUnload();
             ScreenManager.Game.Components.Remove(projectileTrailParticles);
+            projectileTrailParticles.ManualUnload();
             ScreenManager.Game.Components.Remove(smokePlumeParticles);
+            smokePlumeParticles.ManualUnload();
             cue.Stop(AudioStopOptions.Immediate);
             
         }
