@@ -19,8 +19,7 @@ namespace Battlezone.BattlezoneObjects
     /// </summary>
     public class Level : Actor
     {
-        BoundingBox ModelBounds;
-        BoundingBox WorldBounds;
+        BoundingBox WorldBoundsBox;
 
         public Level(Game game)
             : base(game)
@@ -44,6 +43,35 @@ namespace Battlezone.BattlezoneObjects
         protected override void LoadContent()
         {
             base.LoadContent();
+
+            Matrix []m_transforms = new Matrix[ActorModel.Bones.Count];
+            ActorModel.CopyAbsoluteBoneTransformsTo(m_transforms);
+
+            foreach (ModelMesh mesh in ActorModel.Meshes)
+            {
+                VertexPositionNormalTexture[] vertices=
+                    new VertexPositionNormalTexture[mesh.VertexBuffer.SizeInBytes / mesh.MeshParts[0].VertexStride];
+
+                mesh.VertexBuffer.GetData<VertexPositionNormalTexture>(vertices);
+
+                // Find min, max xyz for this mesh - assumes will be centred on 0,0,0 as BB is initialised to 0,0,0
+                Vector3 min = vertices[0].Position;
+                Vector3 max = vertices[0].Position;
+
+                for (int i = 1; i < vertices.Length; i++)
+                {
+                    min = Vector3.Min(min, vertices[i].Position);
+                    max = Vector3.Max(max, vertices[i].Position);
+                }                
+
+                // We need to take into account the fact that the mesh may have a bone transform
+                min = Vector3.Transform(min, m_transforms[mesh.ParentBone.Index]);
+                max = Vector3.Transform(max, m_transforms[mesh.ParentBone.Index]);
+
+                // Now expand main bb by this mesh's box
+                WorldBoundsBox.Min = Vector3.Min(WorldBoundsBox.Min, min);
+                WorldBoundsBox.Max = Vector3.Max(WorldBoundsBox.Max, max);
+            }
         }
 
         /// <summary>
