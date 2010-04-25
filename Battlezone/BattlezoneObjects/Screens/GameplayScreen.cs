@@ -443,21 +443,15 @@ namespace Battlezone
                     }
                     if (input.TurretLeft)
                     {
-                        m_kPlayer.TurretRotation += (2 * deltaTime);
-                        //projectiles.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles));
-                        //CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
+                        m_kPlayer.TurretRotation += (1.2f * deltaTime);
                     }
                     if (input.TurretRight)
                     {
-                        m_kPlayer.TurretRotation -= (2 * deltaTime);
-                        //projectiles.Add(new Projectile(explosionParticles, explosionSmokeParticles, projectileTrailParticles));
-                        //CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
+                        m_kPlayer.TurretRotation -= (1.2f * deltaTime);
                     }
 
                     if (input.TurnLeft)
                     {
-                        //m_kPlayer.TurretRotation += ((float)Math.PI / 5) * deltaTime;
-                        //m_kPlayer.SteerRotation = (float)Math.PI / 5;
                         m_kPlayer.LWheelRotation -= (deltaTime);
                         m_kPlayer.RWheelRotation += (deltaTime);
                         m_kPlayer.TurretRotation -= ((float)Math.PI / 5) * deltaTime;
