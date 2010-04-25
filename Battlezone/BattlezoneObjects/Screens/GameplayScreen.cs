@@ -73,7 +73,9 @@ namespace Battlezone
 
         SpawnManager m_kSpawnManager;
 
-        HealthBar m_kHealthBar;
+        BattlezoneObjects.HUD.HealthBar m_kHealthBar;
+        BattlezoneObjects.HUD.Radar m_kRadar;
+        public List<AITank> Enemies = new List<AITank>();
 
         TimeSpan timeToNextProjectile = TimeSpan.Zero;
 
@@ -277,14 +279,18 @@ namespace Battlezone
             m_kSkyDome = new SkyDome(ScreenManager.Game, ScreenManager.GraphicsDevice);
             ScreenManager.Game.Components.Add(m_kSkyDome);
 
-            m_kHealthBar = new HealthBar(ScreenManager.Game);
-            ScreenManager.Game.Components.Add(m_kHealthBar);
-
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
 
             AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3());
             ScreenManager.Game.Components.Add(test);
+            Enemies.Add(test);
+
+            m_kHealthBar = new BattlezoneObjects.HUD.HealthBar(ScreenManager.Game);
+            ScreenManager.Game.Components.Add(m_kHealthBar);
+
+            m_kRadar = new Battlezone.BattlezoneObjects.HUD.Radar(ScreenManager.Game);
+            ScreenManager.Game.Components.Add(m_kRadar);
 
             //Building b = new Building(ScreenManager.Game);
             //ScreenManager.Game.Components.Add(b);
@@ -398,6 +404,8 @@ namespace Battlezone
                     ChaseDirection = (temp.Forward * -1);
                     Up = Vector3.UnitY;
                     CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
+
+
                     m_kTimer.Update(gameTime);
                 }
             }
