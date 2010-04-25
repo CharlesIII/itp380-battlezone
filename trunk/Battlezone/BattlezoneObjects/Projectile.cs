@@ -182,6 +182,10 @@ namespace Battlezone
                 fTerminalVelocity = 1000.0f;
                 Force = fireDirection * 10000000.0f;
             }
+            else if (type == PROJECTILE_TYPE.SHELL)
+            {
+                Scale = 3.5f;
+            }
 
             fireDirection.Normalize();
             bPhysicsDriven = true;

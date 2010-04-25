@@ -441,10 +441,10 @@ namespace Battlezone.BattlezoneObjects
                     {
                         //do attack
                         //Console.Out.WriteLine("Can see tank in ATTACK");
-                        /*Projectile pro = new Projectile(cannonTransform.Translation, GetCannonFacing(), Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.AI_TANK);
+                        Projectile pro = new Projectile(cannonTransform.Translation, GetCannonFacing(), Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.AI_TANK);
                         canFire = false;
                         timer.AddTimer("Enable Cannon", 3, AllowFire, false);
-                        timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early*/
+                        timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early
                     }
                     else
                     {
@@ -525,7 +525,7 @@ namespace Battlezone.BattlezoneObjects
                 Vector3 correctFacing = player.WorldPosition - WorldPosition;
                 correctFacing.Normalize();
                 turretTargetRotationValue = (float)Math.Acos((double)Vector3.Dot(correctFacing, GetCannonFacing()));
-                if (turretTargetRotationValue < 0.015f)
+                if (turretTargetRotationValue < 0.01f)
                     turretTargetRotationValue = 0;
                 Vector3 cross = Vector3.Cross(GetCannonFacing(), correctFacing);
                 if (cross.Y < 0)
