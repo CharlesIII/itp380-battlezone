@@ -74,6 +74,7 @@ namespace Battlezone.BattlezoneObjects
             {
                 myC = Color.Green;
             }
+            
             //Draw the negative space for the health bar
             mBatch.Draw(mHealthBar, new Rectangle(this.Game.Window.ClientBounds.Width / 2 - mHealthBar.Width / 2, 30, mHealthBar.Width, 44), new Rectangle(0, 45, mHealthBar.Width, 44), Color.Gray);
             //Draw the current health level based on the current Health
