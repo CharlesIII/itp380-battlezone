@@ -441,9 +441,14 @@ namespace Battlezone.BattlezoneObjects
                     {
                         //do attack
                         //Console.Out.WriteLine("Can see tank in ATTACK");
-                        Projectile pro = new Projectile(cannonTransform.Translation, GetCannonFacing(), Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.AI_TANK);
-                        canFire = false;
-                        timer.AddTimer("Enable Cannon", 3, AllowFire, false);
+                        if (canFire)
+                        {
+                            Projectile pro = new Projectile((cannonTransform * worldTransform).Translation, GetCannonFacing(), Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.AI_TANK);
+                            pro.Initialize(400.0f, 250, 190, 100.0f, 100.0f, 0.0f);
+                            Game.Components.Add(pro);
+                            canFire = false;
+                            timer.AddTimer("Enable Cannon", 3, AllowFire, false);
+                        }
                         timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early
                     }
                     else
