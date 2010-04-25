@@ -205,6 +205,12 @@ namespace Battlezone
             UnloadContent();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            Console.Out.WriteLine("Disposing ParticleSystem");
+            base.Dispose(disposing);
+        }
+
         /// <summary>
         /// Helper for loading and initializing the particle effect.
         /// </summary>
