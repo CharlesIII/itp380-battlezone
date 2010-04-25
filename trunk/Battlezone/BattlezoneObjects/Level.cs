@@ -38,7 +38,7 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your initialization code here
 
             base.Initialize();
-            Scale = 100.0f;
+            Scale = 1.0f;
         }
 
         protected override void LoadContent()
