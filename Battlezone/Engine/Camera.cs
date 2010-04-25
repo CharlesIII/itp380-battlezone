@@ -57,15 +57,6 @@ namespace Battlezone.Engine
         #region Desired camera positioning (set when creating camera or changing view)
 
         /// <summary>
-        /// Position of camera in world space.
-        /// </summary>
-        public Vector3 Position
-        {
-            get { return position; }
-        }
-        private Vector3 position;
-
-        /// <summary>
         /// Desired camera position in the chased object's coordinate system.
         /// </summary>
         public Vector3 DesiredPositionOffset
@@ -116,6 +107,10 @@ namespace Battlezone.Engine
 
         #endregion
 
+        /// <summary>
+        /// Constructor for the Camera Class.
+        /// </summary>
+        /// <param name="game">A reference to the Game.</param>
         public Camera(Game game)
             : base(game)
         {

@@ -108,9 +108,6 @@ namespace Battlezone
         private float spdBoost = 1.0f;
         private Boolean spdBoostAvail = true;
 
-        private System.Timers.Timer fireTimer;
-        private System.Timers.Timer missileTimer;
-
         private bool justFired = false;
         private bool missileFired = false;
 
