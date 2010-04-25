@@ -292,12 +292,6 @@ namespace Battlezone
 
                 ScreenManager.musicAudioEngine.Update();
 
-                if (cue.IsStopped)
-                {
-                    cue = ScreenManager.musicSoundBank.GetCue("BattlezoneMenu");
-                    cue.Play();
-                }
-
             }
              
         }

@@ -52,9 +52,6 @@ namespace Battlezone
 
         public PathFinder navPathFind;
 
-        public static AudioEngine audioEngine;
-        public static WaveBank waveBank;
-        public static SoundBank soundBank;
 
         private float m_fTotalTime;
         
@@ -115,6 +112,8 @@ namespace Battlezone
         private bool tankExaust = true;
 
         private bool tankExaustFire = true;
+
+        Cue cue;
 
         #endregion
 
@@ -290,12 +289,10 @@ namespace Battlezone
             //Building b = new Building(ScreenManager.Game);
             //ScreenManager.Game.Components.Add(b);
 
-            
-            // Construct our particle system components.
+            tankExaustPlumeParticles = new SmokePlumeParticleSystemGameplay(ScreenManager.Game, content);
             explosionParticles = new ExplosionParticleSystem(ScreenManager.Game, content);
             explosionSmokeParticles = new ExplosionSmokeParticleSystemGameplay(ScreenManager.Game, content);
             projectileTrailParticles = new ProjectileTrailParticleSystemGameplay(ScreenManager.Game, content);
-            tankExaustPlumeParticles = new SmokePlumeParticleSystemGameplay(ScreenManager.Game, content);
             fireParticles = new FireParticleSystemGameplay(ScreenManager.Game, content);
 
             // Set the draw order so the explosions and fire
@@ -313,6 +310,10 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(projectileTrailParticles);
             ScreenManager.Game.Components.Add(tankExaustPlumeParticles);
             ScreenManager.Game.Components.Add(fireParticles);
+
+            ScreenManager.musicAudioEngine.Update();
+            cue = ScreenManager.musicSoundBank.GetCue("BattlezoneGameplay");
+            cue.Play();
  
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -377,6 +378,7 @@ namespace Battlezone
                     //UpdateExplosions(gameTime);
                     //UpdateProjectiles(gameTime);
                     UpdateTankExaust();
+                    ScreenManager.musicAudioEngine.Update();
 
                     if (spdBoost >= 2.5f)
                     {
