@@ -488,7 +488,7 @@ namespace Battlezone.BattlezoneObjects
                 //AI tank has a 20 degree viewing angle for checking? maybe?
             }
             //Console.Out.WriteLine(WorldBounds);
-            Console.Out.WriteLine("Current state: " + currentState);
+            //Console.Out.WriteLine("Current state: " + currentState);
         }
 
         //Helper functions to keep the Update method clean

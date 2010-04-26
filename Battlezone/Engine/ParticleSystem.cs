@@ -207,7 +207,6 @@ namespace Battlezone
 
         protected override void Dispose(bool disposing)
         {
-            Console.Out.WriteLine("Disposing ParticleSystem");
             base.Dispose(disposing);
         }
 

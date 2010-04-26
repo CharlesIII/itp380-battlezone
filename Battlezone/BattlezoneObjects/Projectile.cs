@@ -330,7 +330,6 @@ namespace Battlezone
 
         public void OnTimedEvent()
         {
-            Console.Out.WriteLine("calling remove self");
             explosionParticles.Dispose();
             explosionSmokeParticles.Dispose();
             projectileTrailParticles.Dispose();
@@ -351,9 +350,15 @@ namespace Battlezone
             }
             else if ((a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK) && !dead)
             {
-                Explode();
-                GameplayScreen.Instance.removeActor(this);
-                dead = true;
+                //if we're colliding with the player don't explode until we get closer to the tank
+                float distance = (WorldPosition - a.WorldPosition).Length();
+                Console.Out.WriteLine(distance);
+                if (distance < 110)
+                {
+                    Explode();
+                    GameplayScreen.Instance.removeActor(this);
+                    dead = true;
+                }
             }
         }
 
