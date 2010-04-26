@@ -662,7 +662,7 @@ namespace Battlezone.BattlezoneObjects
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
-                Console.Out.WriteLine("Colliding with a building, resolution undefined.");
+                //Console.Out.WriteLine("Colliding with a building, resolution undefined.");
                 currentState = AIStates.STOP;
             }
         }

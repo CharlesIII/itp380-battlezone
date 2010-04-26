@@ -206,8 +206,8 @@ namespace Battlezone
             m_kWepSel = new Battlezone.BattlezoneObjects.HUD.WeaponSelect(ScreenManager.Game);
             ScreenManager.Game.Components.Add(m_kWepSel);
 
-            //Building b = new Building(ScreenManager.Game);
-            //ScreenManager.Game.Components.Add(b);
+            Building b = new Building(ScreenManager.Game, "building1");
+            ScreenManager.Game.Components.Add(b);
 
             tankExaustPlumeParticles = new SmokePlumeParticleSystemGameplay(ScreenManager.Game, content);
             explosionParticles = new ExplosionParticleSystem(ScreenManager.Game, content);

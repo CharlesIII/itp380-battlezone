@@ -23,11 +23,11 @@ namespace Battlezone.BattlezoneObjects
         //BoundingBox ModelBounds;
         public BoundingBox WorldBoundsBox;
 
-        public Building(Game game)
+        public Building(Game game, string modelName)
             : base(game)
         {
             // TODO: Construct any child components here
-            //sMeshToLoad = "playerTank";
+            sMeshToLoad = modelName;
         }
 
         /// <summary>
@@ -87,6 +87,15 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your update code here
 
             base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// Allows the game component to draw itself.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
         }
     }
 }
