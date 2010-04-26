@@ -28,6 +28,14 @@ namespace Battlezone.BattlezoneObjects
         const float TANK_ROTATION_SPEED = 1.25f;
         const float PURSUIT_DURATION = 30.0f;
 
+        Cue TankEngineIdleCue;
+        Cue TankEngineMovingCue;
+        Cue TankTreadRollingCue;
+        Cue TankCannonFireCue;
+        Cue TankCannonReloadCue;
+
+        float DistanceFromCamera;
+
         ModelBone chassisBone;
         ModelBone turretBone;
         ModelBone cannonBone;
@@ -123,6 +131,15 @@ namespace Battlezone.BattlezoneObjects
             turretTargetRotationValue = 0;
 
             collidingAITanks = new List<AITank>(10);
+
+            TankEngineIdleCue = ScreenManager.soundSoundBank.GetCue("TankIdle");
+            TankTreadRollingCue = ScreenManager.soundSoundBank.GetCue("TankTreadRolling");
+            TankEngineMovingCue = ScreenManager.soundSoundBank.GetCue("TankEngineMoving");
+            TankCannonFireCue = ScreenManager.soundSoundBank.GetCue("FireCannon");
+            TankCannonReloadCue = ScreenManager.soundSoundBank.GetCue("TankReload");
+
+            DistanceFromCamera = (GameplayScreen.CameraMatrix.Translation - WorldPosition).Length();
+
             COLLISION_IDENTIFIER = CollisionIdentifier.AI_TANK;         
         }
 
@@ -145,8 +162,6 @@ namespace Battlezone.BattlezoneObjects
             chassisTransform = chassisBone.Transform;
             turretTransform = turretBone.Transform;
             cannonTransform = cannonBone.Transform;
-
-            
         }
 
         public override void Draw(GameTime gameTime)
@@ -191,6 +206,8 @@ namespace Battlezone.BattlezoneObjects
         {
             float fDelta = gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f;
             timer.Update(gameTime);
+
+            DistanceFromCamera = (GameplayScreen.CameraMatrix.Translation - WorldPosition).Length();
 
             if ((WorldPosition - m_vPlayerPosition).Length() < AUTOMATIC_DETECTION_RADIUS)
             {
@@ -241,12 +258,21 @@ namespace Battlezone.BattlezoneObjects
                         //we're close enough so stop moving and snap position
                         Velocity = new Vector3(0.0f);
                         WorldPosition = m_vCurrentPathTarget;
+
+                        if (TankEngineIdleCue.IsStopped)
+                        {
+                            TankEngineIdleCue.SetVariable("Distance", DistanceFromCamera);
+                            TankEngineIdleCue.Play();
+                        }
+                        if (TankEngineMovingCue.IsPlaying)
+                            TankEngineMovingCue.Stop(AudioStopOptions.Immediate);
+                        if (TankTreadRollingCue.IsPlaying)
+                            TankTreadRollingCue.Stop(AudioStopOptions.Immediate);
                     }
                     else
                     {
                         if (bPhysicsDriven)
                         {
-                            //Console.Out.WriteLine(Velocity);
                             Velocity += vAcceleration * fDelta / 2.0f;
                             m_vPreviousWorldPosition = m_vWorldPosition;
                             WorldPosition += Velocity * fDelta;
@@ -254,13 +280,23 @@ namespace Battlezone.BattlezoneObjects
                             Velocity += vAcceleration * fDelta / 2.0f;
                             if (Velocity.Length() >= fTerminalVelocity)
                             {
-                                //Console.Out.WriteLine("Normalizing");
                                 Vector3 temp = Velocity;
                                 temp.Normalize();
                                 Velocity = temp;
                                 Velocity *= fTerminalVelocity;
                             }
-                            //Console.Out.WriteLine(Velocity);
+                            if (TankEngineIdleCue.IsPlaying)
+                                TankEngineIdleCue.Stop(AudioStopOptions.Immediate);
+                            if (TankEngineMovingCue.IsStopped)
+                            {
+                                TankEngineMovingCue.SetVariable("Distance", DistanceFromCamera);
+                                TankEngineMovingCue.Play();
+                            }
+                            if (TankTreadRollingCue.IsStopped)
+                            {
+                                TankTreadRollingCue.SetVariable("Distance", DistanceFromCamera);
+                                TankTreadRollingCue.Play();
+                            }
                         }
                         else
                         {
@@ -458,6 +494,10 @@ namespace Battlezone.BattlezoneObjects
                             Projectile pro = new Projectile(pos, GetCannonFacing(), Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.AI_TANK);
                             pro.Initialize(400.0f, 250, 190, 100.0f, 100.0f, 0.0f);
                             Game.Components.Add(pro);
+
+                            TankCannonFireCue.SetVariable("Distance", DistanceFromCamera);
+                            TankCannonFireCue.Play();
+
                             canFire = false;
                             canRotate = false;
                             timer.AddTimer("Enable Cannon", 3, AllowFire, false);
@@ -470,6 +510,12 @@ namespace Battlezone.BattlezoneObjects
                         //lost sight, begin pursuit
                         currentState = AIStates.NEED_PURSUE;
                     }
+                }
+                if (canFire == false && TankCannonFireCue.IsStopped)
+                {
+                    //cannon was fired and cannon fire sound is over
+                    TankCannonReloadCue.SetVariable("Distance", DistanceFromCamera);
+                    TankCannonReloadCue.Play();
                 }
 
                 //check to see if we had collided with any AITanks previously and notify them if we're far away enough to avoid collision
