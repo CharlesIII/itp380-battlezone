@@ -29,6 +29,7 @@ namespace Battlezone
         /// The text rendered for this entry.
         /// </summary>
         string text;
+        public bool skip = false;
 
         /// <summary>
         /// Tracks a fading selection effect on the entry.
@@ -125,7 +126,7 @@ namespace Battlezone
 
            float pulsate = (float)Math.Sin(time * 6) + 1;
 
-            float scale = 1 + pulsate * 0.05f * selectionFade;
+           float scale = 1;
 
             // Modify the alpha to fade text out during transitions.
             color = new Color(color.R, color.G, color.B, screen.TransitionAlpha);
@@ -136,9 +137,11 @@ namespace Battlezone
             SpriteFont font = screenManager.Font;
 
             Vector2 origin = new Vector2(0, font.LineSpacing / 2);
-
-            spriteBatch.DrawString(font, text, position, color, 0,
+            if (TitleMenuScreen.skip)
+            {
+                spriteBatch.DrawString(font, text, position, color, 0,
                                    origin, scale, SpriteEffects.None, 0);
+            }
         }
 
 
