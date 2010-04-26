@@ -196,7 +196,5 @@ namespace Battlezone.Engine
 
             return false;
         }
-
-
     }
 }
