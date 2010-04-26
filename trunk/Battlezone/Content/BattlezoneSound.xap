@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = 1::85f60f66-830f-4da7-986b-8e9ee5bc66cc;
+            Name = 1::847af63d-310d-47c8-bac7-10e9f482e185;
             Property = 0;
             Sound = 0;
             Line Color = 4280540189;
@@ -249,7 +249,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::dc4489c1-2126-4bae-b4d7-c1f574a2307d;
+            Name = Sound::f1db462d-cf15-40d9-9c36-ce6a95f683e8;
             Property = 0;
             Sound = 1;
             Line Color = 4285423261;
@@ -849,8 +849,6 @@ Sound Bank
     Windows File = BattlezoneSoundSoundbank.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 1;
-    Header Last Modified High = 0;
-    Header Last Modified Low = 0;
 
     Sound
     {
@@ -1046,7 +1044,7 @@ Sound Bank
             RPC Curve Entry
             {
                 RPC Name = RPC Preset;
-                RPC Curve Name = 1::85f60f66-830f-4da7-986b-8e9ee5bc66cc;
+                RPC Curve Name = 1::847af63d-310d-47c8-bac7-10e9f482e185;
             }
         }
     }
@@ -2318,6 +2316,26 @@ Sound Bank
         {
             Name = bleep2;
             Index = 23;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = MenuExplosion;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = tank_shot_1;
+            Index = 1;
             Weight Min = 0;
             Weight Max = 255;
         }

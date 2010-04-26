@@ -36,10 +36,10 @@ namespace Battlezone
             settings.DurationRandomness = 1;
 
             settings.MinHorizontalVelocity = 20;
-            settings.MaxHorizontalVelocity = 40;
+            settings.MaxHorizontalVelocity = 80;
 
             settings.MinVerticalVelocity = -10;
-            settings.MaxVerticalVelocity = 50;
+            settings.MaxVerticalVelocity = 90;
 
             settings.EndVelocity = 0;
 

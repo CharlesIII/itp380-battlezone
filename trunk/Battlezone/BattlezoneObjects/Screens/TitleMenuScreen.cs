@@ -20,7 +20,7 @@ namespace Battlezone
     {
         #region Initialization
 
-
+        public static bool skip = false;
         /// <summary>
         /// Constructor fills in the menu contents.
         /// </summary>
@@ -49,13 +49,20 @@ namespace Battlezone
         /// </summary>
         void PlayGameMenuEntrySelected(object sender, EventArgs e)
         {
-            try
+            if (skip)
             {
-                LoadingScreen.Load(ScreenManager, true, new BackgroundScreen(), new MainMenuScreen());
+                try
+                {
+                    LoadingScreen.Load(ScreenManager, true, new BackgroundScreen(), new MainMenuScreen());
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                }
             }
-            catch (Exception exception)
+            else
             {
-                Console.WriteLine(exception.Message);
+                skip = true;
             }
         }
 

@@ -104,7 +104,7 @@ namespace Battlezone.BattlezoneObjects
             rotationY += (float)gameTime.ElapsedGameTime.TotalSeconds * 0.05f;
 
             worldTransform =
-                Matrix.CreateScale(200) *
+                Matrix.CreateScale(300) *
                 //Matrix.CreateRotationX(-MathHelper.PiOver2) *
                 Matrix.CreateRotationY(rotationY) *
                 Matrix.CreateTranslation(GameplayScreen.Instance.getPlayer().WorldPosition);
