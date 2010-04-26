@@ -30,7 +30,7 @@ namespace Battlezone
         {
             settings.TextureName = "smoke";
 
-            settings.MaxParticles = 200;
+            settings.MaxParticles = 3000;
 
             settings.Duration = TimeSpan.FromSeconds(1.5);
 
