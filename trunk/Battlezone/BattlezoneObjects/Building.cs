@@ -62,6 +62,8 @@ namespace Battlezone.BattlezoneObjects
                 Vector3 min = vertices[0].Position;
                 Vector3 max = vertices[0].Position;
 
+                
+
                 for (int i = 1; i < vertices.Length; i++)
                 {
                     min = Vector3.Min(min, vertices[i].Position);
@@ -72,10 +74,18 @@ namespace Battlezone.BattlezoneObjects
                 min = Vector3.Transform(min, m_transforms[mesh.ParentBone.Index]);
                 max = Vector3.Transform(max, m_transforms[mesh.ParentBone.Index]);
 
+                Console.Out.WriteLine(min);
+                Console.Out.WriteLine(max);
                 // Now expand main bb by this mesh's box
-                WorldBoundsBox.Min = Vector3.Min(WorldBoundsBox.Min, min);
-                WorldBoundsBox.Max = Vector3.Max(WorldBoundsBox.Max, max);
+                //WorldBoundsBox.Min = Vector3.Min(WorldBoundsBox.Min, min);
+                //WorldBoundsBox.Max = Vector3.Max(WorldBoundsBox.Max, max);
+
+                WorldBoundsBox.Min = min;
+                WorldBoundsBox.Max = max;
+                //Console.Out.WriteLine(mesh.ParentBone.Transform.Translation);
             }
+            //Console.Out.WriteLine(ActorModel.Bones.Count);
+            Console.Out.WriteLine(ActorModel.Bones[0].Transform.Translation);
         }
 
         /// <summary>

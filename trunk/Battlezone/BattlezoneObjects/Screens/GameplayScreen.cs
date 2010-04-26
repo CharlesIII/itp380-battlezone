@@ -45,7 +45,7 @@ namespace Battlezone
 
         public static Matrix CameraMatrix = Matrix.CreateLookAt(new Vector3(0.0f,0.0f,2000.0f),Vector3.Zero,Vector3.UnitY);
         //public static Matrix ProjectionMatrix = Matrix.CreateOrthographic(1024,768,0.00001f,10000.0f);     //TODO: This needs to be Perspective
-        public static Matrix ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(75.0f * (float)Math.PI / 180.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+        public static Matrix ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(90.0f * (float)Math.PI / 180.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 
         public static Vector3 DiffuseColor = Color.Black.ToVector3();
         public static Vector3 DirLightDirection = new Vector3(1,-1,0);
@@ -277,6 +277,7 @@ namespace Battlezone
                 {
                     float fDelta = (gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond) / 1000.0f;
                     m_fTotalTime = (m_fTotalTime + fDelta) % (float)(Math.PI * 2);
+                    m_kTimer.Update(gameTime);
                     DirLightDirection.X = (float)Math.Cos(m_fTotalTime);
                     DirLightDirection.Y = (float)Math.Sin(m_fTotalTime);
                     
@@ -315,11 +316,6 @@ namespace Battlezone
 
                     //check for collisions
                     checkCollision();
-
-                    
-
-
-                    m_kTimer.Update(gameTime);
                 }
             }
         }
@@ -673,26 +669,24 @@ namespace Battlezone
         {
             spdBoost = 2.5f;
             spdBoostAvail = false;
-            m_kTimer.AddTimer("Boost", 5.0f, new Utils.TimerDelegate(BoostOver), false);
+            m_kTimer.AddTimer("Boost", 5.0f, BoostOver, false);
         }
 
         public void BoostOver()
         {
             spdBoost = 1.0f;
             m_kTimer.RemoveTimer("Boost");
-            m_kTimer.AddTimer("BoostCD", 30.0f, new Utils.TimerDelegate(BoostReady), false);
+            m_kTimer.AddTimer("BoostCD", 1.0f, BoostReady, false);
         }
 
         public void BoostReady()
         {
             spdBoostAvail = true;
-            m_kTimer.RemoveTimer("BoostCD");
         }
 
         public void FireEvent()
         {
             justFired = false;
-            m_kTimer.RemoveTimer("FireTimer");
         }
 
         public void MissileEvent()

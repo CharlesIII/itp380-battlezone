@@ -341,15 +341,14 @@ namespace Battlezone
             Console.Out.WriteLine("removing actor");
         }
         /// <summary>
-        /// Checks collision between this actor and the given actor.
+        /// Checks collision between this actor and the given actor. It is expected that inheriting classes override this to provide correct
+        /// functionality.
         /// </summary>
         /// <param name="a">Actor to check collision with.</param>
         /// <returns>True if the two actors are colliding.</returns>
         public virtual bool checkCollision(Actor a)
         {
-            if (WorldBounds.Intersects(a.WorldBounds))
-                return true;
-            else return false;
+            return false;
         }
         /// <summary>
         /// Resolves collision based on defined behaviors.
