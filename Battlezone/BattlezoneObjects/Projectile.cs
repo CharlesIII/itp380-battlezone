@@ -374,39 +374,44 @@ namespace Battlezone
             {
                 return false;
             }
-            if (WorldPosition == m_vPreviousWorldPosition)
+            else if (WorldPosition == m_vPreviousWorldPosition)
             {
                 return false;
             }
-            Vector3 direction = WorldPosition - m_vPreviousWorldPosition;
-            float distanceCovered = direction.Length();
-            direction.Normalize();
-
-            Ray ray = new Ray(m_vPreviousWorldPosition, worldTransform.Forward);
-
-            bool collision = false;
-            float? intersection = ray.Intersects(a.WorldBounds);
-            if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
+            else
             {
-                //Console.Out.WriteLine("Checking against AI tank");
-                if (WorldBounds.Intersects(a.WorldBounds))
+                Vector3 direction = WorldPosition - m_vPreviousWorldPosition;
+                float distanceCovered = direction.Length();
+                direction.Normalize();
+
+                Ray ray = new Ray(m_vPreviousWorldPosition, worldTransform.Forward);
+
+                bool collision = false;
+                float? intersection;
+                if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
                 {
-                    return true;
-                }
-            }
-            if (intersection != null)
-            {
-                if (intersection <= distanceCovered)
-                {
-                    System.Console.Out.WriteLine("It's a Hit!");
-                    collision = true;
+                    Building b = (Building)a;
+                    intersection = ray.Intersects(b.WorldBoundsBox);
                 }
                 else
                 {
-                    System.Console.Out.WriteLine("Apparently not a Hit...");
+                    intersection = ray.Intersects(a.WorldBounds);
                 }
+
+                if (intersection != null)
+                {
+                    if (intersection <= distanceCovered)
+                    {
+                        System.Console.Out.WriteLine("It's a Hit!");
+                        collision = true;
+                    }
+                    else
+                    {
+                        System.Console.Out.WriteLine("Apparently not a Hit...");
+                    }
+                }
+                return collision;
             }
-            return collision;
         }
     }
 }
