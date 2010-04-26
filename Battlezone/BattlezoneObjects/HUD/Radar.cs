@@ -32,10 +32,10 @@ namespace Battlezone.BattlezoneObjects.HUD
         private const float RadarRangeSquared = RadarRange * RadarRange;
 
         // Radius of radar circle on the screen
-        private const float RadarScreenRadius = 150.0f;
+        private const float RadarScreenRadius = 95.0f;
 
         // This is the center position of the radar hud on the screen. 
-        static Vector2 RadarCenterPos = new Vector2(900.0f, 75.0f);
+        static Vector2 RadarCenterPos = new Vector2(919.0f, 105.0f);
 
         /// <summary>
         /// Constructs the Radar on the HUD.
@@ -59,7 +59,7 @@ namespace Battlezone.BattlezoneObjects.HUD
 
             PlayerDotImage = aLoader.Load<Texture2D>("yellowDotSmall") as Texture2D;
             EnemyDotImage = aLoader.Load<Texture2D>("redDotSmall") as Texture2D;
-            RadarImage = aLoader.Load<Texture2D>("blackDotLarge") as Texture2D;
+            RadarImage = aLoader.Load<Texture2D>("radarBG") as Texture2D;
 
             RadarImageCenter = new Vector2(RadarImage.Width * 0.5f, RadarImage.Height * 0.5f);
 
@@ -76,9 +76,12 @@ namespace Battlezone.BattlezoneObjects.HUD
 
             mBatch.Begin();
             // The last parameter of the color determines how transparent the radar circle will be
-            mBatch.Draw(RadarImage, RadarCenterPos, null, new Color(100, 100, 100, 150), 0.0f, RadarImageCenter, 1.0f, SpriteEffects.None, 0.0f);
+            mBatch.Draw(RadarImage, RadarCenterPos, null, new Color(100, 100, 100, 150), 2.0f, RadarImageCenter, 1.0f, SpriteEffects.None, 0.0f);
 
-            float playerForwardRadians = (float)Math.Acos(Vector2.Dot(new Vector2(playerFwd.Z, playerFwd.X), new Vector2(0.0f, 1.0f)));
+            Vector2 plyr = new Vector2(playerFwd.Z, playerFwd.X);
+
+            float playerForwardRadians = (float)Math.Acos(Vector2.Dot(plyr, new Vector2(0.0f, 1.0f)) / plyr.Length());
+
             // If enemy is in range
             foreach (AITank thisEnemy in GameplayScreen.Instance.Enemies)
             {
@@ -97,12 +100,8 @@ namespace Battlezone.BattlezoneObjects.HUD
                     // Offset coords from radar's center
                     diffVect += RadarCenterPos;
 
-                    // We scale each dot so that enemies that are at higher elevations have bigger dots, and enemies
-                    // at lower elevations have smaller dots.
-                    float scaleHeight = 1.0f + ((thisEnemy.WorldPosition.Y - playerPos.Y) / 200.0f);
-
                     // Draw enemy dot on radar
-                   mBatch.Draw(EnemyDotImage, diffVect, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scaleHeight, SpriteEffects.None, 0.0f);
+                   mBatch.Draw(EnemyDotImage, diffVect, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), 1.0f, SpriteEffects.None, 0.0f);
                 }
             }
 

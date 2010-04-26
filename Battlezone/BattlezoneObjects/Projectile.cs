@@ -128,15 +128,18 @@ namespace Battlezone
             : base(Game)
         {
             this.type = type;
+            source = src;
+            float dmgModifier = 1.0f;
+            if (source == CollisionIdentifier.PLAYER_TANK) dmgModifier = 2.0f;
             if (type == PROJECTILE_TYPE.MISSILE)
             {
                 sMeshToLoad = "Missile";
-                Damage = 30.0f;
+                Damage = 15.0f * dmgModifier;
             }
             else if (type == PROJECTILE_TYPE.SHELL)
             {
                 sMeshToLoad = "tank_shell";
-                Damage = 10.0f;
+                Damage = 5.0f * dmgModifier;
             }
             position = Position;
             WorldPosition = position;
@@ -144,12 +147,10 @@ namespace Battlezone
             Force = Direction * 1000000.0f;
             //Force.Y = 0;// cameraDirection.Y * 100.0f; ;//(float)(random.NextDouble() + 0.5) * verticalVelocityRange;
             //Force.Z = Direction.Z * 1000.0f; ;// (float)(random.NextDouble() - 0.5) * sidewaysVelocityRange;
-            projectileLifespan = 6;  
+            projectileLifespan = 5.0f;  
 
             fireDirection = Direction;
             bPhysicsDriven = true;
-
-            source = src;
 
         }
 

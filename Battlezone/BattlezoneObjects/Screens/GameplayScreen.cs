@@ -198,6 +198,9 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(test);
             Enemies.Add(test);
 
+            Building b = new Building(ScreenManager.Game, "building1");
+            //ScreenManager.Game.Components.Add(b);
+
             //Load & Initialize HUD
             m_kHealthBar = new BattlezoneObjects.HUD.HealthBar(ScreenManager.Game);
             ScreenManager.Game.Components.Add(m_kHealthBar);
@@ -205,9 +208,7 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(m_kRadar);
             m_kWepSel = new Battlezone.BattlezoneObjects.HUD.WeaponSelect(ScreenManager.Game);
             ScreenManager.Game.Components.Add(m_kWepSel);
-
-            Building b = new Building(ScreenManager.Game, "building1");
-            ScreenManager.Game.Components.Add(b);
+ 
 
             tankExaustPlumeParticles = new SmokePlumeParticleSystemGameplay(ScreenManager.Game, content);
             explosionParticles = new ExplosionParticleSystem(ScreenManager.Game, content);
@@ -427,8 +428,8 @@ namespace Battlezone
 
                     if (input.Reverse)
                     {
-                        m_kPlayer.LWheelRotation -= (2 * deltaTime * spdBoost);
-                        m_kPlayer.RWheelRotation -= (2 * deltaTime * spdBoost);
+                        m_kPlayer.LWheelRotation -= (2.0f * deltaTime * spdBoost);
+                        m_kPlayer.RWheelRotation -= (2.0f * deltaTime * spdBoost);
                         m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * 275.0f * spdBoost;
                         UpdateTankExaust();
                     }
@@ -631,6 +632,10 @@ namespace Battlezone
             foreach (Actor a in actorsToRemove)
             {
                 activeActors.Remove(a);
+                if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
+                {
+                    Enemies.Remove((AITank)a);
+                }
             }
             actorsToRemove.Clear();
         }
