@@ -443,7 +443,8 @@ namespace Battlezone.BattlezoneObjects
                         //Console.Out.WriteLine("Can see tank in ATTACK");
                         if (canFire)
                         {
-                            Projectile pro = new Projectile((cannonTransform * worldTransform).Translation, GetCannonFacing(), Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.AI_TANK);
+                            Vector3 pos = WorldPosition + new Vector3(0, 95, 0) + (turretTransform * cannonTransform).Translation;
+                            Projectile pro = new Projectile(pos, GetCannonFacing(), Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.AI_TANK);
                             pro.Initialize(400.0f, 250, 190, 100.0f, 100.0f, 0.0f);
                             Game.Components.Add(pro);
                             canFire = false;
