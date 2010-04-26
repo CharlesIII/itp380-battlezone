@@ -4,7 +4,7 @@
 //
 // BATTLEZONE ENTRY POINT
 //
-// Copyright (C) Double XL, Graham Cracka, Old Jamison Irish Whiskey, & C-Cubed.
+// Copyright (C) Double X.L., Graham Cracka, Old Jamison Irish Whiskey, & C-Cubed.
 // All rights reserved.
 //------------------------------------------------------------------------------
 #endregion

@@ -143,13 +143,29 @@ namespace Battlezone.Engine
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            //Update Camera
             UpdateWorldPositions();
+
+            float cameraColDistance = 0.0f;
+            checkCamCollision(out cameraColDistance);
+
+            if (cameraColDistance != 0.0f)
+            {
+                Vector3 cam2Tank = new Vector3();
+                cam2Tank = GameplayScreen.Instance.getPlayer().WorldPosition - desiredPosition;
+                float camTankDistance = cam2Tank.Length();
+                cam2Tank.Normalize();
+
+                desiredPosition += cam2Tank * (camTankDistance - cameraColDistance);
+            }
+
+            //Update Camera
             ChasePosition = GameplayScreen.Instance.getPlayer().WorldPosition;
             Matrix temp = GameplayScreen.Instance.getPlayer().worldTransform * GameplayScreen.Instance.getPlayer().turretBone.Transform;
             ChaseDirection = (temp.Forward * -1);
             Up = Vector3.UnitY;
             GameplayScreen.CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
+
+           
 
             base.Update(gameTime);
         }
@@ -173,11 +189,11 @@ namespace Battlezone.Engine
                 Vector3.TransformNormal(LookAtOffset, transform);
         }
 
-        private bool checkCamCollision()
+        private bool checkCamCollision(out float distanceToBuilding)
         {
             Vector3 dir;
             Vector3 distance;
-            distance = GameplayScreen.Instance.getPlayer().WorldPosition - desiredPosition;
+            distance = desiredPosition - GameplayScreen.Instance.getPlayer().WorldPosition;
             dir = distance;
             dir.Normalize();
 
@@ -188,16 +204,16 @@ namespace Battlezone.Engine
                 if (a.COLLISION_IDENTIFIER == 4)
                 {
                     BattlezoneObjects.Building b = (BattlezoneObjects.Building)a;
-                    System.Console.Out.WriteLine("Well, it's a building");
                     intersection = colCheckRay.Intersects(b.WorldBoundsBox);
                     if (intersection != null && ((intersection*intersection) <= distance.LengthSquared()))
                     {
-                        System.Console.Out.WriteLine("OH SHIT SON!");
+                        System.Console.Out.WriteLine("Camera Is Colliding with Building");
+                        distanceToBuilding = (float)intersection;
                         return true;
                     }
                 }
             }
-
+            distanceToBuilding = 0.0f;
             return false;
         }
     }
