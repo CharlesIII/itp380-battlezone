@@ -288,6 +288,7 @@ namespace Battlezone
                 explosionSmokeParticles.AddParticle(WorldPosition, velocity);
 
             timer.AddTimer("Remove Projectile", 5, OnTimedEvent, false);
+            ScreenManager.soundSoundBank.PlayCue("ProjectileExplosion");
         }
 
         public override void removeSelf()

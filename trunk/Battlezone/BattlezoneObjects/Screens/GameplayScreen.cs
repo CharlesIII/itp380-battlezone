@@ -117,6 +117,8 @@ namespace Battlezone
 
         Cue cue;
 
+        Cue soundCue;
+
         #endregion
 
         
@@ -232,6 +234,10 @@ namespace Battlezone
             ScreenManager.musicAudioEngine.Update();
             cue = ScreenManager.musicSoundBank.GetCue("BattlezoneGameplay");
             cue.Play();
+
+            soundCue = ScreenManager.soundSoundBank.GetCue("TankIdle");
+
+            soundCue.Play();
  
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -297,6 +303,7 @@ namespace Battlezone
                     //UpdateProjectiles(gameTime);
                     UpdateTankExaust();
                     ScreenManager.musicAudioEngine.Update();
+                    ScreenManager.soundAudioEngine.Update();
 
                     if (spdBoost >= 2.5f)
                     {
@@ -384,11 +391,37 @@ namespace Battlezone
                         m_kPlayer.RWheelRotation += (2.0f * deltaTime * spdBoost);
                         m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * -275.0f * spdBoost;
                         UpdateTankExaust();
+
+                        String name = soundCue.Name;
+                        if (soundCue.IsStopped || name == "TankIdle")
+                        {
+                            if (name == "TankIdle")
+                            {
+                                soundCue = ScreenManager.soundSoundBank.GetCue("TankEngineMoving");
+                                soundCue.Play();
+                            }
+                            else
+                            {
+                                soundCue = ScreenManager.soundSoundBank.GetCue("TankTreadRolling");
+                                soundCue.Play();
+                            }
+                        }
                     }
 
                     if (!input.Move)
                     {
                         m_kPlayer.Velocity = new Vector3(0.0f, 0.0f, 0.0f);
+
+                        String name = soundCue.Name;
+                        if (name == "TankEngineMoving" || name == "TankTreadRolling")
+                        {
+                            soundCue.Stop(AudioStopOptions.Immediate);
+                        }
+                        if (soundCue.IsStopped || name == "TankEngineMoving" || name == "TankTreadRolling")
+                        {
+                            soundCue = ScreenManager.soundSoundBank.GetCue("TankIdle");
+                            soundCue.Play();
+                        }
                     }
 
                     if (input.Boost)
@@ -422,11 +455,13 @@ namespace Battlezone
                             switch(selectedWeapon){
                                 case 1:
                                     pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.PLAYER_TANK);
+                                    ScreenManager.soundSoundBank.PlayCue("FireCannon");
                                     break;
                                 case 2:
                                     if (!missileFired)
                                     {
                                         pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.MISSILE, CollisionIdentifier.PLAYER_TANK);
+                                        ScreenManager.soundSoundBank.PlayCue("FireCannon");
                                     }
                                     break;
                                 default:
