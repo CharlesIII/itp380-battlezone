@@ -12,16 +12,16 @@ FBXHeaderExtension:  {
         Month: 4
         Day: 26
         Hour: 1
-        Minute: 15
-        Second: 29
-        Millisecond: 407
+        Minute: 26
+        Second: 30
+        Millisecond: 631
     }
     Creator: "FBX SDK/FBX Plugins version 2009.2"
     OtherFlags:  {
         FlagPLE: 0
     }
 }
-CreationTime: "2010-04-26 01:15:29:407"
+CreationTime: "2010-04-26 01:26:30:631"
 Creator: "FBX SDK/FBX Plugins build 20080623"
 
 ; Document Description
@@ -157,9 +157,9 @@ Objects:  {
         Properties60:  {
             Property: "QuaternionInterpolate", "bool", "",0
             Property: "RotationOffset", "Vector3D", "",0,0,0
-            Property: "RotationPivot", "Vector3D", "",-470.164611816406,662.771621704102,144.838165283203
+            Property: "RotationPivot", "Vector3D", "",-2313.26651439002,679.373533137575,636.700940176492
             Property: "ScalingOffset", "Vector3D", "",0,0,0
-            Property: "ScalingPivot", "Vector3D", "",-470.164611816406,662.771621704102,144.838165283203
+            Property: "ScalingPivot", "Vector3D", "",-2313.26651439002,679.373533137575,636.700940176492
             Property: "TranslationActive", "bool", "",0
             Property: "TranslationMin", "Vector3D", "",0,0,0
             Property: "TranslationMax", "Vector3D", "",0,0,0
@@ -219,7 +219,7 @@ Objects:  {
             Property: "Show", "bool", "",1
             Property: "NegativePercentShapeSupport", "bool", "",1
             Property: "DefaultAttributeIndex", "int", "",0
-            Property: "Lcl Translation", "Lcl Translation", "A+",-1843.10190257361,16.6019114334737,491.862774893289
+            Property: "Lcl Translation", "Lcl Translation", "A+",0,0,0
             Property: "Lcl Rotation", "Lcl Rotation", "A+",0,0,0
             Property: "Lcl Scaling", "Lcl Scaling", "A+",1,1,1
             Property: "Visibility", "Visibility", "A+",1
@@ -231,10 +231,10 @@ Objects:  {
         MultiTake: 1
         Shading: T
         Culling: "CullingOff"
-        Vertices: -1044.63916015625,-196.495697021484,984.820495605469,104.309936523438,-196.495681762695,984.820495605469,-1044.63916015625
-        ,1522.03894042969,984.820495605469,104.309936523438,1522.03894042969,984.820495605469,-1044.63916015625,1522.03894042969
-        ,-695.144165039063,104.309936523438,1522.03894042969,-695.144165039063,-1044.63916015625,-196.495697021484,-695.144165039063
-        ,104.309936523438,-196.495681762695,-695.144165039063
+        Vertices: -2887.74096679688,-179.893783569336,1476.68322753906,-1738.7919921875,-179.893768310547,1476.68322753906,-2887.74096679688
+        ,1538.64086914063,1476.68322753906,-1738.7919921875,1538.64086914063,1476.68322753906,-2887.74096679688,1538.64086914063
+        ,-203.281372070313,-1738.7919921875,1538.64086914063,-203.281372070313,-2887.74096679688,-179.893783569336,-203.281372070313
+        ,-1738.7919921875,-179.893768310547,-203.281372070313
         PolygonVertexIndex: 0,1,3,-3,2,3,5,-5,4,5,7,-7,6,7,1,-1,1,7,5,-4,6,0,2,-5
         Edges: 0,2,6,10,3,1,7,5,11,9,15,13
         GeometryVersion: 124
@@ -243,8 +243,8 @@ Objects:  {
             Name: ""
             MappingInformationType: "ByPolygonVertex"
             ReferenceInformationType: "Direct"
-            Normals: 0,0,1,0,0,1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0,0,1,0,0,0,-1,0,0,-1,0,0,-1,0,0,-1,1.32806503572169e-008,-1,0,1.32806503572169e-008
-             ,-1,0,1.32806503572169e-008,-1,0,1.32806503572169e-008,-1,0,1,0,0,1,0,0,1,0,0,1,0,0,-1,0,0,-1,0,0,-1,0,0,-1,0
+            Normals: 0,0,1,0,0,1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0,0,1,0,0,0,-1,0,0,-1,0,0,-1,0,0,-1,1.32806512453953e-008,-1,0,1.32806512453953e-008
+             ,-1,0,1.32806512453953e-008,-1,0,1.32806512453953e-008,-1,0,1,0,0,1,0,0,1,0,0,1,0,0,-1,0,0,-1,0,0,-1,0,0,-1,0
              ,0
         }
         LayerElementUV: 0 {
@@ -329,13 +329,13 @@ Objects:  {
             Property: "Original|ApplicationVendor", "KString", "", "Autodesk"
             Property: "Original|ApplicationName", "KString", "", "Maya"
             Property: "Original|ApplicationVersion", "KString", "", "2009.2"
-            Property: "Original|DateTime_GMT", "DateTime", "", "26/04/2010 08:15:29.406"
+            Property: "Original|DateTime_GMT", "DateTime", "", "26/04/2010 08:26:30.630"
             Property: "Original|FileName", "KString", "", "I:/tank Game/graham-temp/building1.fbx"
             Property: "LastSaved", "Compound", ""
             Property: "LastSaved|ApplicationVendor", "KString", "", "Autodesk"
             Property: "LastSaved|ApplicationName", "KString", "", "Maya"
             Property: "LastSaved|ApplicationVersion", "KString", "", "2009.2"
-            Property: "LastSaved|DateTime_GMT", "DateTime", "", "26/04/2010 08:15:29.406"
+            Property: "LastSaved|DateTime_GMT", "DateTime", "", "26/04/2010 08:26:30.630"
         }
     }
     Material: "Material::lambert3", "" {
