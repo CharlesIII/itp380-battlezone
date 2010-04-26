@@ -207,7 +207,6 @@ namespace Battlezone.Engine
                     intersection = colCheckRay.Intersects(b.WorldBoundsBox);
                     if (intersection != null && ((intersection*intersection) <= distance.LengthSquared()))
                     {
-                        System.Console.Out.WriteLine("Camera Is Colliding with Building");
                         distanceToBuilding = (float)intersection;
                         return true;
                     }

@@ -2,7 +2,7 @@
 //------------------------------------------------------------------------------
 // GameplayScreen.cs
 //
-// Copyright (C) Double XL, Graham Cracka, Old Jamison Irish Whiskey, & C-Cubed.
+// Copyright (C) Double X.L., Graham Cracka, Old Jamison Irish Whiskey, & C-Cubed.
 // All rights reserved.
 //------------------------------------------------------------------------------
 #endregion
@@ -121,12 +121,8 @@ namespace Battlezone
 
         #endregion
 
-        
-
-
         #region Initialization
-
-
+        
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -152,8 +148,6 @@ namespace Battlezone
             }
             else
                 throw new Exception("There should only be one GameplayeScreen object in existence.");
-
-
         }
 
         /// <summary>
