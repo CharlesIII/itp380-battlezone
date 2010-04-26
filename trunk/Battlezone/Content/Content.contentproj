@@ -238,10 +238,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BattlezoneSound.xap">
-      <Name>BattlezoneSound</Name>
-      <Importer>XactImporter</Importer>
-      <Processor>XactProcessor</Processor>
+    <Compile Include="building1.fbx">
+      <Name>building1</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="buildingTexture1.jpg">
+      <Name>buildingTexture1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
