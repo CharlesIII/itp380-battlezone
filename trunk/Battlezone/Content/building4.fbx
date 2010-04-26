@@ -13,15 +13,15 @@ FBXHeaderExtension:  {
         Day: 26
         Hour: 2
         Minute: 12
-        Second: 4
-        Millisecond: 351
+        Second: 38
+        Millisecond: 102
     }
     Creator: "FBX SDK/FBX Plugins version 2009.2"
     OtherFlags:  {
         FlagPLE: 0
     }
 }
-CreationTime: "2010-04-26 02:12:04:351"
+CreationTime: "2010-04-26 02:12:38:102"
 Creator: "FBX SDK/FBX Plugins build 20080623"
 
 ; Document Description
@@ -70,7 +70,7 @@ Definitions:  {
 ;------------------------------------------------------------------
 
 Objects:  {
-    Model: "Model::pCube33", "Mesh" {
+    Model: "Model::building1", "Mesh" {
         Version: 232
         Properties60:  {
             Property: "QuaternionInterpolate", "bool", "",0
@@ -137,7 +137,7 @@ Objects:  {
             Property: "Show", "bool", "",1
             Property: "NegativePercentShapeSupport", "bool", "",1
             Property: "DefaultAttributeIndex", "int", "",0
-            Property: "Lcl Translation", "Lcl Translation", "A+",115.843097327408,6.20965580562279,88.5535309525967
+            Property: "Lcl Translation", "Lcl Translation", "A+",3.41572057386545,6.3696381073314,-137.746126036322
             Property: "Lcl Rotation", "Lcl Rotation", "A+",0,0,0
             Property: "Lcl Scaling", "Lcl Scaling", "A+",0.0328083989501312,0.0328083989501312,0.0328083989501312
             Property: "Visibility", "Visibility", "A+",1
@@ -149,10 +149,10 @@ Objects:  {
         MultiTake: 1
         Shading: T
         Culling: "CullingOff"
-        Vertices: -246.944702148438,-196.495681762695,235.958221435547,1465.33227539063,-196.495681762695,235.958221435547,-246.944702148438
-        ,870.542236328125,235.958221435547,1465.33227539063,870.542236328125,235.958221435547,-246.944702148438,870.542236328125
-        ,-150.790100097656,1465.33227539063,870.542236328125,-150.790100097656,-246.944702148438,-196.495681762695,-150.790100097656
-        ,1465.33227539063,-196.495681762695,-150.790100097656
+        Vertices: -1044.63916015625,-196.495697021484,984.820495605469,122.39591217041,-196.495681762695,984.820495605469,-1044.63916015625
+        ,1522.03894042969,984.820495605469,122.39591217041,1522.03894042969,984.820495605469,-1044.63916015625,1522.03894042969
+        ,-695.144165039063,122.39591217041,1522.03894042969,-695.144165039063,-1044.63916015625,-196.495697021484,-695.144165039063
+        ,122.39591217041,-196.495681762695,-695.144165039063
         PolygonVertexIndex: 0,1,3,-3,2,3,5,-5,4,5,7,-7,6,7,1,-1,1,7,5,-4,6,0,2,-5
         Edges: 0,2,6,10,3,1,7,5,11,9,15,13
         GeometryVersion: 124
@@ -161,23 +161,24 @@ Objects:  {
             Name: ""
             MappingInformationType: "ByPolygonVertex"
             ReferenceInformationType: "Direct"
-            Normals: 0,0,1,0,0,1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0,0,1,0,0,0,-1,0,0,-1,0,0,-1,0,0,-1,0,-1,0,0,-1,0,0,-1,0,0,-1,0,1,0,0
-             ,1,0,0,1,0,0,1,0,0,-1,0,0,-1,0,0,-1,0,0,-1,0,0
+            Normals: 0,0,1,0,0,1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0,0,1,0,0,0,-1,0,0,-1,0,0,-1,0,0,-1,1.30748354365551e-008,-1,0,1.30748354365551e-008
+             ,-1,0,1.30748354365551e-008,-1,0,1.30748354365551e-008,-1,0,1,0,0,1,0,0,1,0,0,1,0,0,-1,0,0,-1,0,0,-1,0,0,-1,0
+             ,0
         }
         LayerElementUV: 0 {
             Version: 101
             Name: "map1"
             MappingInformationType: "ByPolygonVertex"
             ReferenceInformationType: "IndexToDirect"
-            UV: 0.995460629463196,0.00513100624084473,0.995460629463196,0.00513100624084473,0.681874096393585,1.10980033874512
-             ,0.0045393705368042,1.00158143043518,0.00453940033912659,0.00513100624084473,0.931874096393585,1.35980033874512
-             ,0.375,1.06793260574341,0.995460629463196,1.00158143043518,0.375,1.31793260574341,0.625,1.31793260574341,0.995460629463196
-             ,0.00513100624084473,0.995460629463196,1.00158143043518,0.00453940033912659,0.00513100624084473,0.00453940033912659
-             ,1.00158143043518,0.00453940033912659,1.00158143043518,0.625,1.06793260574341,0.681874096393585,1.35980033874512
-             ,0.995460629463196,0.00513100624084473,0.00453940033912659,1.00158143043518,0.931874096393585,1.10980033874512
-             ,0.00453940033912659,0.00513100624084473,0.995460629463196,1.00158143043518,0.0045393705368042,0.00513100624084473
-             ,0.995460629463196,1.00158143043518
-            UVIndex: 20,1,23,18,2,19,5,16,4,17,7,14,6,15,9,8,22,10,11,3,12,0,21,13
+            UV: 0.994152247905731,0.00197812216356397,0.994152247905731,0.00197812216356397,1.04756164550781,0.182743847370148
+             ,0.0122470259666443,0.995752096176147,0.0122470259666443,0.00197809934616089,1.29756164550781,0.432743847370148
+             ,1.03136444091797,0.689546167850494,0.994152247905731,0.995752096176147,1.04323315620422,0.939546167850494,1.29323315620422
+             ,0.939546167850494,0.994152247905731,0.00197812216356397,0.994152247905731,0.995752096176147,0.0122470259666443
+             ,0.00197812216356397,0.0122470259666443,0.995752096176147,0.0122470259666443,0.00197812216356397,0.994152247905731
+             ,0.995752096176147,0.0122470259666443,0.00197812216356397,0.994152247905731,0.995752096176147,0.0122470259666443
+             ,0.995752096176147,1.29756164550781,0.182743847370148,0.0122470259666443,0.995752096176147,1.28136444091797,0.689546167850494
+             ,1.04756164550781,0.432743847370148,0.994152247905731,0.00197809934616089
+            UVIndex: 14,1,17,18,2,19,5,22,4,23,7,20,6,21,9,8,16,10,11,3,12,0,15,13
         }
         LayerElementSmoothing: 0 {
             Version: 102
@@ -225,7 +226,7 @@ Objects:  {
                 TypedIndex: 0
             }
         }
-        NodeAttributeName: "Geometry::pCube33"
+        NodeAttributeName: "Geometry::building1"
     }
     SceneInfo: "SceneInfo::GlobalInfo", "UserData" {
         Type: "UserData"
@@ -240,19 +241,19 @@ Objects:  {
             Comment: ""
         }
         Properties60:  {
-            Property: "DocumentUrl", "KString", "", "I:\tank Game\graham-temp\building1.fbx"
-            Property: "SrcDocumentUrl", "KString", "", "I:\tank Game\graham-temp\building1.fbx"
+            Property: "DocumentUrl", "KString", "", "I:\tank Game\graham-temp\building4.fbx"
+            Property: "SrcDocumentUrl", "KString", "", "I:\tank Game\graham-temp\building4.fbx"
             Property: "Original", "Compound", ""
             Property: "Original|ApplicationVendor", "KString", "", "Autodesk"
             Property: "Original|ApplicationName", "KString", "", "Maya"
             Property: "Original|ApplicationVersion", "KString", "", "2009.2"
-            Property: "Original|DateTime_GMT", "DateTime", "", "26/04/2010 09:12:04.350"
-            Property: "Original|FileName", "KString", "", "I:/tank Game/graham-temp/building1.fbx"
+            Property: "Original|DateTime_GMT", "DateTime", "", "26/04/2010 09:12:38.101"
+            Property: "Original|FileName", "KString", "", "I:/tank Game/graham-temp/building4.fbx"
             Property: "LastSaved", "Compound", ""
             Property: "LastSaved|ApplicationVendor", "KString", "", "Autodesk"
             Property: "LastSaved|ApplicationName", "KString", "", "Maya"
             Property: "LastSaved|ApplicationVersion", "KString", "", "2009.2"
-            Property: "LastSaved|DateTime_GMT", "DateTime", "", "26/04/2010 09:12:04.350"
+            Property: "LastSaved|DateTime_GMT", "DateTime", "", "26/04/2010 09:12:38.101"
         }
     }
     Material: "Material::lambert3", "" {
@@ -350,10 +351,10 @@ Objects:  {
 ;------------------------------------------------------------------
 
 Connections:  {
-    Connect: "OO", "Model::pCube33", "Model::Scene"
+    Connect: "OO", "Model::building1", "Model::Scene"
     Connect: "OO", "Video::file2", "Texture::file2"
-    Connect: "OO", "Material::lambert3", "Model::pCube33"
-    Connect: "OO", "Texture::file2", "Model::pCube33"
+    Connect: "OO", "Material::lambert3", "Model::building1"
+    Connect: "OO", "Texture::file2", "Model::building1"
 }
 ;Takes and animation section
 ;----------------------------------------------------
