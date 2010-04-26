@@ -188,8 +188,9 @@ namespace Battlezone.Engine
                 if (a.COLLISION_IDENTIFIER == 4)
                 {
                     intersection = colCheckRay.Intersects(a.WorldBounds);
-                    if (intersection != null && ((intersection*intersection) <= distance.LengthSquared()){
+                    if (intersection != null && ((intersection*intersection) <= distance.LengthSquared())){
                         return true;
+                }
                 }
             }
 
