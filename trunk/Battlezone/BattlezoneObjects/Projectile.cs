@@ -361,6 +361,12 @@ namespace Battlezone
                     dead = true;
                 }
             }
+            else if ((a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING) && !dead)
+            {
+                Explode();
+                GameplayScreen.Instance.removeActor(this);
+                dead = true;
+            }
         }
 
         /// <summary>

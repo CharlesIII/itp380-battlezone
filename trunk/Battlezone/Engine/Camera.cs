@@ -187,10 +187,14 @@ namespace Battlezone.Engine
             {
                 if (a.COLLISION_IDENTIFIER == 4)
                 {
-                    intersection = colCheckRay.Intersects(a.WorldBounds);
-                    if (intersection != null && ((intersection*intersection) <= distance.LengthSquared())){
+                    BattlezoneObjects.Building b = (BattlezoneObjects.Building)a;
+                    System.Console.Out.WriteLine("Well, it's a building");
+                    intersection = colCheckRay.Intersects(b.WorldBoundsBox);
+                    if (intersection != null && ((intersection*intersection) <= distance.LengthSquared()))
+                    {
+                        System.Console.Out.WriteLine("OH SHIT SON!");
                         return true;
-                }
+                    }
                 }
             }
 
