@@ -141,7 +141,11 @@ namespace Battlezone.BattlezoneObjects
         #endregion
 
 
-
+        /// <summary>
+        /// Construtor for the Player Tank
+        /// </summary>
+        /// <param name="game">Reference to the Game</param>
+        /// <param name="spawnPos">Spawning Position of the Tank</param>
         public PlayerTank(Game game, Vector3 spawnPos)
             : base(game)
         {

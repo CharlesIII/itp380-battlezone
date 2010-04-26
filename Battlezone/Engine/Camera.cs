@@ -173,7 +173,7 @@ namespace Battlezone.Engine
                 Vector3.TransformNormal(LookAtOffset, transform);
         }
 
-        private bool checkCamCollision(out float )
+        private bool checkCamCollision()
         {
             Vector3 dir;
             Vector3 distance;
