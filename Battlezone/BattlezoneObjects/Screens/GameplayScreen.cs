@@ -199,7 +199,7 @@ namespace Battlezone
             Enemies.Add(test);
 
             Building b = new Building(ScreenManager.Game, "building1");
-            //ScreenManager.Game.Components.Add(b);
+            ScreenManager.Game.Components.Add(b);
 
             //Load & Initialize HUD
             m_kHealthBar = new BattlezoneObjects.HUD.HealthBar(ScreenManager.Game);
