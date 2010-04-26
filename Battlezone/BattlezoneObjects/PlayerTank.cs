@@ -281,6 +281,7 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your update code here
 
             base.Update(gameTime);
+            //Console.Out.WriteLine(WorldPosition);
             WorldBounds.Center = WorldPosition;
             WorldBounds.Radius = ModelBounds.Radius * Scale;
         }
@@ -324,8 +325,8 @@ namespace Battlezone.BattlezoneObjects
             {
                 Velocity = new Vector3();
                 Building b = (Building)a;
-                System.Console.Out.WriteLine(b.WorldBoundsBox);
-                Console.Out.WriteLine(b.WorldPosition);
+                //System.Console.Out.WriteLine(b.WorldBoundsBox);
+                //Console.Out.WriteLine(b.WorldPosition);
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.SHELL)
             {

@@ -60,6 +60,7 @@ namespace Battlezone.BattlezoneObjects
         float targetTankRotationValue;
 
         bool canFire;
+        bool canRotate;
 
         List<AITank> collidingAITanks;
         
@@ -118,6 +119,7 @@ namespace Battlezone.BattlezoneObjects
             Scale = 59.0f;
 
             canFire = true;
+            canRotate = true;
             turretTargetRotationValue = 0;
 
             collidingAITanks = new List<AITank>(10);
@@ -422,19 +424,22 @@ namespace Battlezone.BattlezoneObjects
                 {
                     if (Math.Abs(turretTargetRotationValue) > 0)
                     {
-                        if (turretTargetRotationValue < 0)
+                        if (canRotate)
                         {
-                            turretRotationValue -= fDelta * TURRET_ROTATION_SPEED;
-                            turretTargetRotationValue += fDelta * TURRET_ROTATION_SPEED;
-                            if (turretTargetRotationValue >= 0)
-                                turretTargetRotationValue = 0;
-                        }
-                        else
-                        {
-                            turretRotationValue += fDelta * TURRET_ROTATION_SPEED;
-                            turretTargetRotationValue -= fDelta * TURRET_ROTATION_SPEED;
-                            if (turretTargetRotationValue <= 0)
-                                turretTargetRotationValue = 0;
+                            if (turretTargetRotationValue < 0)
+                            {
+                                turretRotationValue -= fDelta * TURRET_ROTATION_SPEED;
+                                turretTargetRotationValue += fDelta * TURRET_ROTATION_SPEED;
+                                if (turretTargetRotationValue >= 0)
+                                    turretTargetRotationValue = 0;
+                            }
+                            else
+                            {
+                                turretRotationValue += fDelta * TURRET_ROTATION_SPEED;
+                                turretTargetRotationValue -= fDelta * TURRET_ROTATION_SPEED;
+                                if (turretTargetRotationValue <= 0)
+                                    turretTargetRotationValue = 0;
+                            }
                         }
                     }
                     else if (CheckPlayerSighted())
@@ -448,7 +453,9 @@ namespace Battlezone.BattlezoneObjects
                             pro.Initialize(400.0f, 250, 190, 100.0f, 100.0f, 0.0f);
                             Game.Components.Add(pro);
                             canFire = false;
+                            canRotate = false;
                             timer.AddTimer("Enable Cannon", 3, AllowFire, false);
+                            timer.AddTimer("Enable Rotation", 0.1f, AllowRotate, false);
                         }
                         timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early
                     }
@@ -571,6 +578,11 @@ namespace Battlezone.BattlezoneObjects
             canFire = true;
         }
 
+        private void AllowRotate()
+        {
+            canRotate = true;
+        }
+
         public override Vector3 GetWorldFacing()
         {
             Vector3 result = worldTransform.Forward;
@@ -662,7 +674,7 @@ namespace Battlezone.BattlezoneObjects
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
-                //Console.Out.WriteLine("Colliding with a building, resolution undefined.");
+                Console.Out.WriteLine("Colliding with a building, resolution undefined.");
                 currentState = AIStates.STOP;
             }
         }
@@ -672,6 +684,8 @@ namespace Battlezone.BattlezoneObjects
             if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
                 Building b = (Building)a;
+                //Console.Out.WriteLine(WorldBounds);
+                //Console.Out.WriteLine(b.WorldBoundsBox);
                 return WorldBounds.Intersects(b.WorldBoundsBox);
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK || a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
