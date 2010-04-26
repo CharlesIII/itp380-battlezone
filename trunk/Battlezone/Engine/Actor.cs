@@ -140,7 +140,10 @@ namespace Battlezone
             get { return _health; }
         }
         private float _health = 100.0f;
-        protected bool dead = false;
+        public bool dead = false;
+
+        //Flag to tell if was just recently dmg
+        private bool recentlyDamaged = false;
 
         /// <summary>
         /// Constructs a new Actor.

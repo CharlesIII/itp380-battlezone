@@ -331,7 +331,12 @@ namespace Battlezone.BattlezoneObjects
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.SHELL)
             {
                 Projectile temp = (Projectile)a;
-                CurrentHealth -= temp.Damage;
+                if (a.dead)
+                {
+                    CurrentHealth -= temp.Damage;
+                    System.Console.Out.WriteLine("Ouch");
+                }
+                
             }
         }
 

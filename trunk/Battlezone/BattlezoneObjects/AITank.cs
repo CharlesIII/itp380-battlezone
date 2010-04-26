@@ -652,6 +652,7 @@ namespace Battlezone.BattlezoneObjects
                 if (CurrentHealth <= 0.0f)
                 {
                     currentState = AIStates.DEAD;
+                    GameplayScreen.Instance.Enemies.Remove(this);
                 }
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
