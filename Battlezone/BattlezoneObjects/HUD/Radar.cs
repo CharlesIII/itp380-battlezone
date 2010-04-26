@@ -72,7 +72,7 @@ namespace Battlezone.BattlezoneObjects.HUD
         public override void Draw(GameTime gameTime)
         {
             Vector3 playerFwd = GameplayScreen.Instance.getPlayer().GetWorldFacing();
-            Vector3 playerPos = GameplayScreen.Instance.getPlayer().GetWorldPosition();
+            Vector3 playerPos = GameplayScreen.Instance.getPlayer().GetWorldPosition() * -1.0f;
 
             mBatch.Begin();
             // The last parameter of the color determines how transparent the radar circle will be
