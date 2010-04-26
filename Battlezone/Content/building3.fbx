@@ -13,15 +13,15 @@ FBXHeaderExtension:  {
         Day: 26
         Hour: 2
         Minute: 12
-        Second: 4
-        Millisecond: 351
+        Second: 28
+        Millisecond: 43
     }
     Creator: "FBX SDK/FBX Plugins version 2009.2"
     OtherFlags:  {
         FlagPLE: 0
     }
 }
-CreationTime: "2010-04-26 02:12:04:351"
+CreationTime: "2010-04-26 02:12:28:043"
 Creator: "FBX SDK/FBX Plugins build 20080623"
 
 ; Document Description
@@ -70,7 +70,7 @@ Definitions:  {
 ;------------------------------------------------------------------
 
 Objects:  {
-    Model: "Model::pCube33", "Mesh" {
+    Model: "Model::pCube5", "Mesh" {
         Version: 232
         Properties60:  {
             Property: "QuaternionInterpolate", "bool", "",0
@@ -137,7 +137,7 @@ Objects:  {
             Property: "Show", "bool", "",1
             Property: "NegativePercentShapeSupport", "bool", "",1
             Property: "DefaultAttributeIndex", "int", "",0
-            Property: "Lcl Translation", "Lcl Translation", "A+",115.843097327408,6.20965580562279,88.5535309525967
+            Property: "Lcl Translation", "Lcl Translation", "A+",-66.5457227626635,6.20965580562279,88.5535309525967
             Property: "Lcl Rotation", "Lcl Rotation", "A+",0,0,0
             Property: "Lcl Scaling", "Lcl Scaling", "A+",0.0328083989501312,0.0328083989501312,0.0328083989501312
             Property: "Visibility", "Visibility", "A+",1
@@ -225,7 +225,7 @@ Objects:  {
                 TypedIndex: 0
             }
         }
-        NodeAttributeName: "Geometry::pCube33"
+        NodeAttributeName: "Geometry::pCube5"
     }
     SceneInfo: "SceneInfo::GlobalInfo", "UserData" {
         Type: "UserData"
@@ -240,19 +240,19 @@ Objects:  {
             Comment: ""
         }
         Properties60:  {
-            Property: "DocumentUrl", "KString", "", "I:\tank Game\graham-temp\building1.fbx"
-            Property: "SrcDocumentUrl", "KString", "", "I:\tank Game\graham-temp\building1.fbx"
+            Property: "DocumentUrl", "KString", "", "I:\tank Game\graham-temp\building3.fbx"
+            Property: "SrcDocumentUrl", "KString", "", "I:\tank Game\graham-temp\building3.fbx"
             Property: "Original", "Compound", ""
             Property: "Original|ApplicationVendor", "KString", "", "Autodesk"
             Property: "Original|ApplicationName", "KString", "", "Maya"
             Property: "Original|ApplicationVersion", "KString", "", "2009.2"
-            Property: "Original|DateTime_GMT", "DateTime", "", "26/04/2010 09:12:04.350"
-            Property: "Original|FileName", "KString", "", "I:/tank Game/graham-temp/building1.fbx"
+            Property: "Original|DateTime_GMT", "DateTime", "", "26/04/2010 09:12:28.042"
+            Property: "Original|FileName", "KString", "", "I:/tank Game/graham-temp/building3.fbx"
             Property: "LastSaved", "Compound", ""
             Property: "LastSaved|ApplicationVendor", "KString", "", "Autodesk"
             Property: "LastSaved|ApplicationName", "KString", "", "Maya"
             Property: "LastSaved|ApplicationVersion", "KString", "", "2009.2"
-            Property: "LastSaved|DateTime_GMT", "DateTime", "", "26/04/2010 09:12:04.350"
+            Property: "LastSaved|DateTime_GMT", "DateTime", "", "26/04/2010 09:12:28.042"
         }
     }
     Material: "Material::lambert3", "" {
@@ -350,10 +350,10 @@ Objects:  {
 ;------------------------------------------------------------------
 
 Connections:  {
-    Connect: "OO", "Model::pCube33", "Model::Scene"
+    Connect: "OO", "Model::pCube5", "Model::Scene"
     Connect: "OO", "Video::file2", "Texture::file2"
-    Connect: "OO", "Material::lambert3", "Model::pCube33"
-    Connect: "OO", "Texture::file2", "Model::pCube33"
+    Connect: "OO", "Material::lambert3", "Model::pCube5"
+    Connect: "OO", "Texture::file2", "Model::pCube5"
 }
 ;Takes and animation section
 ;----------------------------------------------------
