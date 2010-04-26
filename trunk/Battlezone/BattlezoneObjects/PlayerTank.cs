@@ -137,7 +137,6 @@ namespace Battlezone.BattlezoneObjects
             set { hatchRotationValue = value; }
         }
 
-
         #endregion
 
 
@@ -175,7 +174,7 @@ namespace Battlezone.BattlezoneObjects
         {
             base.LoadContent();
 
-            tankModel = ActorModel;  //base.meshLoader.Load<Model>("playerTank");
+            tankModel = ActorModel;  
 
             // Look up shortcut references to the bones we are going to animate.
             leftBackWheelBone = tankModel.Bones["l_back_wheel_geo"];
@@ -316,10 +315,22 @@ namespace Battlezone.BattlezoneObjects
         /// <param name="a">Actor with which it is currently colliding.</param>
         public override void collide(Actor a)
         {
-            if (a is AITank)
+            if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
             {
                 Velocity = new Vector3(0.0f, 0.0f, 0.0f);
-                System.Console.Out.WriteLine("CRASH!");
+                System.Console.Out.WriteLine("TANKS CRASHED!");
+            }
+            else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
+            {
+                Velocity = new Vector3();
+                Building b = (Building)a;
+                System.Console.Out.WriteLine(b.WorldBoundsBox);
+                Console.Out.WriteLine(b.WorldPosition);
+            }
+            else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.SHELL)
+            {
+                Projectile temp = (Projectile)a;
+                CurrentHealth -= temp.Damage;
             }
         }
 
