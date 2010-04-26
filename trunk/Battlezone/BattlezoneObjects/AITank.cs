@@ -428,14 +428,20 @@ namespace Battlezone.BattlezoneObjects
                         {
                             if (turretTargetRotationValue < 0)
                             {
-                                turretRotationValue -= fDelta * TURRET_ROTATION_SPEED;
+                                if (turretTargetRotationValue < 0.15)
+                                    turretRotationValue -= fDelta * TURRET_ROTATION_SPEED / 2;
+                                else
+                                    turretRotationValue -= fDelta * TURRET_ROTATION_SPEED;
                                 turretTargetRotationValue += fDelta * TURRET_ROTATION_SPEED;
                                 if (turretTargetRotationValue >= 0)
                                     turretTargetRotationValue = 0;
                             }
                             else
                             {
-                                turretRotationValue += fDelta * TURRET_ROTATION_SPEED;
+                                if (turretTargetRotationValue < 0.15)
+                                    turretRotationValue += fDelta * TURRET_ROTATION_SPEED / 2;
+                                else
+                                    turretRotationValue += fDelta * TURRET_ROTATION_SPEED;
                                 turretTargetRotationValue -= fDelta * TURRET_ROTATION_SPEED;
                                 if (turretTargetRotationValue <= 0)
                                     turretTargetRotationValue = 0;
@@ -455,7 +461,7 @@ namespace Battlezone.BattlezoneObjects
                             canFire = false;
                             canRotate = false;
                             timer.AddTimer("Enable Cannon", 3, AllowFire, false);
-                            timer.AddTimer("Enable Rotation", 0.1f, AllowRotate, false);
+                            timer.AddTimer("Enable Rotation", 0.75f, AllowRotate, false);
                         }
                         timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early
                     }
@@ -495,7 +501,7 @@ namespace Battlezone.BattlezoneObjects
                 //AI tank has a 20 degree viewing angle for checking? maybe?
             }
             //Console.Out.WriteLine(WorldBounds);
-            //Console.Out.WriteLine("Current state: " + currentState);
+            Console.Out.WriteLine("Current state: " + currentState);
         }
 
         //Helper functions to keep the Update method clean
@@ -505,7 +511,7 @@ namespace Battlezone.BattlezoneObjects
             //Console.Out.WriteLine(sightRay.Direction);
             bool seePlayer = false;
             Actor player = new Actor(Game);
-            
+            Console.Out.WriteLine("Checking vision");
             foreach (Actor a in GameplayScreen.Instance.activeActors)
             {
                 //Console.Out.WriteLine(GameplayScreen.Instance.activeActors.Count);
@@ -515,7 +521,10 @@ namespace Battlezone.BattlezoneObjects
                     {
                         Building b = (Building)a;
                         if (sightRay.Intersects(b.WorldBoundsBox) != null)
+                        {
+                            Console.Out.WriteLine("Saw building");
                             return false;
+                        }
                     }
                     else if (sightRay.Intersects(a.WorldBounds) != null)
                     {
@@ -525,6 +534,7 @@ namespace Battlezone.BattlezoneObjects
                             //Console.Out.WriteLine("Can see player");
                             //m_vPlayerLastKnownPosition = new Vector3(a.WorldPosition.X, a.WorldPosition.Y, a.WorldPosition.Z);
                             seePlayer = true;
+                            Console.Out.WriteLine("Saw player");
                             player = a;
                         }
                         else
