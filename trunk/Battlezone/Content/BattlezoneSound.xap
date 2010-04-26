@@ -125,7 +125,7 @@ Global Settings
         Read Only = 0;
         Time = 0;
         Value = 1.000000;
-        Initial Value = -0.000000;
+        Initial Value = 0.000000;
         Min = 0.000000;
         Max = 4.000000;
     }
@@ -218,6 +218,62 @@ Global Settings
     RPC
     {
         Name = RPC Preset;
+
+        RPC Curve
+        {
+            Name = 1::85f60f66-830f-4da7-986b-8e9ee5bc66cc;
+            Property = 0;
+            Sound = 0;
+            Line Color = 4280540189;
+            Viewable = 1;
+
+            Variable Entry
+            {
+                Name = AttackTime;
+            }
+
+            RPC Point
+            {
+                X = 36.000000;
+                Y = -1129.411743;
+                Curve = 0;
+            }
+
+            RPC Point
+            {
+                X = 4064.000000;
+                Y = 70.588234;
+                Curve = 0;
+            }
+        }
+
+        RPC Curve
+        {
+            Name = Sound::dc4489c1-2126-4bae-b4d7-c1f574a2307d;
+            Property = 0;
+            Sound = 1;
+            Line Color = 4285423261;
+            Viewable = 1;
+
+            Variable Entry
+            {
+                Name = DopplerPitchScalar;
+            }
+
+            RPC Point
+            {
+                X = 3.221675;
+                Y = 176.470596;
+                Curve = 0;
+            }
+
+            RPC Point
+            {
+                X = 4.000000;
+                Y = -2505.882324;
+                Curve = 0;
+            }
+        }
     }
 }
 
@@ -230,8 +286,8 @@ Wave Bank
     Windows Bank Path Edited = 1;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 4108717965;
-    Bank Last Revised High = 30074060;
+    Bank Last Revised Low = 3008664097;
+    Bank Last Revised High = 30074085;
 
     Wave
     {
@@ -793,6 +849,8 @@ Sound Bank
     Windows File = BattlezoneSoundSoundbank.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 1;
+    Header Last Modified High = 0;
+    Header Last Modified Low = 0;
 
     Sound
     {
@@ -947,6 +1005,11 @@ Sound Bank
             Name = Default;
         }
 
+        RPC Entry
+        {
+            RPC Name = RPC Preset;
+        }
+
         Track
         {
             Volume = 0;
@@ -978,6 +1041,12 @@ Sound Bank
                     Weight = 255;
                     Weight Min = 0;
                 }
+            }
+
+            RPC Curve Entry
+            {
+                RPC Name = RPC Preset;
+                RPC Curve Name = 1::85f60f66-830f-4da7-986b-8e9ee5bc66cc;
             }
         }
     }
