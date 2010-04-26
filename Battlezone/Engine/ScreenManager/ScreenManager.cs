@@ -47,6 +47,10 @@ namespace Battlezone
         public static WaveBank musicWaveBank;
         public static SoundBank musicSoundBank;
 
+        public static AudioEngine soundAudioEngine;
+        public static WaveBank soundWaveBank;
+        public static SoundBank soundSoundBank;
+
         #endregion
 
         #region Properties
@@ -125,6 +129,10 @@ namespace Battlezone
             musicAudioEngine = new AudioEngine("Content/BattlezoneMusic.xgs");
             musicWaveBank = new WaveBank(ScreenManager.musicAudioEngine, "Content/BattlezoneMusicWaveBank.xwb", 0, 4);
             musicSoundBank = new SoundBank(ScreenManager.musicAudioEngine, "Content/BattlezoneMusicSoundBank.xsb");
+
+            soundAudioEngine = new AudioEngine("Content/BattlezoneSound.xgs");
+            soundWaveBank = new WaveBank(soundAudioEngine, "Content/BattlezoneSoundWaveBank.xwb");
+            soundSoundBank = new SoundBank(soundAudioEngine, "Content/BattlezoneSoundSoundBank.xsb");
 
             // Tell each of the screens to load their content.
             foreach (GameScreen screen in screens)
