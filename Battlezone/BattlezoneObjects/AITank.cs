@@ -461,7 +461,7 @@ namespace Battlezone.BattlezoneObjects
                             canFire = false;
                             canRotate = false;
                             timer.AddTimer("Enable Cannon", 3, AllowFire, false);
-                            timer.AddTimer("Enable Rotation", 0.75f, AllowRotate, false);
+                            timer.AddTimer("Enable Rotation", 0.6f, AllowRotate, false);
                         }
                         timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early
                     }
@@ -508,41 +508,53 @@ namespace Battlezone.BattlezoneObjects
         private bool CheckPlayerSighted()
         {
             Ray sightRay = new Ray(cannonBone.Transform.Translation, GetCannonFacing());
-            //Console.Out.WriteLine(sightRay.Direction);
+
             bool seePlayer = false;
-            Actor player = new Actor(Game);
-            Console.Out.WriteLine("Checking vision");
+            Actor player = null;
+
+            //find out what the distance to the player is if we can see them and compare it to the distance we can see some other object
+            float? distanceToPlayer = null;
+            float? distanceToAnotherObject = null;
             foreach (Actor a in GameplayScreen.Instance.activeActors)
             {
-                //Console.Out.WriteLine(GameplayScreen.Instance.activeActors.Count);
                 if (a.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING && a.COLLISION_IDENTIFIER != CollisionIdentifier.AI_TANK)
                 {
                     if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING) 
                     {
                         Building b = (Building)a;
-                        if (sightRay.Intersects(b.WorldBoundsBox) != null)
-                        {
-                            Console.Out.WriteLine("Saw building");
-                            return false;
-                        }
+                        distanceToAnotherObject = sightRay.Intersects(b.WorldBoundsBox);
                     }
-                    else if (sightRay.Intersects(a.WorldBounds) != null)
+                    else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK)
                     {
-                        if (a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK)
+                        distanceToPlayer = sightRay.Intersects(a.WorldBounds);
+                        player = a;
+                    }
+                    else
+                    {
+                        float? temp = sightRay.Intersects(a.WorldBounds);
+                        if (temp < distanceToAnotherObject || distanceToAnotherObject == null)
                         {
-                            //Console.Out.WriteLine(a.WorldBounds);
-                            //Console.Out.WriteLine("Can see player");
-                            //m_vPlayerLastKnownPosition = new Vector3(a.WorldPosition.X, a.WorldPosition.Y, a.WorldPosition.Z);
-                            seePlayer = true;
-                            Console.Out.WriteLine("Saw player");
-                            player = a;
+                            distanceToAnotherObject = temp;
                         }
-                        else
-                            return false;
                     }
                 }
             }
-
+            //Console.Out.WriteLine("Player distance: " + distanceToPlayer);
+            //Console.Out.WriteLine("Object distance: " + distanceToAnotherObject);
+            //if the player is closer than the closest object we can see, then we can see the player
+            if (distanceToAnotherObject == null && distanceToPlayer != null)
+            {
+                //can't see any other objects, but the player
+                seePlayer = true;
+            }
+            else if (distanceToPlayer == null)
+            {
+                //can't see the player
+                return false;
+            }
+            else if (distanceToPlayer < distanceToAnotherObject)
+                seePlayer = true;
+            
             if (seePlayer == true)
             {
                 Vector3 correctFacing = player.WorldPosition - WorldPosition;
@@ -554,6 +566,7 @@ namespace Battlezone.BattlezoneObjects
                 if (cross.Y < 0)
                     turretTargetRotationValue *= -1;
             }
+
             return seePlayer;
         }
 
@@ -615,15 +628,14 @@ namespace Battlezone.BattlezoneObjects
         {
             Force = (m_vCurrentPathTarget - WorldPosition);
             Vector3 tempForce = Force;
-            //figure out how much we need to rotate by and whether the rotation should CW or CCW
             Vector3 Facing = GetWorldFacing();
+
             tempForce.Normalize();
             Facing.Normalize();
-            //Console.Out.WriteLine(Force);
-            //Console.Out.WriteLine(Facing);
+
             float deltaRotationValue = (float)Math.Acos((Double)Vector3.Dot(tempForce, Facing));
-            //Console.Out.WriteLine(Vector3.Dot(tempForce, Facing));
-            //Console.Out.WriteLine(deltaRotationValue);
+
+            //figure out how much we need to rotate by and whether the rotation should CW or CCW
             if (Vector3.Cross(Force, Facing).Y > 0.0f)
                 targetTankRotationValue = RotAngle + deltaRotationValue;
             else
@@ -631,8 +643,6 @@ namespace Battlezone.BattlezoneObjects
 
             //set the magnitude of the Force vector
             Force = tempForce * fTerminalVelocity;
-
-            //Console.Out.WriteLine("Force: " +Force);
         }
 
         public void msgWeAreColliding(AITank tank)
@@ -695,8 +705,6 @@ namespace Battlezone.BattlezoneObjects
             if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
                 Building b = (Building)a;
-                //Console.Out.WriteLine(WorldBounds);
-                //Console.Out.WriteLine(b.WorldBoundsBox);
                 return WorldBounds.Intersects(b.WorldBoundsBox);
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK || a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)

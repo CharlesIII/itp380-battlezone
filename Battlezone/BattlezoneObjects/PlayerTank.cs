@@ -282,8 +282,9 @@ namespace Battlezone.BattlezoneObjects
 
             base.Update(gameTime);
             //Console.Out.WriteLine(WorldPosition);
-            WorldBounds.Center = WorldPosition;
-            WorldBounds.Radius = ModelBounds.Radius * Scale;
+            //WorldBounds.Center = WorldPosition + new Vector3(0,0, turretTransform.Translation.Z);
+            //Console.Out.WriteLine(WorldBounds.Center);
+            //WorldBounds.Radius = ModelBounds.Radius * Scale;
         }
 
         /// <summary>
