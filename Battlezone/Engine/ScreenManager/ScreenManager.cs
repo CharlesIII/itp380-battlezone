@@ -134,6 +134,7 @@ namespace Battlezone
             soundWaveBank = new WaveBank(soundAudioEngine, "Content/BattlezoneSoundWaveBank.xwb");
             soundSoundBank = new SoundBank(soundAudioEngine, "Content/BattlezoneSoundSoundBank.xsb");
 
+
             // Tell each of the screens to load their content.
             foreach (GameScreen screen in screens)
             {
