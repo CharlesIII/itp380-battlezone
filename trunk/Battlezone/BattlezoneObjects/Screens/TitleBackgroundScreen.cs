@@ -563,6 +563,11 @@ namespace Battlezone
                 }
 
             }
+
+            if (TitleMenuScreen.skip)
+            {
+                name = "BATTLEZONE";
+            }
             sprite.Begin();
             sprite.DrawString(font, name, temp, color, 0,
                                    origin, 1, SpriteEffects.None, 0);

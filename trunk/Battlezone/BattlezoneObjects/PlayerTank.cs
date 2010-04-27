@@ -75,6 +75,7 @@ namespace Battlezone.BattlezoneObjects
         String name;
 
         Cue soundCue;
+        Cue treadsRollingCue;
 
         #endregion
 
@@ -303,35 +304,41 @@ namespace Battlezone.BattlezoneObjects
                 if (Velocity == Vector3.Zero)
                 {
                     name = soundCue.Name;
-                    if (name == "TankEngineMoving" || name == "TankTreadRolling")
+                    if (soundCue.IsStopped && name == "TankSlowDown")
                     {
+                        //treadsRollingCue = ScreenManager.soundSoundBank.GetCue("TankTreadRolling");
+                        //treadsRollingCue.Stop(AudioStopOptions.Immediate);
                         soundCue.Stop(AudioStopOptions.Immediate);
-                    }
-                    if (soundCue.IsStopped || name == "TankEngineMoving" || name == "TankTreadRolling")
-                    {
                         soundCue = ScreenManager.soundSoundBank.GetCue("TankIdle");
+                        soundCue.Play();
+                    }
+                    if (soundCue.IsStopped || name == "TankEngineMoving" || name == "TankSpeedUp")
+                    {
+                        //treadsRollingCue = ScreenManager.soundSoundBank.GetCue("TankTreadRolling");
+                        //treadsRollingCue.Stop(AudioStopOptions.Immediate);
+                        soundCue.Stop(AudioStopOptions.Immediate);
+                        soundCue = ScreenManager.soundSoundBank.GetCue("TankSlowDown");
                         soundCue.Play();
                     }
                 }
                 else
                 {
                     name = soundCue.Name;
-                    if (soundCue.IsStopped || name == "TankIdle")
+                    if (soundCue.IsStopped || name == "TankIdle"|| name =="TankSlowDown")
                     {
-                        if (name == "TankIdle")
+                        if (name == "TankIdle" || name == "TankSlowDown")
                         {
                             soundCue.Stop(AudioStopOptions.Immediate);
-                            soundCue = ScreenManager.soundSoundBank.GetCue("TankTreadRolling");
-                            soundCue.Play();
-                            soundCue.Stop(AudioStopOptions.Immediate);
-                            soundCue = ScreenManager.soundSoundBank.GetCue("TankEngineMoving");
+                            soundCue = ScreenManager.soundSoundBank.GetCue("TankSpeedUp");
                             soundCue.Play();
 
                         }
                         else
                         {
-                            soundCue = ScreenManager.soundSoundBank.GetCue("TankTreadRolling");
+                            soundCue = ScreenManager.soundSoundBank.GetCue("TankEngineMoving");
                             soundCue.Play();
+                            //treadsRollingCue = ScreenManager.soundSoundBank.GetCue("TankTreadRolling");
+                            //treadsRollingCue.Play();
                         }
                     }
                 }
