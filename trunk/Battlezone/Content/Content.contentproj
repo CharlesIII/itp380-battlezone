@@ -200,11 +200,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="blackDotLarge.png">
-      <Name>blackDotLarge</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="redDotSmall.png">
       <Name>redDotSmall</Name>
       <Importer>TextureImporter</Importer>

@@ -72,15 +72,17 @@ namespace Battlezone.BattlezoneObjects.HUD
         public override void Draw(GameTime gameTime)
         {
             Vector3 playerFwd = GameplayScreen.Instance.getPlayer().GetWorldFacing();
-            Vector3 playerPos = GameplayScreen.Instance.getPlayer().GetWorldPosition() * -1.0f;
+            Vector3 playerPos = GameplayScreen.Instance.getPlayer().GetWorldPosition();
 
             mBatch.Begin();
             // The last parameter of the color determines how transparent the radar circle will be
             mBatch.Draw(RadarImage, RadarCenterPos, null, new Color(100, 100, 100, 150), 2.0f, RadarImageCenter, 1.0f, SpriteEffects.None, 0.0f);
 
-            Vector2 plyr = new Vector2(playerFwd.Z, playerFwd.X);
+            Vector2 plyr = new Vector2(playerFwd.X, playerFwd.Z);
 
-            float playerForwardRadians = (float)Math.Acos(Vector2.Dot(plyr, new Vector2(0.0f, 1.0f)) / plyr.Length());
+            float playerForwardRadians = (float)Math.Atan2(1.0f, 0.0f) - (float)Math.Atan2(plyr.Y, plyr.X);//(float)Math.Acos(Vector2.Dot(plyr, new Vector2(0.0f, 1.0f)) / plyr.Length());
+
+            System.Console.Out.WriteLine(playerForwardRadians);
 
             // If enemy is in range
             foreach (AITank thisEnemy in GameplayScreen.Instance.Enemies)
