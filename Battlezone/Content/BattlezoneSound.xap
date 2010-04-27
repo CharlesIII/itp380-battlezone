@@ -217,14 +217,14 @@ Global Settings
 
     RPC
     {
-        Name = RPC Preset;
+        Name = SpeedUp;
 
         RPC Curve
         {
-            Name = 1::847af63d-310d-47c8-bac7-10e9f482e185;
-            Property = 0;
+            Name = 1::8ed52155-4180-4a1a-895c-728f64bf8449;
+            Property = 1;
             Sound = 0;
-            Line Color = 4280540189;
+            Line Color = 4280796060;
             Viewable = 1;
 
             Variable Entry
@@ -234,43 +234,81 @@ Global Settings
 
             RPC Point
             {
-                X = 36.000000;
-                Y = -1129.411743;
+                X = 0.000000;
+                Y = 0.000000;
                 Curve = 0;
             }
 
             RPC Point
             {
-                X = 4064.000000;
-                Y = 70.588234;
+                X = 1958.000000;
+                Y = 510.726654;
                 Curve = 0;
             }
         }
+    }
+
+    RPC
+    {
+        Name = SlowDown;
 
         RPC Curve
         {
-            Name = Sound::f1db462d-cf15-40d9-9c36-ce6a95f683e8;
-            Property = 0;
-            Sound = 1;
-            Line Color = 4285423261;
+            Name = 1::6dd47958-23a6-47fd-a722-db563a0188cd;
+            Property = 1;
+            Sound = 0;
+            Line Color = 4290103137;
             Viewable = 1;
 
             Variable Entry
             {
-                Name = DopplerPitchScalar;
+                Name = AttackTime;
             }
 
             RPC Point
             {
-                X = 3.221675;
-                Y = 176.470596;
+                X = 0.000000;
+                Y = 494.117645;
                 Curve = 0;
             }
 
             RPC Point
             {
-                X = 4.000000;
-                Y = -2505.882324;
+                X = 2105.000000;
+                Y = -4.152249;
+                Curve = 0;
+            }
+        }
+    }
+
+    RPC
+    {
+        Name = TankMove;
+
+        RPC Curve
+        {
+            Name = 1::a16cfa64-115c-45f5-9c2b-df0d17102c08;
+            Property = 1;
+            Sound = 0;
+            Line Color = 4285238243;
+            Viewable = 1;
+
+            Variable Entry
+            {
+                Name = AttackTime;
+            }
+
+            RPC Point
+            {
+                X = 3805.000000;
+                Y = 510.726654;
+                Curve = 0;
+            }
+
+            RPC Point
+            {
+                X = 10123.000000;
+                Y = 510.726654;
                 Curve = 0;
             }
         }
@@ -286,8 +324,8 @@ Wave Bank
     Windows Bank Path Edited = 1;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 3008664097;
-    Bank Last Revised High = 30074085;
+    Bank Last Revised Low = 1438606878;
+    Bank Last Revised High = 30074299;
 
     Wave
     {
@@ -987,64 +1025,6 @@ Sound Bank
                     Weight = 255;
                     Weight Min = 0;
                 }
-            }
-        }
-    }
-
-    Sound
-    {
-        Name = tank_roll_1;
-        Volume = 600;
-        Pitch = 384;
-        Priority = 0;
-
-        Category Entry
-        {
-            Name = Default;
-        }
-
-        RPC Entry
-        {
-            RPC Name = RPC Preset;
-        }
-
-        Track
-        {
-            Volume = 0;
-            Use Filter = 0;
-
-            Play Wave Event
-            {
-                Break Loop = 0;
-                Use Speaker Position = 0;
-                Use Center Speaker = 1;
-                New Speaker Position On Loop = 1;
-                Speaker Position Angle = 0.000000;
-                Speaer Position Arc = 0.000000;
-
-                Event Header
-                {
-                    Timestamp = 0;
-                    Relative = 0;
-                    Random Recurrence = 0;
-                    Random Offset = 0;
-                }
-
-                Wave Entry
-                {
-                    Bank Name = BattlezoneSoundWaveBank;
-                    Bank Index = 0;
-                    Entry Name = tank_roll_1;
-                    Entry Index = 20;
-                    Weight = 255;
-                    Weight Min = 0;
-                }
-            }
-
-            RPC Curve Entry
-            {
-                RPC Name = RPC Preset;
-                RPC Curve Name = 1::847af63d-310d-47c8-bac7-10e9f482e185;
             }
         }
     }
@@ -1989,6 +1969,180 @@ Sound Bank
         }
     }
 
+    Sound
+    {
+        Name = TankSpeedUp;
+        Volume = 600;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = SpeedUp;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaer Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = BattlezoneSoundWaveBank;
+                    Bank Index = 0;
+                    Entry Name = tank_idle;
+                    Entry Index = 17;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+
+            RPC Curve Entry
+            {
+                RPC Name = SpeedUp;
+                RPC Curve Name = 1::8ed52155-4180-4a1a-895c-728f64bf8449;
+            }
+        }
+    }
+
+    Sound
+    {
+        Name = TankSlowDown;
+        Volume = 600;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = SlowDown;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaer Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = BattlezoneSoundWaveBank;
+                    Bank Index = 0;
+                    Entry Name = tank_idle;
+                    Entry Index = 17;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+
+            RPC Curve Entry
+            {
+                RPC Name = SlowDown;
+                RPC Curve Name = 1::6dd47958-23a6-47fd-a722-db563a0188cd;
+            }
+        }
+    }
+
+    Sound
+    {
+        Name = TankMoving;
+        Volume = 600;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = TankMove;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaer Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = BattlezoneSoundWaveBank;
+                    Bank Index = 0;
+                    Entry Name = tank_idle;
+                    Entry Index = 17;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+
+            RPC Curve Entry
+            {
+                RPC Name = TankMove;
+                RPC Curve Name = 1::a16cfa64-115c-45f5-9c2b-df0d17102c08;
+            }
+        }
+    }
+
     Cue
     {
         Name = TankTreadRolling;
@@ -2011,26 +2165,6 @@ Sound Bank
 
     Cue
     {
-        Name = TankEngineMoving;
-
-        Variation
-        {
-            Variation Type = 3;
-            Variation Table Type = 1;
-            New Variation on Loop = 0;
-        }
-
-        Sound Entry
-        {
-            Name = tank_roll_1;
-            Index = 3;
-            Weight Min = 0;
-            Weight Max = 255;
-        }
-    }
-
-    Cue
-    {
         Name = TankIdle;
 
         Variation
@@ -2043,7 +2177,7 @@ Sound Bank
         Sound Entry
         {
             Name = tank_idle;
-            Index = 6;
+            Index = 5;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2063,7 +2197,7 @@ Sound Bank
         Sound Entry
         {
             Name = tank_reload_1;
-            Index = 5;
+            Index = 4;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2071,7 +2205,7 @@ Sound Bank
         Sound Entry
         {
             Name = tank_reload_2;
-            Index = 4;
+            Index = 3;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2091,7 +2225,7 @@ Sound Bank
         Sound Entry
         {
             Name = tank_hit;
-            Index = 8;
+            Index = 7;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2111,7 +2245,7 @@ Sound Bank
         Sound Entry
         {
             Name = tank_hit_2;
-            Index = 7;
+            Index = 6;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2119,7 +2253,7 @@ Sound Bank
         Sound Entry
         {
             Name = tank_heavy_shot;
-            Index = 9;
+            Index = 8;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2139,7 +2273,7 @@ Sound Bank
         Sound Entry
         {
             Name = explosion_1;
-            Index = 13;
+            Index = 12;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2147,7 +2281,7 @@ Sound Bank
         Sound Entry
         {
             Name = explosion_2;
-            Index = 12;
+            Index = 11;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2175,7 +2309,7 @@ Sound Bank
         Sound Entry
         {
             Name = cooldown_reload_sound;
-            Index = 15;
+            Index = 14;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2183,7 +2317,7 @@ Sound Bank
         Sound Entry
         {
             Name = cooldown_reload_sound_2;
-            Index = 14;
+            Index = 13;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2203,14 +2337,6 @@ Sound Bank
         Sound Entry
         {
             Name = cannon_large;
-            Index = 18;
-            Weight Min = 0;
-            Weight Max = 255;
-        }
-
-        Sound Entry
-        {
-            Name = cannon_distant;
             Index = 17;
             Weight Min = 0;
             Weight Max = 255;
@@ -2218,8 +2344,16 @@ Sound Bank
 
         Sound Entry
         {
-            Name = cannon_medium;
+            Name = cannon_distant;
             Index = 16;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+
+        Sound Entry
+        {
+            Name = cannon_medium;
+            Index = 15;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2247,7 +2381,7 @@ Sound Bank
         Sound Entry
         {
             Name = bleep3;
-            Index = 21;
+            Index = 20;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2267,7 +2401,7 @@ Sound Bank
         Sound Entry
         {
             Name = building_demolition;
-            Index = 20;
+            Index = 19;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2275,7 +2409,7 @@ Sound Bank
         Sound Entry
         {
             Name = building_demolition_2;
-            Index = 19;
+            Index = 18;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2295,7 +2429,7 @@ Sound Bank
         Sound Entry
         {
             Name = bleep1;
-            Index = 22;
+            Index = 21;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2315,7 +2449,7 @@ Sound Bank
         Sound Entry
         {
             Name = bleep2;
-            Index = 23;
+            Index = 22;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2336,6 +2470,66 @@ Sound Bank
         {
             Name = tank_shot_1;
             Index = 1;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = TankSlowDown;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = TankSlowDown;
+            Index = 24;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = TankSpeedUp;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = TankSpeedUp;
+            Index = 23;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = TankEngineMoving;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = TankMoving;
+            Index = 25;
             Weight Min = 0;
             Weight Max = 255;
         }
