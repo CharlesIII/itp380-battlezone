@@ -28,6 +28,12 @@ namespace Battlezone.BattlezoneObjects
         const float TANK_ROTATION_SPEED = 1.25f;
         const float PURSUIT_DURATION = 30.0f;
 
+        const string CANNON_FIRE = "FireCannon";
+        const string CANNON_RELOAD = "TankReload";
+        const string TANK_IDLE = "TankIdle";
+        const string TANK_ENGINE_MOVE = "TankEngineMoving";
+        const string TANK_TREAD_MOVE = "TankTreadRolling";
+
         Cue TankEngineIdleCue;
         Cue TankEngineMovingCue;
         Cue TankTreadRollingCue;
@@ -132,11 +138,11 @@ namespace Battlezone.BattlezoneObjects
 
             collidingAITanks = new List<AITank>(10);
 
-            TankEngineIdleCue = ScreenManager.soundSoundBank.GetCue("TankIdle");
-            TankTreadRollingCue = ScreenManager.soundSoundBank.GetCue("TankTreadRolling");
-            TankEngineMovingCue = ScreenManager.soundSoundBank.GetCue("TankEngineMoving");
-            TankCannonFireCue = ScreenManager.soundSoundBank.GetCue("FireCannon");
-            TankCannonReloadCue = ScreenManager.soundSoundBank.GetCue("TankReload");
+            TankEngineIdleCue = ScreenManager.soundSoundBank.GetCue(TANK_IDLE);
+            TankTreadRollingCue = ScreenManager.soundSoundBank.GetCue(TANK_TREAD_MOVE);
+            TankEngineMovingCue = ScreenManager.soundSoundBank.GetCue(TANK_ENGINE_MOVE);
+            TankCannonFireCue = ScreenManager.soundSoundBank.GetCue(CANNON_FIRE);
+            TankCannonReloadCue = ScreenManager.soundSoundBank.GetCue(CANNON_RELOAD);
 
             DistanceFromCamera = (GameplayScreen.CameraMatrix.Translation - WorldPosition).Length();
 
@@ -208,11 +214,14 @@ namespace Battlezone.BattlezoneObjects
             timer.Update(gameTime);
 
             DistanceFromCamera = (GameplayScreen.CameraMatrix.Translation - WorldPosition).Length();
+            
+            if (currentState == AIStates.STOP || currentState == AIStates.DEAD)
+                return;
 
             if ((WorldPosition - m_vPlayerPosition).Length() < AUTOMATIC_DETECTION_RADIUS)
             {
                 //player has been automatically detected so set PlayerLastKnownPosition
-                //m_vPlayerLastKnownPosition = new Vector3(m_vPlayerPosition.X, m_vPlayerPosition.Y, m_vPlayerPosition.Z);
+                m_vPlayerLastKnownPosition = new Vector3(m_vPlayerPosition.X, m_vPlayerPosition.Y, m_vPlayerPosition.Z);
 
                 //change action flow based on current state and modify state
                 //perform quick instant vision check
@@ -225,327 +234,330 @@ namespace Battlezone.BattlezoneObjects
                 }
                  */
             }
-            if (currentState == AIStates.STOP)
-                return;
-            if (currentState != AIStates.DEAD)  //wrap around all the logic to stop the AI tank when its dead
+
+            //make sure we're facing the right direction before we start moving
+            if (RotAngle < targetTankRotationValue)
             {
-                //make sure we're facing the right direction before we start moving
-                if (RotAngle < targetTankRotationValue)
-                {
-                    //we need to rotate CCW
-                    RotAngle += TANK_ROTATION_SPEED * fDelta;
+                //we need to rotate CCW
+                RotAngle += TANK_ROTATION_SPEED * fDelta;
 
-                    //clamp RotAngle to target if close enough
-                    if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.10f)
-                        RotAngle = targetTankRotationValue;
-                    Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
-                }
-                else if (RotAngle > targetTankRotationValue)
-                {
-                    //we need to rotate CW
-                    RotAngle -= TANK_ROTATION_SPEED * fDelta;
+                //clamp RotAngle to target if close enough
+                if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.10f)
+                    RotAngle = targetTankRotationValue;
+                Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
+            }
+            else if (RotAngle > targetTankRotationValue)
+            {
+                //we need to rotate CW
+                RotAngle -= TANK_ROTATION_SPEED * fDelta;
 
-                    //clamp RotAngle to target if close enough
-                    if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.10f)
-                        RotAngle = targetTankRotationValue;
-                    Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
+                //clamp RotAngle to target if close enough
+                if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.10f)
+                    RotAngle = targetTankRotationValue;
+                Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
+            }
+            else
+            {
+                //we're facing the right direction do movement logic
+                if ((m_vCurrentPathTarget - WorldPosition).Length() < 5.0f)
+                {
+                    //we're close enough so stop moving and snap position
+                    Velocity = new Vector3(0.0f);
+                    WorldPosition = m_vCurrentPathTarget;
+                    if (TankEngineIdleCue.IsStopped)
+                        TankEngineIdleCue = ScreenManager.soundSoundBank.GetCue(TANK_IDLE);
+                    if (TankEngineIdleCue.IsPrepared)
+                    {
+                        TankEngineIdleCue.SetVariable("Distance", DistanceFromCamera);
+                        TankEngineIdleCue.Play();
+                    }
+                    if (TankEngineMovingCue.IsPlaying)
+                        TankEngineMovingCue.Stop(AudioStopOptions.Immediate);
+                    if (TankTreadRollingCue.IsPlaying)
+                        TankTreadRollingCue.Stop(AudioStopOptions.Immediate);
                 }
                 else
                 {
-                    //we're facing the right direction do movement logic
-                    if ((m_vCurrentPathTarget - WorldPosition).Length() < 5.0f)
+                    if (bPhysicsDriven)
                     {
-                        //we're close enough so stop moving and snap position
-                        Velocity = new Vector3(0.0f);
-                        WorldPosition = m_vCurrentPathTarget;
-
-                        if (TankEngineIdleCue.IsStopped)
+                        Velocity += vAcceleration * fDelta / 2.0f;
+                        m_vPreviousWorldPosition = m_vWorldPosition;
+                        WorldPosition += Velocity * fDelta;
+                        vAcceleration = vForce / fMass;
+                        Velocity += vAcceleration * fDelta / 2.0f;
+                        if (Velocity.Length() >= fTerminalVelocity)
                         {
-                            TankEngineIdleCue.SetVariable("Distance", DistanceFromCamera);
-                            TankEngineIdleCue.Play();
+                            Vector3 temp = Velocity;
+                            temp.Normalize();
+                            Velocity = temp;
+                            Velocity *= fTerminalVelocity;
                         }
-                        if (TankEngineMovingCue.IsPlaying)
-                            TankEngineMovingCue.Stop(AudioStopOptions.Immediate);
-                        if (TankTreadRollingCue.IsPlaying)
-                            TankTreadRollingCue.Stop(AudioStopOptions.Immediate);
-                    }
-                    else
-                    {
-                        if (bPhysicsDriven)
-                        {
-                            Velocity += vAcceleration * fDelta / 2.0f;
-                            m_vPreviousWorldPosition = m_vWorldPosition;
-                            WorldPosition += Velocity * fDelta;
-                            vAcceleration = vForce / fMass;
-                            Velocity += vAcceleration * fDelta / 2.0f;
-                            if (Velocity.Length() >= fTerminalVelocity)
-                            {
-                                Vector3 temp = Velocity;
-                                temp.Normalize();
-                                Velocity = temp;
-                                Velocity *= fTerminalVelocity;
-                            }
-                            if (TankEngineIdleCue.IsPlaying)
-                                TankEngineIdleCue.Stop(AudioStopOptions.Immediate);
-                            if (TankEngineMovingCue.IsStopped)
-                            {
-                                TankEngineMovingCue.SetVariable("Distance", DistanceFromCamera);
-                                TankEngineMovingCue.Play();
-                            }
-                            if (TankTreadRollingCue.IsStopped)
-                            {
-                                TankTreadRollingCue.SetVariable("Distance", DistanceFromCamera);
-                                TankTreadRollingCue.Play();
-                            }
-                        }
-                        else
-                        {
-                            WorldPosition = Velocity * fDelta;
-                        }
-                    }
-                }
+                        if (TankEngineMovingCue.IsStopped)
+                            TankEngineMovingCue = ScreenManager.soundSoundBank.GetCue(TANK_ENGINE_MOVE);
+                        if (TankTreadRollingCue.IsStopped)
+                            TankTreadRollingCue = ScreenManager.soundSoundBank.GetCue(TANK_TREAD_MOVE);
 
-                //Console.Out.WriteLine(WorldPosition);
-                //Console.Out.WriteLine(m_vCurrentPathTarget);
-                //Console.Out.WriteLine(currentState);
-
-                /****************************************************************
-                 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                 * AI LOGIC CODE
-                 * REMINDER TO SELF: come up with a way to resolve or avoid 
-                 * collisions in paths of the AI tanks.
-                 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                 ****************************************************************/
-
-                if (currentState == AIStates.PATROL)
-                {
-                    //if we've reached CurrentPathTarget, scan for player
-                    if (WorldPosition.Equals(m_vCurrentPathTarget))
-                    {
-                        currentState = AIStates.SCAN;
-                    }
-                }
-                else if (currentState == AIStates.NEED_PATROL)
-                {
-                    //reset turret
-                    if (turretRotationValue != 0)
-                    {
-                        if (turretRotationValue + TURRET_ROTATION_SPEED * fDelta < 2 * Math.PI)
+                        if (TankEngineIdleCue.IsPlaying)
+                            TankEngineIdleCue.Stop(AudioStopOptions.Immediate);
+                        if (TankEngineMovingCue.IsPrepared)
                         {
-                            turretRotationValue += TURRET_ROTATION_SPEED * fDelta;
+                            TankEngineMovingCue.SetVariable("Distance", DistanceFromCamera);
+                            TankEngineMovingCue.Play();
                         }
-                        else
+                        if (TankTreadRollingCue.IsPrepared)
                         {
-                            //finished or almost finished a full rotation of the turret so snap it to 0 so we can perform tasks
-                            turretRotationValue = 0;
+                            TankTreadRollingCue.SetVariable("Distance", DistanceFromCamera);
+                            TankTreadRollingCue.Play();
                         }
                     }
                     else
                     {
-                        if (path.IndexOf(m_vCurrentPathTarget) == path.Count - 1)
-                        {
-                            if (WorldPosition.Equals(m_vPatrolEnd))
-                            {
-                                m_vTarget = m_vPatrolBegin;
-                                path = pathFromPatrolEndToBegin;
-                            }
-                            else if (WorldPosition.Equals(m_vPatrolBegin))
-                            {
-                                m_vTarget = m_vPatrolEnd;
-                                path = pathFromPatrolBeginToEnd;
-                            }
-                            else
-                            {
-                                m_vTarget = m_vPatrolBegin;
-                                path = navigation.GetPath(WorldPosition, m_vPatrolBegin);
-                            }
-                            m_vCurrentPathTarget = (Vector3)path[1];    //target/world position is already the starting position of the path so get the next node
-                        }
-                        else
-                        {
-                            m_vCurrentPathTarget = (Vector3)path[path.IndexOf(m_vCurrentPathTarget) + 1];
-                        }
-
-                        //set the force vector to be in the right direction
-                        UpdateForce();
-
-
-                        currentState = AIStates.PATROL;
+                        WorldPosition = Velocity * fDelta;
                     }
                 }
-                else if (currentState == AIStates.SCAN)
+            }
+
+            //Console.Out.WriteLine(WorldPosition);
+            //Console.Out.WriteLine(m_vCurrentPathTarget);
+            //Console.Out.WriteLine(currentState);
+
+            /****************************************************************
+             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             * AI LOGIC CODE
+             * REMINDER TO SELF: come up with a way to resolve or avoid 
+             * collisions in paths of the AI tanks.
+             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             ****************************************************************/
+
+            if (currentState == AIStates.PATROL)
+            {
+                //if we've reached CurrentPathTarget, scan for player
+                if (WorldPosition.Equals(m_vCurrentPathTarget))
                 {
-                    //scan for the player
+                    currentState = AIStates.SCAN;
+                }
+            }
+            else if (currentState == AIStates.NEED_PATROL)
+            {
+                //reset turret
+                if (turretRotationValue != 0)
+                {
                     if (turretRotationValue + TURRET_ROTATION_SPEED * fDelta < 2 * Math.PI)
                     {
                         turretRotationValue += TURRET_ROTATION_SPEED * fDelta;
-
-                        if (CheckPlayerSighted())
-                        {
-                            //player is visible, switch over to attack mode
-                            currentState = AIStates.ATTACK;
-                        }
                     }
                     else
                     {
-                        //finished or almost finished a full rotation of the turret so snap it to 0 and perform once last scan
+                        //finished or almost finished a full rotation of the turret so snap it to 0 so we can perform tasks
                         turretRotationValue = 0;
-
-                        if (CheckPlayerSighted())
+                    }
+                }
+                else
+                {
+                    if (path.IndexOf(m_vCurrentPathTarget) == path.Count - 1)
+                    {
+                        if (WorldPosition.Equals(m_vPatrolEnd))
                         {
-                            currentState = AIStates.ATTACK;
+                            m_vTarget = m_vPatrolBegin;
+                            path = pathFromPatrolEndToBegin;
+                        }
+                        else if (WorldPosition.Equals(m_vPatrolBegin))
+                        {
+                            m_vTarget = m_vPatrolEnd;
+                            path = pathFromPatrolBeginToEnd;
                         }
                         else
                         {
-                            if (timer.GetNumberOfTimers() > 0)
-                            {
-                                //means we should be in pursuit mode
-                                currentState = AIStates.PURSUE;
-                            }
-                            else
-                            {
-                                currentState = AIStates.NEED_PATROL;
-                            }
+                            m_vTarget = m_vPatrolBegin;
+                            path = navigation.GetPath(WorldPosition, m_vPatrolBegin);
                         }
-                    }
-                }
-                else if (currentState == AIStates.NEED_PURSUE)
-                {
-                    //reset turret
-
-                    if (turretRotationValue > fDelta * TURRET_ROTATION_SPEED)
-                    {
-                        if (turretRotationValue + TURRET_ROTATION_SPEED * fDelta < 2 * Math.PI)
-                        {
-                            turretRotationValue += TURRET_ROTATION_SPEED * fDelta;
-                        }
-                        else
-                        {
-                            //finished or almost finished a full rotation of the turret so snap it to 0 so we can perform tasks
-                            turretRotationValue = 0;
-                        }
+                        m_vCurrentPathTarget = (Vector3)path[1];    //target/world position is already the starting position of the path so get the next node
                     }
                     else
                     {
-                        turretRotationValue = 0;
-                        timer.AddTimer("Stop Pursuit", PURSUIT_DURATION, StopPursuit, false);
-
-                        m_vTarget = FindClosestNavNode(m_vPlayerLastKnownPosition);
-                        path = navigation.GetPath(m_vCurrentPathTarget, m_vTarget);
-
-                        currentState = AIStates.PURSUE;
+                        m_vCurrentPathTarget = (Vector3)path[path.IndexOf(m_vCurrentPathTarget) + 1];
                     }
+
+                    //set the force vector to be in the right direction
+                    UpdateForce();
+
+                    currentState = AIStates.PATROL;
                 }
-                else if (currentState == AIStates.PURSUE)
-                {
-                    //only scan for the player once we reach the navnode closest to its last known position
-                    if (WorldPosition.Equals(m_vTarget))
-                    {
-                        currentState = AIStates.SCAN;
-
-                        //pick a random place to look
-                        m_vTarget = (Vector3)navNodes[rg.Next(navNodes.Count)];
-                        path = navigation.GetPath(WorldPosition, m_vTarget);
-                    }
-                    else
-                    {
-                        if (WorldPosition.Equals(m_vCurrentPathTarget))
-                        {
-                            m_vCurrentPathTarget = (Vector3)path[path.IndexOf(m_vCurrentPathTarget) + 1];
-                            UpdateForce();
-                        }
-                    }
-                }
-                else if (currentState == AIStates.ATTACK)
-                {
-                    if (Math.Abs(turretTargetRotationValue) > 0)
-                    {
-                        if (canRotate)
-                        {
-                            if (turretTargetRotationValue < 0)
-                            {
-                                if (turretTargetRotationValue < 0.15)
-                                    turretRotationValue -= fDelta * TURRET_ROTATION_SPEED / 2;
-                                else
-                                    turretRotationValue -= fDelta * TURRET_ROTATION_SPEED;
-                                turretTargetRotationValue += fDelta * TURRET_ROTATION_SPEED;
-                                if (turretTargetRotationValue >= 0)
-                                    turretTargetRotationValue = 0;
-                            }
-                            else
-                            {
-                                if (turretTargetRotationValue < 0.15)
-                                    turretRotationValue += fDelta * TURRET_ROTATION_SPEED / 2;
-                                else
-                                    turretRotationValue += fDelta * TURRET_ROTATION_SPEED;
-                                turretTargetRotationValue -= fDelta * TURRET_ROTATION_SPEED;
-                                if (turretTargetRotationValue <= 0)
-                                    turretTargetRotationValue = 0;
-                            }
-                        }
-                    }
-                    else if (CheckPlayerSighted())
-                    {
-                        //do attack
-                        //Console.Out.WriteLine("Can see tank in ATTACK");
-                        if (canFire)
-                        {
-                            Vector3 pos = WorldPosition + new Vector3(0, 95, 0) + (turretTransform * cannonTransform).Translation;
-                            Projectile pro = new Projectile(pos, GetCannonFacing(), Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.AI_TANK);
-                            pro.Initialize(400.0f, 250, 190, 100.0f, 100.0f, 0.0f);
-                            Game.Components.Add(pro);
-
-                            TankCannonFireCue.SetVariable("Distance", DistanceFromCamera);
-                            TankCannonFireCue.Play();
-
-                            canFire = false;
-                            canRotate = false;
-                            timer.AddTimer("Enable Cannon", 3, AllowFire, false);
-                            timer.AddTimer("Enable Rotation", 0.6f, AllowRotate, false);
-                        }
-                        timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early
-                    }
-                    else
-                    {
-                        //lost sight, begin pursuit
-                        currentState = AIStates.NEED_PURSUE;
-                    }
-                }
-                if (canFire == false && TankCannonFireCue.IsStopped)
-                {
-                    //cannon was fired and cannon fire sound is over
-                    TankCannonReloadCue.SetVariable("Distance", DistanceFromCamera);
-                    TankCannonReloadCue.Play();
-                }
-
-                //check to see if we had collided with any AITanks previously and notify them if we're far away enough to avoid collision
-                if (collidingAITanks.Count > 0)
-                {
-                    List<AITank> tanksToRemove = new List<AITank>(10);
-                    foreach (AITank tank in collidingAITanks)
-                    {
-                        Vector3 distance = WorldPosition - tank.WorldPosition;
-                        float requiredDistanceApart = WorldBounds.Radius + tank.WorldBounds.Radius + 40;
-                        if (distance.Length() >= requiredDistanceApart)
-                        {
-                            tank.msgCollisionResolved(this);
-                            tanksToRemove.Add(tank);
-                        }
-                    }
-
-                    //remove any tanks we have resolved collision with
-                    foreach (AITank removedTank in tanksToRemove)
-                    {
-                        collidingAITanks.Remove(removedTank);
-                    }
-                }
-
-                //TODO: Add World Bound check so the player doesn't fall off the world
-
-                //when the tank reaches its target, it performs a radial check for the player
-                //if the player is within a minimum detection distance, the AI will instantly "discover" the player
-                //AI tank has a 20 degree viewing angle for checking? maybe?
             }
+            else if (currentState == AIStates.SCAN)
+            {
+                //scan for the player
+                if (turretRotationValue + TURRET_ROTATION_SPEED * fDelta < 2 * Math.PI)
+                {
+                    turretRotationValue += TURRET_ROTATION_SPEED * fDelta;
+
+                    if (CheckPlayerSighted())
+                    {
+                        //player is visible, switch over to attack mode
+                        currentState = AIStates.ATTACK;
+                    }
+                }
+                else
+                {
+                    //finished or almost finished a full rotation of the turret so snap it to 0 and perform once last scan
+                    turretRotationValue = 0;
+
+                    if (CheckPlayerSighted())
+                    {
+                        currentState = AIStates.ATTACK;
+                    }
+                    else
+                    {
+                        if (timer.GetNumberOfTimers() > 0)
+                        {
+                            //means we should be in pursuit mode
+                            currentState = AIStates.PURSUE;
+                        }
+                        else
+                        {
+                            currentState = AIStates.NEED_PATROL;
+                        }
+                    }
+                }
+            }
+            else if (currentState == AIStates.NEED_PURSUE)
+            {
+                //reset turret
+                if (turretRotationValue > fDelta * TURRET_ROTATION_SPEED)
+                {
+                    if (turretRotationValue + TURRET_ROTATION_SPEED * fDelta < 2 * Math.PI)
+                    {
+                        turretRotationValue += TURRET_ROTATION_SPEED * fDelta;
+                    }
+                    else
+                    {
+                        //finished or almost finished a full rotation of the turret so snap it to 0 so we can perform tasks
+                        turretRotationValue = 0;
+                    }
+                }
+                else
+                {
+                    turretRotationValue = 0;
+                    timer.AddTimer("Stop Pursuit", PURSUIT_DURATION, StopPursuit, false);
+
+                    m_vTarget = FindClosestNavNode(m_vPlayerLastKnownPosition);
+                    path = navigation.GetPath(m_vCurrentPathTarget, m_vTarget);
+
+                    currentState = AIStates.PURSUE;
+                }
+            }
+            else if (currentState == AIStates.PURSUE)
+            {
+                //only scan for the player once we reach the navnode closest to its last known position
+                if (WorldPosition.Equals(m_vTarget))
+                {
+                    currentState = AIStates.SCAN;
+
+                    //pick a random place to look
+                    m_vTarget = (Vector3)navNodes[rg.Next(navNodes.Count)];
+                    path = navigation.GetPath(WorldPosition, m_vTarget);
+                }
+                else
+                {
+                    if (WorldPosition.Equals(m_vCurrentPathTarget))
+                    {
+                        m_vCurrentPathTarget = (Vector3)path[path.IndexOf(m_vCurrentPathTarget) + 1];
+                        UpdateForce();
+                    }
+                }
+            }
+            else if (currentState == AIStates.ATTACK)
+            {
+                if (Math.Abs(turretTargetRotationValue) > 0)
+                {
+                    if (canRotate)
+                    {
+                        if (turretTargetRotationValue < 0)
+                        {
+                            if (turretTargetRotationValue < 0.15)
+                                turretRotationValue -= fDelta * TURRET_ROTATION_SPEED / 2;
+                            else
+                                turretRotationValue -= fDelta * TURRET_ROTATION_SPEED;
+                            turretTargetRotationValue += fDelta * TURRET_ROTATION_SPEED;
+                            if (turretTargetRotationValue >= 0)
+                                turretTargetRotationValue = 0;
+                        }
+                        else
+                        {
+                            if (turretTargetRotationValue < 0.15)
+                                turretRotationValue += fDelta * TURRET_ROTATION_SPEED / 2;
+                            else
+                                turretRotationValue += fDelta * TURRET_ROTATION_SPEED;
+                            turretTargetRotationValue -= fDelta * TURRET_ROTATION_SPEED;
+                            if (turretTargetRotationValue <= 0)
+                                turretTargetRotationValue = 0;
+                        }
+                    }
+                }
+                else if (CheckPlayerSighted())
+                {
+                    //do attack
+                    //Console.Out.WriteLine("Can see tank in ATTACK");
+                    if (canFire)
+                    {
+                        Vector3 pos = WorldPosition + new Vector3(0, 95, 0) + (turretTransform * cannonTransform).Translation;
+                        Projectile pro = new Projectile(pos, GetCannonFacing(), Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.AI_TANK);
+                        pro.Initialize(400.0f, 250, 190, 100.0f, 100.0f, 0.0f);
+                        Game.Components.Add(pro);
+                        
+                        if (TankCannonFireCue.IsStopped)
+                            TankCannonFireCue = ScreenManager.soundSoundBank.GetCue(CANNON_FIRE);
+                        TankCannonFireCue.SetVariable("Distance", DistanceFromCamera);
+                        TankCannonFireCue.Play();
+                        TankCannonReloadCue = ScreenManager.soundSoundBank.GetCue(CANNON_RELOAD);
+
+                        canFire = false;
+                        canRotate = false;
+                        timer.AddTimer("Enable Cannon", 3, AllowFire, false);
+                        timer.AddTimer("Enable Rotation", 0.75f, AllowRotate, false);
+                    }
+                    timer.RemoveTimer("Stop Pursuit");  //remove timer to prevent entering patrol mode too early
+                }
+                else
+                {
+                    //lost sight, begin pursuit
+                    currentState = AIStates.NEED_PURSUE;
+                }
+            }
+            if (canFire == false && TankCannonFireCue.IsStopped && TankCannonReloadCue.IsPrepared)
+            {
+                //cannon was fired and cannon fire sound is over
+                TankCannonReloadCue.SetVariable("Distance", DistanceFromCamera);
+                TankCannonReloadCue.Play();
+            }
+
+            //check to see if we had collided with any AITanks previously and notify them if we're far away enough to avoid collision
+            if (collidingAITanks.Count > 0)
+            {
+                List<AITank> tanksToRemove = new List<AITank>(10);
+                foreach (AITank tank in collidingAITanks)
+                {
+                    Vector3 distance = WorldPosition - tank.WorldPosition;
+                    float requiredDistanceApart = WorldBounds.Radius + tank.WorldBounds.Radius + 40;
+                    if (distance.Length() >= requiredDistanceApart)
+                    {
+                        tank.msgCollisionResolved(this);
+                        tanksToRemove.Add(tank);
+                    }
+                }
+
+                //remove any tanks we have resolved collision with
+                foreach (AITank removedTank in tanksToRemove)
+                {
+                    collidingAITanks.Remove(removedTank);
+                }
+            }
+
+            //TODO: Add World Bound check so the player doesn't fall off the world
+
+            //when the tank reaches its target, it performs a radial check for the player
+            //if the player is within a minimum detection distance, the AI will instantly "discover" the player
+            //AI tank has a 20 degree viewing angle for checking? maybe?
             //Console.Out.WriteLine(WorldBounds);
             Console.Out.WriteLine("Current state: " + currentState);
         }
@@ -553,8 +565,17 @@ namespace Battlezone.BattlezoneObjects
         //Helper functions to keep the Update method clean
         private bool CheckPlayerSighted()
         {
-            Ray sightRay = new Ray(cannonBone.Transform.Translation, GetCannonFacing());
+            return CheckPlayerSighted(null);
+        }
 
+        private bool CheckPlayerSighted(Vector3? direction)
+        {
+            Ray sightRay;
+            if (direction == null)
+                sightRay = new Ray(WorldPosition, GetCannonFacing());
+            else
+                sightRay = new Ray(WorldPosition, (Vector3)direction);
+            Console.Out.WriteLine(sightRay.Position);
             bool seePlayer = false;
             Actor player = null;
 
@@ -611,6 +632,8 @@ namespace Battlezone.BattlezoneObjects
                 Vector3 cross = Vector3.Cross(GetCannonFacing(), correctFacing);
                 if (cross.Y < 0)
                     turretTargetRotationValue *= -1;
+
+                m_vPlayerLastKnownPosition = new Vector3(m_vPlayerPosition.X, m_vPlayerPosition.Y, m_vPlayerPosition.Z);
             }
 
             return seePlayer;
