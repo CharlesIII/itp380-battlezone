@@ -355,8 +355,9 @@ namespace Battlezone.BattlezoneObjects
             if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
                 Building b = (Building)a;
-                if (WorldBounds.Intersects(b.WorldBoundsBox)){
-                    System.Console.Out.WriteLine("Collision with Building Detected")
+                if (WorldBounds.Intersects(b.WorldBoundsBox))
+                {
+                    System.Console.Out.WriteLine("Collision with Building Detected");
                     return true;
                 }
                 return false;
