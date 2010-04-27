@@ -30,7 +30,7 @@ namespace Battlezone
         {
             settings.TextureName = "fire";
 
-            settings.MaxParticles = 2000;
+            settings.MaxParticles = 5000;
 
             settings.Duration = TimeSpan.FromSeconds(2);
 
