@@ -115,6 +115,8 @@ namespace Battlezone
 
         private bool tankExaustFire = true;
 
+        public AudioManager audioManager;
+
         Cue cue;
 
         Cue soundCue;
@@ -159,6 +161,10 @@ namespace Battlezone
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
 
             gameFont = content.Load<SpriteFont>("gamefont");
+
+            audioManager = new AudioManager(ScreenManager.Game);
+
+            ScreenManager.Game.Components.Add(audioManager);
 
             //load audio
             /*
@@ -223,9 +229,8 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(tankExaustPlumeParticles);
             ScreenManager.Game.Components.Add(fireParticles);
 
-            ScreenManager.musicAudioEngine.Update();
             cue = ScreenManager.musicSoundBank.GetCue("BattlezoneGameplay");
-            cue.Play();
+            //cue.Play();
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -291,7 +296,6 @@ namespace Battlezone
                     //UpdateProjectiles(gameTime);
                     UpdateTankExaust();
                     ScreenManager.musicAudioEngine.Update();
-                    ScreenManager.soundAudioEngine.Update();
 
                     if (spdBoost >= 2.5f)
                     {
@@ -303,6 +307,12 @@ namespace Battlezone
 
                     //check for collisions
                     checkCollision();
+
+                    //update 3d sound
+                    audioManager.Listener.Position = e_Camera.DesiredPosition;
+                    audioManager.Listener.Forward = CameraMatrix.Forward;
+                    audioManager.Listener.Up = CameraMatrix.Up;
+                    audioManager.Listener.Velocity = Vector3.Zero;
                 }
             }
         }
@@ -419,15 +429,15 @@ namespace Battlezone
                             {
                                 case 1:
                                     pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.PLAYER_TANK);
-                                    ScreenManager.soundSoundBank.PlayCue("FireCannon");
-                                    ScreenManager.soundSoundBank.PlayCue("TankReload");
+                                    audioManager.Play3DCue("FireCannon",m_kPlayer);
+                                    audioManager.Play3DCue("TankShellReload",m_kPlayer);
                                     break;
                                 case 2:
                                     if (!missileFired)
                                     {
                                         pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.MISSILE, CollisionIdentifier.PLAYER_TANK);
-                                        ScreenManager.soundSoundBank.PlayCue("FireCannon");
-                                        ScreenManager.soundSoundBank.PlayCue("TankReload");
+                                        audioManager.Play3DCue("FireMissile",m_kPlayer);
+                                        audioManager.Play3DCue("TankMissileReload",m_kPlayer);
                                     }
                                     break;
                                 default:
@@ -497,14 +507,14 @@ namespace Battlezone
 
             if (tankExaust)
             {
-                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle));
+                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle - (Math.PI / 3)), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle - (Math.PI / 3)));
                 temp = m_kPlayer.WorldPosition + temp;
                 tankExaustPlumeParticles.AddParticle(temp, Vector3.Zero);
                 tankExaust = false;
             }
             else
             {
-                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle - (Math.PI / 3)), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle - (Math.PI / 3)));
+                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle - 2*(Math.PI / 3)), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle - 2*(Math.PI / 3)));
                 temp = m_kPlayer.WorldPosition + temp;
 
                 tankExaustPlumeParticles.AddParticle(temp, Vector3.Zero);
@@ -519,7 +529,7 @@ namespace Battlezone
 
             if (tankExaustFire)
             {
-                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle));
+                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle - (Math.PI / 3)), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle - (Math.PI / 3)));
                 temp = m_kPlayer.WorldPosition + temp;
                 for (int i = 0; i < fireParticlesPerFrame; i++)
                 {
@@ -529,7 +539,7 @@ namespace Battlezone
             }
             else
             {
-                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle - (Math.PI / 3)), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle - (Math.PI / 3)));
+                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle - 2*(Math.PI / 3)), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle - 2*(Math.PI / 3)));
                 temp = m_kPlayer.WorldPosition + temp;
                 for (int i = 0; i < fireParticlesPerFrame; i++)
                 {

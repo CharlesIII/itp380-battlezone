@@ -29,7 +29,7 @@ namespace Battlezone.BattlezoneObjects
         const float PURSUIT_DURATION = 30.0f;
 
         const string CANNON_FIRE = "FireCannon";
-        const string CANNON_RELOAD = "TankReload";
+        const string CANNON_RELOAD = "TankShellReload";
         const string TANK_IDLE = "TankIdle";
         const string TANK_ENGINE_MOVE = "TankEngineMoving";
         const string TANK_TREAD_MOVE = "TankTreadRolling";
@@ -138,11 +138,11 @@ namespace Battlezone.BattlezoneObjects
 
             collidingAITanks = new List<AITank>(10);
 
-            TankEngineIdleCue = ScreenManager.soundSoundBank.GetCue(TANK_IDLE);
-            TankTreadRollingCue = ScreenManager.soundSoundBank.GetCue(TANK_TREAD_MOVE);
-            TankEngineMovingCue = ScreenManager.soundSoundBank.GetCue(TANK_ENGINE_MOVE);
-            TankCannonFireCue = ScreenManager.soundSoundBank.GetCue(CANNON_FIRE);
-            TankCannonReloadCue = ScreenManager.soundSoundBank.GetCue(CANNON_RELOAD);
+            TankEngineIdleCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_IDLE,this);
+            TankTreadRollingCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_TREAD_MOVE,this);
+            TankEngineMovingCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_ENGINE_MOVE,this);
+            TankCannonFireCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_FIRE,this);
+            TankCannonReloadCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_RELOAD,this);
 
             DistanceFromCamera = (GameplayScreen.CameraMatrix.Translation - WorldPosition).Length();
 
@@ -268,10 +268,9 @@ namespace Battlezone.BattlezoneObjects
                     Velocity = new Vector3(0.0f);
                     WorldPosition = m_vCurrentPathTarget;
                     if (TankEngineIdleCue.IsStopped)
-                        TankEngineIdleCue = ScreenManager.soundSoundBank.GetCue(TANK_IDLE);
+                        TankEngineIdleCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_IDLE,this);
                     if (TankEngineIdleCue.IsPrepared)
                     {
-                        TankEngineIdleCue.SetVariable("Distance", DistanceFromCamera);
                         TankEngineIdleCue.Play();
                     }
                     if (TankEngineMovingCue.IsPlaying)
@@ -296,9 +295,9 @@ namespace Battlezone.BattlezoneObjects
                             Velocity *= fTerminalVelocity;
                         }
                         if (TankEngineMovingCue.IsStopped)
-                            TankEngineMovingCue = ScreenManager.soundSoundBank.GetCue(TANK_ENGINE_MOVE);
+                            TankEngineMovingCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_ENGINE_MOVE,this);
                         if (TankTreadRollingCue.IsStopped)
-                            TankTreadRollingCue = ScreenManager.soundSoundBank.GetCue(TANK_TREAD_MOVE);
+                            TankTreadRollingCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_TREAD_MOVE,this);
 
                         if (TankEngineIdleCue.IsPlaying)
                             TankEngineIdleCue.Stop(AudioStopOptions.Immediate);
@@ -509,10 +508,9 @@ namespace Battlezone.BattlezoneObjects
                         Game.Components.Add(pro);
                         
                         if (TankCannonFireCue.IsStopped)
-                            TankCannonFireCue = ScreenManager.soundSoundBank.GetCue(CANNON_FIRE);
-                        TankCannonFireCue.SetVariable("Distance", DistanceFromCamera);
+                            TankCannonFireCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_FIRE,this);
                         TankCannonFireCue.Play();
-                        TankCannonReloadCue = ScreenManager.soundSoundBank.GetCue(CANNON_RELOAD);
+                        TankCannonReloadCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_RELOAD,this);
 
                         canFire = false;
                         canRotate = false;

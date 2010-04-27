@@ -63,6 +63,7 @@ namespace Battlezone
         String text;
         String name;
         float scale;
+        Cue c;
 
         Utils.Timer m_kTimer = new Utils.Timer();
 
@@ -334,7 +335,6 @@ namespace Battlezone
                     pro.Initialize(100, 90, 50, 250, 250, 0);
                     projectiles.Add(pro);
                     ScreenManager.soundSoundBank.PlayCue("MenuExplosion");
-                    //letter = false;
 
                 }
               
@@ -459,7 +459,7 @@ namespace Battlezone
                 text = "Z";
                 name = "BATTLE";
                 //letterPosition = new Vector2(X, Y);
-                startPosition.X = startPosition.X + deltaTime * 850;
+                startPosition.X = startPosition.X + deltaTime * 900;
 
                 sprite.Begin();
                 sprite.DrawString(font, text, startPosition, color, 0,
@@ -482,7 +482,7 @@ namespace Battlezone
                 text = "O";
                 name = "BATTLEZ";
                 //letterPosition = new Vector2(X, Y);
-                startPosition.X = startPosition.X + deltaTime * 900;
+                startPosition.X = startPosition.X + deltaTime * 1000;
 
                 sprite.Begin();
                 sprite.DrawString(font, text, startPosition, color, 0,
@@ -505,7 +505,7 @@ namespace Battlezone
                 text = "N";
                 name = "BATTLEZO";
                 //letterPosition = new Vector2(X, Y);
-                startPosition.X = startPosition.X + deltaTime * 950;
+                startPosition.X = startPosition.X + deltaTime * 1100;
 
                 sprite.Begin();
                 sprite.DrawString(font, text, startPosition, color, 0,
@@ -528,7 +528,7 @@ namespace Battlezone
             {
                 text = "E";
                 name = "BATTLEZON";
-                startPosition.X = startPosition.X + deltaTime * 1100;
+                startPosition.X = startPosition.X + deltaTime * 1200;
                 //letterPosition = new Vector2(X, Y);
                 sprite.Begin();
                 sprite.DrawString(font, text, startPosition, color, 0,

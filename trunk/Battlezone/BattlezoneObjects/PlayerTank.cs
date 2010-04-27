@@ -154,7 +154,6 @@ namespace Battlezone.BattlezoneObjects
         {
             sMeshToLoad = "playerTank";
             startingPos = spawnPos;
-            ScreenManager.soundAudioEngine.Update();
         }
 
         /// <summary>
@@ -299,10 +298,9 @@ namespace Battlezone.BattlezoneObjects
             //WorldBounds.Center = WorldPosition + new Vector3(0,0, turretTransform.Translation.Z);
             //Console.Out.WriteLine(WorldBounds.Center);
             //WorldBounds.Radius = ModelBounds.Radius * Scale;
-            ScreenManager.soundAudioEngine.Update();
             if (gamePlay && soundCue == null)
             {
-                soundCue = ScreenManager.soundSoundBank.GetCue("TankIdle");
+                soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankIdle");
                 soundCue.Play();
             }
             if (gamePlay && soundCue != null)
@@ -313,13 +311,13 @@ namespace Battlezone.BattlezoneObjects
                     if (soundCue.IsStopped && name == "TankSlowDown")
                     {
                         soundCue.Stop(AudioStopOptions.Immediate);
-                        soundCue = ScreenManager.soundSoundBank.GetCue("TankIdle");
+                        soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankIdle");
                         soundCue.Play();
                     }
-                    if (soundCue.IsStopped || name == "TankEngineMoving" || name == "TankSpeedUp")
+                    else if (soundCue.IsStopped || name == "TankEngineMoving" || name == "TankSpeedUp")
                     {
                         soundCue.Stop(AudioStopOptions.Immediate);
-                        soundCue = ScreenManager.soundSoundBank.GetCue("TankSlowDown");
+                        soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankSlowDown");
                         soundCue.Play();
                     }
                 }
@@ -331,13 +329,14 @@ namespace Battlezone.BattlezoneObjects
                         if (name == "TankIdle" || name == "TankSlowDown")
                         {
                             soundCue.Stop(AudioStopOptions.Immediate);
-                            soundCue = ScreenManager.soundSoundBank.GetCue("TankSpeedUp");
+
+                            soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankSpeedUp");
                             soundCue.Play();
 
                         }
                         else
                         {
-                            soundCue = ScreenManager.soundSoundBank.GetCue("TankEngineMoving");
+                            soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankEngineMoving");
                             soundCue.Play();
                         }
                     }

@@ -28,7 +28,7 @@ namespace Battlezone
     /// since we don't know how to construct a single model from multiple meshes.
     /// Drawing code has been updated to account for the change.
     /// </summary>
-    public class Actor : Microsoft.Xna.Framework.DrawableGameComponent
+    public class Actor : Microsoft.Xna.Framework.DrawableGameComponent, IAudioEmitter
     {
         protected Model ActorModel;
         protected ContentManager meshLoader;
@@ -99,7 +99,27 @@ namespace Battlezone
                 m_bChanged = true;
             }
         }
-
+        public Vector3 Position
+        {
+            get
+            {
+                return m_vWorldPosition;
+            }
+        }
+        public Vector3 Forward
+        {
+            get
+            {
+                return GetWorldFacing();
+            }
+        }
+        public Vector3 Up
+        {
+            get
+            {
+                return worldTransform.Up;
+            }
+        }
         private Vector3 m_vVelocity;
         public Vector3 Velocity
         {
