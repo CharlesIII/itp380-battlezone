@@ -348,8 +348,10 @@ namespace Battlezone.BattlezoneObjects
             if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
                 Building b = (Building)a;
-                if (b.WorldBoundsBox.Intersects(WorldBounds))
+                if (WorldBounds.Intersects(b.WorldBoundsBox)){
+                    System.Console.Out.WriteLine("Collision with Building Detected")
                     return true;
+                }
                 return false;
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
@@ -376,10 +378,10 @@ namespace Battlezone.BattlezoneObjects
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
                 Building b = (Building)a;
-                Vector3 tank2building = b.WorldPosition - WorldPosition;
-
-                Velocity += tank2building * -1.0f;
-                //System.Console.Out.WriteLine(b.WorldBoundsBox);
+                Vector3 building2tank = WorldPosition - b.WorldPosition;
+                building2tank.Normalize();
+                Velocity += building2tank;
+                System.Console.Out.WriteLine("TEST");
                 //Console.Out.WriteLine(b.WorldPosition);
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.SHELL)
