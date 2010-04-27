@@ -236,25 +236,28 @@ namespace Battlezone.BattlezoneObjects
             }
 
             //make sure we're facing the right direction before we start moving
-            if (RotAngle < targetTankRotationValue)
+            if (targetTankRotationValue > 0)
             {
                 //we need to rotate CCW
                 RotAngle += TANK_ROTATION_SPEED * fDelta;
-
+                targetTankRotationValue -= TANK_ROTATION_SPEED * fDelta;
                 //clamp RotAngle to target if close enough
-                if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.10f)
-                    RotAngle = targetTankRotationValue;
+                if (Math.Abs(targetTankRotationValue) <= 0.10f)
+                    targetTankRotationValue = 0;
                 Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
+                Console.Out.WriteLine(GetWorldFacing());
             }
-            else if (RotAngle > targetTankRotationValue)
+            else if (targetTankRotationValue < 0)
             {
                 //we need to rotate CW
                 RotAngle -= TANK_ROTATION_SPEED * fDelta;
+                targetTankRotationValue += TANK_ROTATION_SPEED * fDelta;
 
                 //clamp RotAngle to target if close enough
-                if (Math.Abs(targetTankRotationValue - RotAngle) <= 0.10f)
-                    RotAngle = targetTankRotationValue;
+                if (Math.Abs(targetTankRotationValue) <= 0.10f)
+                    targetTankRotationValue = 0;
                 Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
+                Console.Out.WriteLine(GetWorldFacing());
             }
             else
             {
@@ -394,7 +397,7 @@ namespace Battlezone.BattlezoneObjects
                     if (CheckPlayerSighted())
                     {
                         //player is visible, switch over to attack mode
-                        currentState = AIStates.ATTACK;
+                        //currentState = AIStates.ATTACK;
                     }
                 }
                 else
@@ -404,7 +407,7 @@ namespace Battlezone.BattlezoneObjects
 
                     if (CheckPlayerSighted())
                     {
-                        currentState = AIStates.ATTACK;
+                        //currentState = AIStates.ATTACK;
                     }
                     else
                     {
@@ -559,7 +562,7 @@ namespace Battlezone.BattlezoneObjects
             //if the player is within a minimum detection distance, the AI will instantly "discover" the player
             //AI tank has a 20 degree viewing angle for checking? maybe?
             //Console.Out.WriteLine(WorldBounds);
-            Console.Out.WriteLine("Current state: " + currentState);
+            //Console.Out.WriteLine("Current state: " + currentState);
         }
 
         //Helper functions to keep the Update method clean
@@ -575,7 +578,7 @@ namespace Battlezone.BattlezoneObjects
                 sightRay = new Ray(WorldPosition, GetCannonFacing());
             else
                 sightRay = new Ray(WorldPosition, (Vector3)direction);
-            Console.Out.WriteLine(sightRay.Position);
+
             bool seePlayer = false;
             Actor player = null;
 
@@ -679,6 +682,7 @@ namespace Battlezone.BattlezoneObjects
         {
             Vector3 result = worldTransform.Forward;
             result.X *= -1; //I don't even know
+            result.Z *= -1;
             return result;
         }
 
@@ -695,21 +699,20 @@ namespace Battlezone.BattlezoneObjects
         /// </summary>
         private void UpdateForce()
         {
-            Force = (m_vCurrentPathTarget - WorldPosition);
-            Vector3 tempForce = Force;
+            Vector3 tempForce = (m_vCurrentPathTarget - WorldPosition);
             Vector3 Facing = GetWorldFacing();
-
+            
             tempForce.Normalize();
             Facing.Normalize();
 
             float deltaRotationValue = (float)Math.Acos((Double)Vector3.Dot(tempForce, Facing));
 
             //figure out how much we need to rotate by and whether the rotation should CW or CCW
-            if (Vector3.Cross(Force, Facing).Y > 0.0f)
-                targetTankRotationValue = RotAngle + deltaRotationValue;
+            if (Vector3.Cross(Facing, tempForce).Y > 0.0f)
+                targetTankRotationValue = deltaRotationValue;
             else
-                targetTankRotationValue = RotAngle - deltaRotationValue;
-
+                targetTankRotationValue = - deltaRotationValue;
+            
             //set the magnitude of the Force vector
             Force = tempForce * fTerminalVelocity;
         }
@@ -764,7 +767,7 @@ namespace Battlezone.BattlezoneObjects
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
-                Console.Out.WriteLine("Colliding with a building, resolution undefined.");
+                //Console.Out.WriteLine("Colliding with a building, resolution undefined.");
                 currentState = AIStates.STOP;
             }
         }
