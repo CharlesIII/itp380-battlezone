@@ -370,9 +370,9 @@ namespace Battlezone
 
                     if (input.Move)
                     {
-                        m_kPlayer.LWheelRotation += (2.0f * deltaTime * spdBoost);
-                        m_kPlayer.RWheelRotation += (2.0f * deltaTime * spdBoost);
-                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * -275.0f * spdBoost;
+                        m_kPlayer.LWheelRotation += (4.0f * deltaTime * spdBoost);
+                        m_kPlayer.RWheelRotation += (4.0f * deltaTime * spdBoost);
+                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * -550.0f * spdBoost;
                         UpdateTankExaust();
                     }
 
@@ -389,9 +389,9 @@ namespace Battlezone
 
                     if (input.Reverse)
                     {
-                        m_kPlayer.LWheelRotation -= (2.0f * deltaTime * spdBoost);
-                        m_kPlayer.RWheelRotation -= (2.0f * deltaTime * spdBoost);
-                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * 275.0f * spdBoost;
+                        m_kPlayer.LWheelRotation -= (4.0f * deltaTime * spdBoost);
+                        m_kPlayer.RWheelRotation -= (4.0f * deltaTime * spdBoost);
+                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * 550.0f * spdBoost;
                         UpdateTankExaust();
                     }
                     if (!input.TurnLeft && !input.TurnRight)
