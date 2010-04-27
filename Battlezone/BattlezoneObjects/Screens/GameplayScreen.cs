@@ -188,7 +188,7 @@ namespace Battlezone
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
 
-            AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3(), new Vector3(-406.0f, 0.0f, -410.0f));
+            AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3());
             ScreenManager.Game.Components.Add(test);
             Enemies.Add(test);
 
