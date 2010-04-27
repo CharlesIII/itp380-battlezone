@@ -394,9 +394,9 @@ namespace Battlezone
                         m_kPlayer.LWheelRotation -= (4.0f * deltaTime * spdBoost);
                         m_kPlayer.RWheelRotation -= (4.0f * deltaTime * spdBoost);
 
-                        m_kPlayer.Force = m_kPlayer.GetWorldFacing() * 500.0f;
+                        //m_kPlayer.Force = m_kPlayer.GetWorldFacing() * 500.0f;
                         
-                        //m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * 550.0f * spdBoost;
+                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * 550.0f * spdBoost;
                         UpdateTankExaust();
                     }
                     if (!input.TurnLeft && !input.TurnRight)
