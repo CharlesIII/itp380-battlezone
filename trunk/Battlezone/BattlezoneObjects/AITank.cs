@@ -222,8 +222,6 @@ namespace Battlezone.BattlezoneObjects
             if (currentState == AIStates.STOP || currentState == AIStates.DEAD)
                 return;
 
-            m_vPlayerPosition = GameplayScreen.Instance.getPlayer().WorldPosition;
-
             if ((WorldPosition - m_vPlayerPosition).Length() < AUTOMATIC_DETECTION_RADIUS)
             {
                 //player has been automatically detected so set PlayerLastKnownPosition

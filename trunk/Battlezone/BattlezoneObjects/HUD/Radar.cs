@@ -28,7 +28,7 @@ namespace Battlezone.BattlezoneObjects.HUD
         private Vector2 RadarImageCenter;
 
         // Distance that the radar can "see"
-        private const float RadarRange = 2500.0f;
+        private const float RadarRange = 4000.0f;
         private const float RadarRangeSquared = RadarRange * RadarRange;
 
         // Radius of radar circle on the screen
@@ -80,9 +80,7 @@ namespace Battlezone.BattlezoneObjects.HUD
 
             Vector2 plyr = new Vector2(playerFwd.X, playerFwd.Z);
 
-            float playerForwardRadians = (float)Math.Atan2(1.0f, 0.0f) - (float)Math.Atan2(plyr.Y, plyr.X);//(float)Math.Acos(Vector2.Dot(plyr, new Vector2(0.0f, 1.0f)) / plyr.Length());
-
-            System.Console.Out.WriteLine(playerForwardRadians);
+            float playerForwardRadians = (float)Math.PI/2.0f + (float)Math.Atan2(1.0f, 0.0f) - (float)Math.Atan2(plyr.Y, plyr.X);//(float)Math.Acos(Vector2.Dot(plyr, new Vector2(0.0f, 1.0f)) / plyr.Length());
 
             // If enemy is in range
             foreach (AITank thisEnemy in GameplayScreen.Instance.Enemies)
