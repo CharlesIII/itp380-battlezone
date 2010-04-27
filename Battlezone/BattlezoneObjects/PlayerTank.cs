@@ -375,8 +375,10 @@ namespace Battlezone.BattlezoneObjects
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
-                Velocity = new Vector3();
                 Building b = (Building)a;
+                Vector3 tank2building = b.WorldPosition - WorldPosition;
+
+                Velocity += tank2building * -1.0f;
                 //System.Console.Out.WriteLine(b.WorldBoundsBox);
                 //Console.Out.WriteLine(b.WorldPosition);
             }

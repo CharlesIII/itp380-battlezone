@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Battlezone.Engine;
+using Battlezone.BattlezoneObjects;
 
 namespace Utils
 {
@@ -93,7 +95,11 @@ namespace Utils
             m_kSpriteBatch.DrawString(m_kFont, "FPS: " + frameRate.ToString("f3"), m_vPosition, DrawColor);
             m_kSpriteBatch.DrawString(m_kFont, "Max FPS: " + m_fHighestFrameRate.ToString("f3"), new Vector2(m_vPosition.X, m_vPosition.Y + 20), DrawColor);
             m_kSpriteBatch.DrawString(m_kFont, "Min FPS: " + m_fLowestFrameRate.ToString("f3"), new Vector2(m_vPosition.X, m_vPosition.Y + 40), DrawColor);
-            m_kSpriteBatch.End();
+            if (Battlezone.GameplayScreen.Instance.IsActive && Battlezone.GameplayScreen.Instance.getPlayer() != null)
+            {
+                m_kSpriteBatch.DrawString(m_kFont, "X: " + Battlezone.GameplayScreen.Instance.getPlayer().WorldPosition.X + " Y: " + Battlezone.GameplayScreen.Instance.getPlayer().WorldPosition.Y + " Z: " + Battlezone.GameplayScreen.Instance.getPlayer().WorldPosition.Z, new Vector2(m_vPosition.X - 60, m_vPosition.Y + 60), Color.Black);
+            }
+                m_kSpriteBatch.End();
 
         }
 

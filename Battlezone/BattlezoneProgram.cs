@@ -26,7 +26,7 @@ namespace Battlezone
             
             using (BattlezoneGame game = new BattlezoneGame())
             {
-                game.Run();
+                 game.Run();
             }
             
             //A* test code
