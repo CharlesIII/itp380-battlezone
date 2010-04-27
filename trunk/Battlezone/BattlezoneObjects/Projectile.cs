@@ -408,12 +408,12 @@ namespace Battlezone
                 {
                     if (intersection <= distanceCovered)
                     {
-                        System.Console.Out.WriteLine("It's a Hit!");
+                        //System.Console.Out.WriteLine("It's a Hit!");
                         collision = true;
                     }
                     else
                     {
-                        System.Console.Out.WriteLine("Apparently not a Hit...");
+                        //System.Console.Out.WriteLine("Apparently not a Hit...");
                     }
                 }
                 return collision;
