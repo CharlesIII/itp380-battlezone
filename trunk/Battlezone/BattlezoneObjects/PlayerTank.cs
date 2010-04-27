@@ -355,7 +355,7 @@ namespace Battlezone.BattlezoneObjects
             if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
                 Building b = (Building)a;
-                if (WorldBounds.Intersects(b.WorldBoundsBox))
+                if (buildingIntersect(b))
                 {
                     System.Console.Out.WriteLine("Collision with Building Detected");
                     return true;
@@ -402,6 +402,31 @@ namespace Battlezone.BattlezoneObjects
                 }
                 
             }
+        }
+
+        /// <summary>
+        /// Checks if the player is intersecting with a building.
+        /// </summary>
+        /// <param name="b">Building object to check intersection against.</param>
+        /// <returns></returns>
+        public bool buildingIntersect(Building b)
+        {
+            float minX = Math.Min(b.WorldBoundsBox.Min.X, b.WorldBoundsBox.Max.X);
+            float minZ = Math.Min(b.WorldBoundsBox.Min.Z, b.WorldBoundsBox.Max.Z);
+            float maxX = Math.Max(b.WorldBoundsBox.Min.X, b.WorldBoundsBox.Max.X);
+            float maxZ = Math.Max(b.WorldBoundsBox.Min.Z, b.WorldBoundsBox.Max.Z);
+            
+
+            if (WorldPosition.X >= (minX - WorldBounds.Radius) && WorldPosition.X <= (maxX + WorldBounds.Radius))
+            {
+                if (WorldPosition.Z >= (minZ - WorldBounds.Radius) && WorldPosition.Z <= (maxZ + WorldBounds.Radius))
+                {
+                    //Console.Out.WriteLine(b.WorldBoundsBox);
+                    //Console.Out.WriteLine(WorldPosition);
+                    return true;
+                }
+            }
+            return false;
         }
 
     }
