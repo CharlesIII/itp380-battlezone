@@ -38,7 +38,7 @@ namespace Battlezone.BattlezoneObjects
 
             base.Initialize();
             Scale = 1.0f;
-            /*
+            
             Building building1 = new Building(Game, "building1");
             Game.Components.Add(building1);
 
@@ -203,7 +203,7 @@ namespace Battlezone.BattlezoneObjects
 
             Building building55 = new Building(Game, "building55");
             Game.Components.Add(building55);
-             */
+             
         }
 
         protected override void LoadContent()

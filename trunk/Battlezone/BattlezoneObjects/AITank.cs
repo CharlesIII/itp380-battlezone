@@ -63,6 +63,7 @@ namespace Battlezone.BattlezoneObjects
         Vector3 m_vPatrolBegin;
         Vector3 m_vPatrolEnd;
         Vector3 m_vCurrentPathTarget;
+        Vector3 m_vSpawnPosition;
 
         enum AIStates {NEED_PURSUE, PURSUE, PATROL, NEED_PATROL, SCAN, ATTACK, DEAD, STOP};
         AIStates currentState;
@@ -88,13 +89,14 @@ namespace Battlezone.BattlezoneObjects
         /// <param name="game">A reference to the game.</param>
         /// <param name="pf">A* Path Finding implementation.</param>
         /// <param name="playerPos">A reference to the player's position.</param>
-        public AITank(Game game, PathFinder pf, Vector3 playerPos)
+        public AITank(Game game, PathFinder pf, Vector3 playerPos, Vector3 spawnPos)
             : base(game)
         {
             // TODO: Construct any child components here
             sMeshToLoad = "enemyTank";
             navigation = pf;
             m_vPlayerPosition = playerPos;  //AI always knows where the player is
+            m_vSpawnPosition = spawnPos;
         }
 
         /// <summary>
@@ -106,6 +108,8 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your initialization code here
 
             base.Initialize();
+
+            WorldPosition = m_vSpawnPosition;
 
             fMass = 10;
             bPhysicsDriven = true;
@@ -217,6 +221,8 @@ namespace Battlezone.BattlezoneObjects
             
             if (currentState == AIStates.STOP || currentState == AIStates.DEAD)
                 return;
+
+            m_vPlayerPosition = GameplayScreen.Instance.getPlayer().WorldPosition;
 
             if ((WorldPosition - m_vPlayerPosition).Length() < AUTOMATIC_DETECTION_RADIUS)
             {

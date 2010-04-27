@@ -176,7 +176,7 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(e_Camera);
 
             //Load Player Tank
-            m_kPlayer = new PlayerTank(ScreenManager.Game, new Vector3(0.0f, 0.0f, -500.0f));
+            m_kPlayer = new PlayerTank(ScreenManager.Game, new Vector3(1330.0f, 0.0f, -1600.0f));
             ScreenManager.Game.Components.Add(m_kPlayer);
             /* Debug usage for AI Tank testing*/
             //m_kPlayer.Initialize();
@@ -188,12 +188,9 @@ namespace Battlezone
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
 
-            AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3());
+            AITank test = new AITank(ScreenManager.Game, navPathFind, getPlayer().WorldPosition, new Vector3(-406.0f, 0.0f, -410.0f));
             ScreenManager.Game.Components.Add(test);
             Enemies.Add(test);
-
-            Building b = new Building(ScreenManager.Game, "building1");
-            ScreenManager.Game.Components.Add(b);
 
             //Load & Initialize HUD
             m_kHealthBar = new BattlezoneObjects.HUD.HealthBar(ScreenManager.Game);
