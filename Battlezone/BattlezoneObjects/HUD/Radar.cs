@@ -80,7 +80,7 @@ namespace Battlezone.BattlezoneObjects.HUD
 
             Vector2 plyr = new Vector2(playerFwd.X, playerFwd.Z);
 
-            float playerForwardRadians = (float)Math.PI/2.0f + (float)Math.Atan2(1.0f, 0.0f) - (float)Math.Atan2(plyr.Y, plyr.X);//(float)Math.Acos(Vector2.Dot(plyr, new Vector2(0.0f, 1.0f)) / plyr.Length());
+            float playerForwardRadians = (float)Math.Atan2(plyr.Y, plyr.X) - (float)Math.Atan2(1.0f, 0.0f);//(float)Math.Acos(Vector2.Dot(plyr, new Vector2(0.0f, 1.0f)) / plyr.Length());
 
             // If enemy is in range
             foreach (AITank thisEnemy in GameplayScreen.Instance.Enemies)
