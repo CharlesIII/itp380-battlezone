@@ -168,7 +168,7 @@ namespace Battlezone
             m_vWorldPosition = new Vector3(0.0f, 0.0f, 0.0f);
             m_Quat = Quaternion.Identity;
             m_vVelocity = new Vector3(0.0f, 0.0f, 0.0f);
-            m_fRotAngle = -(float)Math.PI/3;
+            m_fRotAngle = 0;
             bPhysicsDriven = false;
             fMass = 1;
             fTerminalVelocity = 1;
