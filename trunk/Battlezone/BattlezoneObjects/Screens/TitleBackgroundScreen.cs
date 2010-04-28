@@ -670,7 +670,7 @@ namespace Battlezone
         void UpdateFireExaust()
         {
             // This is trivial: we just create one new smoke particle per frame.
-            const int fireParticlesPerFrame = 40;
+            const int fireParticlesPerFrame = 20;
 
             firePosition.X = -startPosition.X;
             firePosition.Y = startPosition.Y;
@@ -679,7 +679,7 @@ namespace Battlezone
 
             for (int i = 0; i < fireParticlesPerFrame; i++)
             {
-                fireParticles.AddParticle(new Vector3(-firePosition.X + random.Next(-350, 550), firePosition.Y + 150, -50), Vector3.Zero);
+                fireParticles.AddParticle(new Vector3(-firePosition.X + random.Next(-330, 570), firePosition.Y + 80, -50), Vector3.Zero);
             }
         }
 
