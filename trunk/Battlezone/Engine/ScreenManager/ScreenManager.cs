@@ -125,7 +125,7 @@ namespace Battlezone
             font = content.Load<SpriteFont>("Xirod");
             gameTitleFont = content.Load<SpriteFont>("ethno");
             blankTexture = content.Load<Texture2D>("blank");
-
+            
             musicAudioEngine = new AudioEngine("Content/BattlezoneMusic.xgs");
             musicWaveBank = new WaveBank(ScreenManager.musicAudioEngine, "Content/BattlezoneMusicWaveBank.xwb", 0, 4);
             musicSoundBank = new SoundBank(ScreenManager.musicAudioEngine, "Content/BattlezoneMusicSoundBank.xsb");
@@ -133,7 +133,7 @@ namespace Battlezone
             soundAudioEngine = new AudioEngine("Content/BattlezoneSound.xgs");
             soundWaveBank = new WaveBank(soundAudioEngine, "Content/BattlezoneSoundWaveBank.xwb");
             soundSoundBank = new SoundBank(soundAudioEngine, "Content/BattlezoneSoundSoundBank.xsb");
-
+            
 
             // Tell each of the screens to load their content.
             foreach (GameScreen screen in screens)

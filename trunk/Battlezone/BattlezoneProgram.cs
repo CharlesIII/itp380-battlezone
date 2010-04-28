@@ -28,9 +28,9 @@ namespace Battlezone
             {
                  game.Run();
             }
-            
-            //A* test code
             /*
+            //A* test code
+            
             PathFinder pf = new PathFinder(@"..\..\..\BattlezoneObjects\Navigation Nodes.txt");
             ArrayList nodes = pf.GetNavigationNodes();
             ArrayList path = pf.GetPath((Vector3)nodes[0], (Vector3)nodes[2]);

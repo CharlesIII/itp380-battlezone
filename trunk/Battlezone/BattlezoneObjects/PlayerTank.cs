@@ -167,7 +167,6 @@ namespace Battlezone.BattlezoneObjects
             base.Initialize();
             Scale = 0.30f;
             WorldPosition = startingPos;
-            RotAngle = (float)-Math.PI / 3;
          
             COLLISION_IDENTIFIER = CollisionIdentifier.PLAYER_TANK;
 
