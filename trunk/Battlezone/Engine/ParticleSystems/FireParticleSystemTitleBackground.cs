@@ -30,7 +30,7 @@ namespace Battlezone
         {
             settings.TextureName = "fire";
 
-            settings.MaxParticles = 10000;
+            settings.MaxParticles = 5000;
 
             settings.Duration = TimeSpan.FromSeconds(2);
 
@@ -48,11 +48,11 @@ namespace Battlezone
             settings.MinColor = new Color(255, 255, 255, 10);
             settings.MaxColor = new Color(255, 255, 255, 40);
 
-            settings.MinStartSize = 5;
+            settings.MinStartSize = 10;
             settings.MaxStartSize = 50;
 
-            settings.MinEndSize = 10;
-            settings.MaxEndSize = 200;
+            settings.MinEndSize = 50;
+            settings.MaxEndSize = 100;
 
             // Use additive blending.
             settings.SourceBlend = Blend.SourceAlpha;
