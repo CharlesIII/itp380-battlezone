@@ -516,7 +516,6 @@ namespace Battlezone
             {
                 Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle - 2*(Math.PI / 3)), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle - 2*(Math.PI / 3)));
                 temp = m_kPlayer.WorldPosition + temp;
-
                 tankExaustPlumeParticles.AddParticle(temp, Vector3.Zero);
                 tankExaust = true;
             }
