@@ -247,20 +247,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackgroundSound.xap">
-      <Name>BackgroundSound</Name>
-      <Importer>XactImporter</Importer>
-      <Processor>XactProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BattlezoneSound.xap">
-      <Name>BattlezoneSound</Name>
-      <Importer>XactImporter</Importer>
-      <Processor>XactProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="radarBG.png">
       <Name>radarBG</Name>
       <Importer>TextureImporter</Importer>
@@ -564,6 +550,30 @@
     </Compile>
     <Compile Include="building55.fbx">
       <Name>building55</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="wall1.fbx">
+      <Name>wall1</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="wall2.fbx">
+      <Name>wall2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="wall3.fbx">
+      <Name>wall3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="wall4.fbx">
+      <Name>wall4</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
