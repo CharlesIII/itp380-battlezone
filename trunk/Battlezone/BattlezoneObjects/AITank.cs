@@ -130,7 +130,7 @@ namespace Battlezone.BattlezoneObjects
             
             currentState = AIStates.PATROL;
 
-            Scale = 59.0f;
+            Scale = 50.0f;
 
             canFire = true;
             canRotate = true;
@@ -141,8 +141,8 @@ namespace Battlezone.BattlezoneObjects
             TankEngineIdleCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_IDLE,this);
             TankTreadRollingCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_TREAD_MOVE,this);
             TankEngineMovingCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_ENGINE_MOVE,this);
-            TankCannonFireCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_FIRE,this);
-            TankCannonReloadCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_RELOAD,this);
+            //TankCannonFireCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_FIRE,this);
+            //TankCannonReloadCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_RELOAD,this);
 
             DistanceFromCamera = (GameplayScreen.CameraMatrix.Translation - WorldPosition).Length();
 
@@ -245,7 +245,6 @@ namespace Battlezone.BattlezoneObjects
                 if (Math.Abs(targetTankRotationValue) <= 0.10f)
                     targetTankRotationValue = 0;
                 Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
-                Console.Out.WriteLine(GetWorldFacing());
             }
             else if (targetTankRotationValue < 0)
             {
@@ -257,12 +256,11 @@ namespace Battlezone.BattlezoneObjects
                 if (Math.Abs(targetTankRotationValue) <= 0.10f)
                     targetTankRotationValue = 0;
                 Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
-                Console.Out.WriteLine(GetWorldFacing());
             }
             else
             {
-                //we're facing the right direction do movement logic
-                if ((m_vCurrentPathTarget - WorldPosition).Length() < 5.0f)
+                //we're facing the right direction so do movement logic
+                if ((m_vCurrentPathTarget - WorldPosition).Length() < 10.0f)
                 {
                     //we're close enough so stop moving and snap position
                     Velocity = new Vector3(0.0f);
@@ -502,15 +500,15 @@ namespace Battlezone.BattlezoneObjects
                     //Console.Out.WriteLine("Can see tank in ATTACK");
                     if (canFire)
                     {
-                        Vector3 pos = WorldPosition + new Vector3(0, 95, 0) + (turretTransform * cannonTransform).Translation;
+                        Vector3 pos = WorldPosition + new Vector3(0, 83, 0) + (turretTransform * cannonTransform).Translation;
                         Projectile pro = new Projectile(pos, GetCannonFacing(), Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.AI_TANK);
                         pro.Initialize(400.0f, 250, 190, 100.0f, 100.0f, 0.0f);
                         Game.Components.Add(pro);
                         
-                        if (TankCannonFireCue.IsDisposed || TankCannonFireCue.IsStopped)
-                            TankCannonFireCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_FIRE,this);
+                        //if (TankCannonFireCue.IsDisposed || TankCannonFireCue.IsStopped)
+                            //TankCannonFireCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_FIRE,this);
                         //TankCannonFireCue.Play();
-                        TankCannonReloadCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_RELOAD,this);
+                        //TankCannonReloadCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_RELOAD,this);
 
                         canFire = false;
                         canRotate = false;
@@ -525,13 +523,14 @@ namespace Battlezone.BattlezoneObjects
                     currentState = AIStates.NEED_PURSUE;
                 }
             }
+            /*
             if (canFire == false && TankCannonFireCue.IsStopped && TankCannonReloadCue.IsPrepared)
             {
                 //cannon was fired and cannon fire sound is over
                 //TankCannonReloadCue.SetVariable("Distance", DistanceFromCamera);
                 //TankCannonReloadCue.Play();
             }
-
+            */
             //check to see if we had collided with any AITanks previously and notify them if we're far away enough to avoid collision
             if (collidingAITanks.Count > 0)
             {
@@ -585,12 +584,16 @@ namespace Battlezone.BattlezoneObjects
             float? distanceToAnotherObject = null;
             foreach (Actor a in GameplayScreen.Instance.activeActors)
             {
-                if (a.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING && a.COLLISION_IDENTIFIER != CollisionIdentifier.AI_TANK)
+                if (a.COLLISION_IDENTIFIER != CollisionIdentifier.NONCOLLIDING)
                 {
                     if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING) 
                     {
                         Building b = (Building)a;
-                        distanceToAnotherObject = sightRay.Intersects(b.WorldBoundsBox);
+                        float? temp = sightRay.Intersects(b.WorldBoundsBox);
+                        if (temp < distanceToAnotherObject || distanceToAnotherObject == null)
+                        {
+                            distanceToAnotherObject = temp;
+                        }
                     }
                     else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.PLAYER_TANK)
                     {
@@ -599,10 +602,14 @@ namespace Battlezone.BattlezoneObjects
                     }
                     else
                     {
-                        float? temp = sightRay.Intersects(a.WorldBounds);
-                        if (temp < distanceToAnotherObject || distanceToAnotherObject == null)
+                        //make sure to not check collision with itself
+                        if (a != this)
                         {
-                            distanceToAnotherObject = temp;
+                            float? temp = sightRay.Intersects(a.WorldBounds);
+                            if (temp < distanceToAnotherObject || distanceToAnotherObject == null)
+                            {
+                                distanceToAnotherObject = temp;
+                            }
                         }
                     }
                 }
@@ -622,7 +629,8 @@ namespace Battlezone.BattlezoneObjects
             }
             else if (distanceToPlayer < distanceToAnotherObject)
                 seePlayer = true;
-            
+            Console.Out.WriteLine("Distance to player: " + distanceToPlayer);
+            Console.Out.WriteLine("Distance to another object: " + distanceToAnotherObject);
             if (seePlayer == true)
             {
                 Vector3 correctFacing = player.WorldPosition - WorldPosition;
