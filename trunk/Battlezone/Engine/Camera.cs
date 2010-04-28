@@ -73,7 +73,7 @@ namespace Battlezone.Engine
             get { return desiredPositionOffset; }
             set { desiredPositionOffset = value; }
         }
-        private Vector3 desiredPositionOffset = new Vector3(0.0f, 220.0f, 1500.0f);
+        private Vector3 desiredPositionOffset = new Vector3(0.0f, 220.0f, 2200.0f);
 
         /// <summary>
         /// Desired camera position in world space.
