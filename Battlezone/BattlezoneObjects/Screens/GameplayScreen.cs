@@ -45,7 +45,7 @@ namespace Battlezone
 
         public static Matrix CameraMatrix = Matrix.CreateLookAt(new Vector3(0.0f,0.0f,2000.0f),Vector3.Zero,Vector3.UnitY);
         //public static Matrix ProjectionMatrix = Matrix.CreateOrthographic(1024,768,0.00001f,10000.0f);     //TODO: This needs to be Perspective
-        public static Matrix ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(90.0f * (float)Math.PI / 180.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+        public static Matrix ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(65.0f * (float)Math.PI / 180.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 
         public static Vector3 DiffuseColor = Color.Black.ToVector3();
         public static Vector3 DirLightDirection = new Vector3(1,-1,0);
@@ -59,11 +59,11 @@ namespace Battlezone
         private List<Actor> actorsToAdd;    //list of new actors to add to list of activeActors
         private List<Actor> actorsToRemove; //list of existing actors to be removed from list of activeActors;
         
-        private BattlezoneObjects.PlayerTank m_kPlayer;
+        private PlayerTank m_kPlayer;
 
-        private Engine.Camera e_Camera;
+        private Camera e_Camera;
 
-        private BattlezoneObjects.SkyDome m_kSkyDome;
+        private SkyDome m_kSkyDome;
 
         ContentManager content;
         SpriteFont gameFont;
