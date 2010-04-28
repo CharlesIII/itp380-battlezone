@@ -314,11 +314,11 @@ namespace Battlezone.BattlezoneObjects
                         soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankIdle");
                         soundCue.Play();
                     }
-                    else if (soundCue.IsStopped || name == "TankEngineMoving" || name == "TankSpeedUp")
+                    if (soundCue.IsStopped || name == "TankEngineMoving" || name == "TankSpeedUp")
                     {
-                        soundCue.Stop(AudioStopOptions.Immediate);
                         soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankSlowDown");
-                        soundCue.Play();
+                        //soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankSlowDown",this);
+                        //soundCue.Play();
                     }
                 }
                 else
@@ -336,6 +336,7 @@ namespace Battlezone.BattlezoneObjects
                         }
                         else
                         {
+                            soundCue.Stop(AudioStopOptions.Immediate);
                             soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankEngineMoving");
                             soundCue.Play();
                         }
