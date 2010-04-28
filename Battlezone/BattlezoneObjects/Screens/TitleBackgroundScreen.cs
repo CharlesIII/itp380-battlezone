@@ -679,7 +679,7 @@ namespace Battlezone
 
             for (int i = 0; i < fireParticlesPerFrame; i++)
             {
-                fireParticles.AddParticle(new Vector3(-firePosition.X + random.Next(-330, 570), firePosition.Y + 80, -50), Vector3.Zero);
+                fireParticles.AddParticle(new Vector3(-firePosition.X + random.Next(-370, 590), firePosition.Y + 80, -50), Vector3.Zero);
             }
         }
 
