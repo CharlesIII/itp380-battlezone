@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -156,6 +157,7 @@ namespace Battlezone.Engine
             initialPath.path.Add(startVertex);
             possibleSolutions.Add(initialPath);
 
+            List<Vertex> visitedVertices = new List<Vertex>(navNodes.Count);
             while (possibleSolutions.Count > 0)
             {
                 //remove the first potential solution off the list
@@ -179,29 +181,37 @@ namespace Battlezone.Engine
                 {
                     //get the last Vertex in the path contained in the PotentialPath
                     Vertex v = (Vertex)p.path[p.path.Count - 1];
+                    //Console.Out.WriteLine("Current vertex: " + v.position);
 
-                    //create a new PotentialPath for every connected vertex and add it to the list of possible solutions
-                    foreach (Vertex u in v.connectedVertices)
+                    //only visit a vertex if it hasn't been visited, if it has been visited, then all the potential paths involving the
+                    //vertex are already in the list of potentialpaths to explore
+                    if (!visitedVertices.Contains(v))
                     {
-                        //!!!!!!--Make sure we don't create a cycle--!!!!!!
-                        if (!p.path.Contains(u))
+                        //create a new PotentialPath for every connected vertex and add it to the list of possible solutions
+                        foreach (Vertex u in v.connectedVertices)
                         {
-                            //compute distance from selected vertex to originating vertex
-                            float currentCost = (u.position - v.position).Length();
+                            //!!!!!!--Make sure we don't create a cycle--!!!!!!
+                            if (!p.path.Contains(u))
+                            {
+                                //Console.Out.WriteLine(u.position);
+                                //compute distance from selected vertex to originating vertex
+                                float currentCost = (u.position - v.position).Length();
 
-                            //compute distance from selected vertex to end vertex; this is the heuristic
-                            float heuristic = (endVertex.position - u.position).Length();
+                                //compute distance from selected vertex to end vertex; this is the heuristic
+                                float heuristic = (endVertex.position - u.position).Length();
 
-                            //create new PotentialPath for this vertex
-                            PotentialPath newSolution = new PotentialPath();
-                            newSolution.path = (ArrayList)p.path.Clone();
-                            newSolution.path.Add(u);
-                            newSolution.currentCost = p.currentCost + currentCost;
-                            newSolution.estimatedCost = newSolution.currentCost + heuristic;
+                                //create new PotentialPath for this vertex
+                                PotentialPath newSolution = new PotentialPath();
+                                newSolution.path = (ArrayList)p.path.Clone();
+                                newSolution.path.Add(u);
+                                newSolution.currentCost = p.currentCost + currentCost;
+                                newSolution.estimatedCost = newSolution.currentCost + heuristic;
 
-                            //add new PotentialPath to possibleSolutions in the proper place
-                            SortedInsert(possibleSolutions, newSolution);
+                                //add new PotentialPath to possibleSolutions in the proper place
+                                SortedInsert(possibleSolutions, newSolution);
+                            }
                         }
+                        visitedVertices.Add(v);
                     }
                 }
             }
@@ -216,6 +226,8 @@ namespace Battlezone.Engine
         /// <param name="p">PotentialPath object to add.</param>
         private void SortedInsert(ArrayList list, PotentialPath p)
         {
+            if (list.Contains(p))
+                return;
             //special case for inserting at beginning
             if (list.Count == 0)
                 list.Add(p);

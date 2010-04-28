@@ -528,8 +528,8 @@ namespace Battlezone.BattlezoneObjects
             if (canFire == false && TankCannonFireCue.IsStopped && TankCannonReloadCue.IsPrepared)
             {
                 //cannon was fired and cannon fire sound is over
-                TankCannonReloadCue.SetVariable("Distance", DistanceFromCamera);
-                TankCannonReloadCue.Play();
+                //TankCannonReloadCue.SetVariable("Distance", DistanceFromCamera);
+                //TankCannonReloadCue.Play();
             }
 
             //check to see if we had collided with any AITanks previously and notify them if we're far away enough to avoid collision
