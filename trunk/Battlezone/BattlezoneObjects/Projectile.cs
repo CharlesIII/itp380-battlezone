@@ -29,7 +29,7 @@ namespace Battlezone
     /// steady stream of trail particles behind it. After a while it explodes,
     /// creating a sudden burst of explosion and smoke particles.
     /// </summary>
-    class Projectile : Actor
+    class Projectile : Actor, IAudioEmitter
     {
         #region Constants
         public enum PROJECTILE_TYPE {MISSILE, SHELL};
@@ -289,7 +289,14 @@ namespace Battlezone
                 explosionSmokeParticles.AddParticle(WorldPosition, velocity);
 
             timer.AddTimer("Remove Projectile", 5, OnTimedEvent, false);
-            GameplayScreen.Instance.audioManager.Play3DCue("ProjectileExplosion",this);
+            //GameplayScreen.Instance.audioManager.Play3DCue("ProjectileExplosion",this);
+            Cue c = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("ProjectileExplosion");
+            AudioEmitter emitter = new AudioEmitter();
+            emitter.Position = WorldPosition;
+            emitter.Up = worldTransform.Up;
+            emitter.Forward = worldTransform.Forward;
+            c.Apply3D(GameplayScreen.Instance.audioManager.Listener, emitter);
+            c.Play();
         }
 
         public override void removeSelf()
