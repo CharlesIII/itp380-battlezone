@@ -355,8 +355,12 @@ namespace Battlezone.BattlezoneObjects
             if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
                 Building b = (Building)a;
-                if (buildingIntersect(b))
+                Plane wall;
+                if (buildingIntersect(b, out wall))
                 {
+                    Vector3 wallNormal = wall.Normal;
+                    wallNormal.Normalize();
+                    Vector3.Dot(Velocity, wallNormal * -1.0f);
                     System.Console.Out.WriteLine("Collision with Building Detected");
                     return true;
                 }
@@ -408,25 +412,72 @@ namespace Battlezone.BattlezoneObjects
         /// Checks if the player is intersecting with a building.
         /// </summary>
         /// <param name="b">Building object to check intersection against.</param>
+        /// <param name="wall">out variable of type Plane.</param>
         /// <returns></returns>
-        public bool buildingIntersect(Building b)
+        public bool buildingIntersect(Building b, out Plane wall)
         {
             float minX = Math.Min(b.WorldBoundsBox.Min.X, b.WorldBoundsBox.Max.X);
             float minZ = Math.Min(b.WorldBoundsBox.Min.Z, b.WorldBoundsBox.Max.Z);
             float maxX = Math.Max(b.WorldBoundsBox.Min.X, b.WorldBoundsBox.Max.X);
             float maxZ = Math.Max(b.WorldBoundsBox.Min.Z, b.WorldBoundsBox.Max.Z);
-            
+
+            Vector4 firstClosest = new Vector4();
+            Vector4 secondClosest = new Vector4();
 
             if (WorldPosition.X >= (minX - WorldBounds.Radius) && WorldPosition.X <= (maxX + WorldBounds.Radius))
             {
                 if (WorldPosition.Z >= (minZ - WorldBounds.Radius) && WorldPosition.Z <= (maxZ + WorldBounds.Radius))
                 {
+                    Vector3[] corners = b.WorldBoundsBox.GetCorners();
+                    for (int i = 0; i < corners.Length; i++)
+                    {
+                        Vector3 temp = corners[i];
+                        float tempd = distanceSquared(new Vector2(temp.X, temp.Z), new Vector2(WorldPosition.X, WorldPosition.Z));
+
+                        if (firstClosest.W > tempd || firstClosest.W == 0){
+                            firstClosest = new Vector4(temp, tempd);
+                        } else if (secondClosest.W > tempd || secondClosest.W == 0){
+                            secondClosest = new Vector4(temp, tempd);
+                        }
+                    }
+
+                    firstClosest.W = (float)Math.Sqrt(firstClosest.W);
+                    secondClosest.W = (float)Math.Sqrt(secondClosest.W);
+                    
+                    Vector3 arbitrary = new Vector3();
+
+                    Random rand = new Random();
+
+
+
+                    if (firstClosest.X == secondClosest.X){
+                        arbitrary.X = firstClosest.X;
+                        arbitrary.Z = rand.Next((int)Math.Min(firstClosest.Z, secondClosest.Z), (int)Math.Max(firstClosest.Z, secondClosest.Z));
+                    } else {
+                        arbitrary.Z = firstClosest.Z;
+                        arbitrary.X = rand.Next((int)Math.Min(firstClosest.X, secondClosest.X), (int)Math.Max(firstClosest.X, secondClosest.X));
+                    }
+
+                    wall = new Plane(new Vector3(firstClosest.X,firstClosest.Y, firstClosest.Z), arbitrary, new Vector3(secondClosest.X, secondClosest.Y, secondClosest.Z));
+
                     //Console.Out.WriteLine(b.WorldBoundsBox);
                     //Console.Out.WriteLine(WorldPosition);
                     return true;
                 }
             }
+            wall = new Plane();
             return false;
+        }
+
+        /// <summary>
+        /// Computes the distance squared between two points.
+        /// </summary>
+        /// <param name="p1">Vector2 point 1.</param>
+        /// <param name="p2">Vector2 point 2.</param>
+        /// <returns></returns>
+        public float distanceSquared(Vector2 p1, Vector2 p2)
+        {
+            return (p2.X - p1.X) * (p2.X - p1.X) - (p2.Y - p1.Y) * (p2.Y - p1.Y);
         }
 
     }
