@@ -629,8 +629,7 @@ namespace Battlezone.BattlezoneObjects
             }
             else if (distanceToPlayer < distanceToAnotherObject)
                 seePlayer = true;
-            Console.Out.WriteLine("Distance to player: " + distanceToPlayer);
-            Console.Out.WriteLine("Distance to another object: " + distanceToAnotherObject);
+
             if (seePlayer == true)
             {
                 Vector3 correctFacing = player.WorldPosition - WorldPosition;
