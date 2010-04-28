@@ -396,7 +396,7 @@ namespace Battlezone.BattlezoneObjects
                     if (CheckPlayerSighted())
                     {
                         //player is visible, switch over to attack mode
-                        //currentState = AIStates.ATTACK;
+                        currentState = AIStates.ATTACK;
                     }
                 }
                 else
@@ -406,7 +406,7 @@ namespace Battlezone.BattlezoneObjects
 
                     if (CheckPlayerSighted())
                     {
-                        //currentState = AIStates.ATTACK;
+                        currentState = AIStates.ATTACK;
                     }
                     else
                     {
@@ -766,7 +766,7 @@ namespace Battlezone.BattlezoneObjects
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
                 //Console.Out.WriteLine("Colliding with a building, resolution undefined.");
-                currentState = AIStates.STOP;
+                //currentState = AIStates.STOP;
             }
         }
 

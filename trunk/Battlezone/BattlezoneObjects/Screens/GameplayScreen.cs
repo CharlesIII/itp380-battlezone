@@ -196,7 +196,7 @@ namespace Battlezone
 
             AITank test = new AITank(ScreenManager.Game, navPathFind, new Vector3());
             ScreenManager.Game.Components.Add(test);
-            Enemies.Add(test);
+            //Enemies.Add(test);
 
             //Load & Initialize HUD
             m_kHealthBar = new BattlezoneObjects.HUD.HealthBar(ScreenManager.Game);

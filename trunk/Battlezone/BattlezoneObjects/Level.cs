@@ -39,6 +39,7 @@ namespace Battlezone.BattlezoneObjects
             base.Initialize();
             Scale = 1.0f;
             
+            /*
             Building building1 = new Building(Game, "building1");
             Game.Components.Add(building1);
 
@@ -56,19 +57,19 @@ namespace Battlezone.BattlezoneObjects
 
             Building building6 = new Building(Game, "building6");
             Game.Components.Add(building6);
-
+            */
             Building building7 = new Building(Game, "building7");
-            Game.Components.Add(building7);
+            //Game.Components.Add(building7);
 
             Building building8 = new Building(Game, "building8");
-            Game.Components.Add(building8);
+            //Game.Components.Add(building8);
 
             Building building9 = new Building(Game, "building9");
-            Game.Components.Add(building9);
+            //Game.Components.Add(building9);
 
             Building building10 = new Building(Game, "building10");
             Game.Components.Add(building10);
-
+            /*
             Building building11 = new Building(Game, "building11");
             Game.Components.Add(building11);
 

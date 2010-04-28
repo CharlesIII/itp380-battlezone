@@ -208,6 +208,7 @@ namespace Battlezone.Engine
                     if (intersection != null && ((intersection*intersection) <= distance.LengthSquared()))
                     {
                         distanceToBuilding = (float)intersection;
+                        //Console.Out.WriteLine(b.WorldBoundsBox);
                         return true;
                     }
                 }
