@@ -203,6 +203,18 @@ namespace Battlezone.BattlezoneObjects
 
             Building building55 = new Building(Game, "building55");
             Game.Components.Add(building55);
+
+            Building wall1 = new Building(Game, "wall1");
+            Game.Components.Add(wall1);
+
+            Building wall2 = new Building(Game, "wall2");
+            Game.Components.Add(wall2);
+
+            Building wall3 = new Building(Game, "wall3");
+            Game.Components.Add(wall3);
+
+            Building wall4 = new Building(Game, "wall4");
+            Game.Components.Add(wall4);
              
         }
 
