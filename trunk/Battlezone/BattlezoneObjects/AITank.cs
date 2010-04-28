@@ -507,9 +507,9 @@ namespace Battlezone.BattlezoneObjects
                         pro.Initialize(400.0f, 250, 190, 100.0f, 100.0f, 0.0f);
                         Game.Components.Add(pro);
                         
-                        if (TankCannonFireCue.IsStopped)
+                        if (TankCannonFireCue.IsDisposed || TankCannonFireCue.IsStopped)
                             TankCannonFireCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_FIRE,this);
-                        TankCannonFireCue.Play();
+                        //TankCannonFireCue.Play();
                         TankCannonReloadCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_RELOAD,this);
 
                         canFire = false;
