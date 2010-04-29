@@ -250,7 +250,7 @@ namespace Battlezone.BattlezoneObjects
             float fDelta = gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f;
             timer.Update(gameTime);
             m_vPlayerPosition = GameplayScreen.Instance.m_kPlayer.Position;
-            Console.WriteLine(m_vPlayerPosition);
+           // Console.WriteLine(m_vPlayerPosition);
             DistanceFromCamera = (GameplayScreen.CameraMatrix.Translation - WorldPosition).Length();
             
             if (currentState == AIStates.STOP || currentState == AIStates.DEAD)
@@ -948,8 +948,8 @@ namespace Battlezone.BattlezoneObjects
                     GameplayScreen.Instance.Enemies.Remove(this);
                     GameplayScreen.Instance.removeActor(this);
 
-                   // explosionParticles = new ExplosionParticleSystemTank(Game, meshLoader);
-                  //  explosionSmokeParticles = new ExplosionSmokeParticleSystemTank(Game, meshLoader);
+                    explosionParticles = new ExplosionParticleSystemTank(Game, meshLoader);
+                    explosionSmokeParticles = new ExplosionSmokeParticleSystemTank(Game, meshLoader);
 
                     // Set the draw order so the explosions and fire
                     // will appear over the top of the smoke.
