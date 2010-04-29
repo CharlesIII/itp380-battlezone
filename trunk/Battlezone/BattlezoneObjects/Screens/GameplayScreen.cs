@@ -87,6 +87,7 @@ namespace Battlezone
         BattlezoneObjects.HUD.Radar m_kRadar;
         public List<AITank> Enemies = new List<AITank>();
         BattlezoneObjects.HUD.WeaponSelect m_kWepSel;
+        public BattlezoneObjects.HUD.LifeCount m_kLifeCount;
 
         TimeSpan timeToNextProjectile = TimeSpan.Zero;
 
@@ -225,6 +226,8 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(m_kRadar);
             m_kWepSel = new Battlezone.BattlezoneObjects.HUD.WeaponSelect(ScreenManager.Game);
             ScreenManager.Game.Components.Add(m_kWepSel);
+            m_kLifeCount = new Battlezone.BattlezoneObjects.HUD.LifeCount(ScreenManager.Game);
+            ScreenManager.Game.Components.Add(m_kLifeCount);
  
 
             tankExaustPlumeParticles = new SmokePlumeParticleSystemGameplay(ScreenManager.Game, content);
