@@ -24,7 +24,7 @@ namespace Battlezone.BattlezoneObjects
         #region Variables
 
         const float TURRET_ROTATION_SPEED = 1.0f;
-        const float AUTOMATIC_DETECTION_RADIUS = 20.0f;
+        const float AUTOMATIC_DETECTION_RADIUS = 300.0f;
         const float TANK_ROTATION_SPEED = 1.25f;
         const float PURSUIT_DURATION = 30.0f;
 
@@ -39,6 +39,9 @@ namespace Battlezone.BattlezoneObjects
         Cue TankTreadRollingCue;
         Cue TankCannonFireCue;
         Cue TankCannonReloadCue;
+
+        public ParticleSystem explosionParticles;
+        public ParticleSystem explosionSmokeParticles;
 
         float DistanceFromCamera;
 
@@ -172,6 +175,14 @@ namespace Battlezone.BattlezoneObjects
 
         public override void Draw(GameTime gameTime)
         {
+            if (explosionParticles != null && explosionSmokeParticles != null)
+            {
+                explosionParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
+                explosionSmokeParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
+            }
+            if (currentState == AIStates.DEAD) 
+                return;
+
             base.updateWorldTransform();
 
             tankModel.Root.Transform = worldTransform;
@@ -227,12 +238,21 @@ namespace Battlezone.BattlezoneObjects
                 //perform quick instant vision check
                 //if visible, set turretRotationTarget and stop moving and set state to attack
                 //if not visisble, find the closest nav node to the player position and navigate to it and set state to pursue
-                /*
-                if (currentState == AIStates.STOP)
+                if (CheckPlayerSighted(m_vPlayerLastKnownPosition - WorldPosition))
                 {
-                    previousState = AIStates.NEED_PURSUE;
+                    //should be able to see the player so go into attack mode
+                    //CheckPlayerSighted will have already set the correct turret rotation value
+                    //Attack state will automatically handle rotating the turret to the correct position
+                    currentState = AIStates.ATTACK;
                 }
-                 */
+                else
+                {
+                    //only change states if we're in one of the relatively idle states
+                    if (currentState == AIStates.PATROL || currentState == AIStates.SCAN)
+                    {
+                        currentState = AIStates.NEED_PURSUE;
+                    }
+                }
             }
 
             //make sure we're facing the right direction before we start moving
@@ -685,9 +705,11 @@ namespace Battlezone.BattlezoneObjects
 
         private void StopPursuit()
         {
-            currentState = AIStates.NEED_PATROL;
+            if (currentState != AIStates.DEAD)
+                currentState = AIStates.NEED_PATROL;
         }
 
+        //------------Timer callbacks-------------------
         private void AllowFire()
         {
             canFire = true;
@@ -697,6 +719,16 @@ namespace Battlezone.BattlezoneObjects
         {
             canRotate = true;
         }
+        private void DisposeSelf()
+        {
+            Game.Components.Remove(this);
+            Game.Components.Remove(this.explosionParticles);
+            explosionParticles.Dispose();
+            Game.Components.Remove(this.explosionSmokeParticles);
+            explosionParticles.Dispose();
+            Dispose(true);
+        }
+        //----------------------------------------------
 
         public override Vector3 GetWorldFacing()
         {
@@ -771,6 +803,28 @@ namespace Battlezone.BattlezoneObjects
                 {
                     currentState = AIStates.DEAD;
                     GameplayScreen.Instance.Enemies.Remove(this);
+                    GameplayScreen.Instance.removeActor(this);
+
+                    explosionParticles = new ExplosionParticleSystemTank(Game, meshLoader);
+                    explosionSmokeParticles = new ExplosionSmokeParticleSystemTank(Game, meshLoader);
+
+                    // Set the draw order so the explosions and fire
+                    // will appear over the top of the smoke.
+                    explosionSmokeParticles.DrawOrder = 200;
+                    explosionParticles.DrawOrder = 400;
+
+                    // Register the particle system components.
+                    Game.Components.Add(explosionParticles);
+                    Game.Components.Add(explosionSmokeParticles);
+
+                    for (int i = 0; i < 1000; i++)
+                        explosionParticles.AddParticle(WorldPosition, new Vector3());
+
+                    for (int i = 0; i < 1600; i++)
+                        explosionSmokeParticles.AddParticle(WorldPosition, new Vector3());
+
+
+                    timer.AddTimer("Dispose Tank", 15, DisposeSelf, false);
                 }
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
@@ -814,7 +868,6 @@ namespace Battlezone.BattlezoneObjects
                 return false;
             }
         }
-
     }
 }
 

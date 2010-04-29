@@ -134,7 +134,7 @@ namespace Battlezone
             if (type == PROJECTILE_TYPE.MISSILE)
             {
                 sMeshToLoad = "Missile";
-                Damage = 15.0f * dmgModifier;
+                Damage = 100.0f * dmgModifier;
             }
             else if (type == PROJECTILE_TYPE.SHELL)
             {
