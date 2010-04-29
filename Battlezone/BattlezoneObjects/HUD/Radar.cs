@@ -80,16 +80,16 @@ namespace Battlezone.BattlezoneObjects.HUD
 
             Vector2 plyr = new Vector2(playerFwd.X, playerFwd.Z);
 
-            float playerForwardRadians = (float)Math.Atan2(plyr.Y, plyr.X) - (float)Math.Atan2(1.0f, 0.0f);//(float)Math.Acos(Vector2.Dot(plyr, new Vector2(0.0f, 1.0f)) / plyr.Length());
+            float playerForwardRadians = (float)Math.Atan2(plyr.Y, plyr.X);// -(float)Math.Atan2(1.0f, 0.0f);//(float)Math.Acos(Vector2.Dot(plyr, new Vector2(0.0f, 1.0f)) / plyr.Length());
 
             // If enemy is in range
             foreach (AITank thisEnemy in GameplayScreen.Instance.Enemies)
             {
                 Vector2 diffVect = new Vector2(thisEnemy.WorldPosition.Z - playerPos.Z, thisEnemy.WorldPosition.X - playerPos.X);
-                float distance = diffVect.LengthSquared();
+                float distance = (float) Math.Sqrt((double)(thisEnemy.WorldPosition.Z - playerPos.Z) * (double)(thisEnemy.WorldPosition.Z - playerPos.Z) + (double)(thisEnemy.WorldPosition.X - playerPos.X) * (double)(thisEnemy.WorldPosition.X - playerPos.X));
 
                 // Check if enemy is within RadarRange
-                if (distance < RadarRangeSquared)
+                if (distance < RadarRange)
                 {
                     // Scale the distance from world coords to radar coords
                     diffVect *= RadarScreenRadius / RadarRange;
