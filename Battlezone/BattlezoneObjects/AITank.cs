@@ -85,7 +85,7 @@ namespace Battlezone.BattlezoneObjects
 
         List<AITank> collidingAITanks;
         
-        Random rg = new Random();
+        
 
         #endregion
 
@@ -113,17 +113,36 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your initialization code here
 
             base.Initialize();
-
+            Random rg = new Random();
             fMass = 10;
             bPhysicsDriven = true;
             fTerminalVelocity = 200.0f;
 
             navNodes = navigation.GetNavigationNodes();
-
             m_vPatrolBegin = (Vector3)navNodes[rg.Next(navNodes.Count)];
+            bool repeat=true;
+            while (repeat)
+            {
+                repeat = false;
+                foreach (Vector3 tempVec in GameplayScreen.Instance.enemyStarts)
+                {
+                    //  for (int i = 0; i < GameplayScreen.Instance.enemyStarts.Count;i++ )
+
+                    if (m_vPatrolBegin.Equals(tempVec))
+                    {
+                        m_vPatrolBegin = (Vector3)navNodes[rg.Next(navNodes.Count)];
+                        repeat = true;
+                        break;
+                    }
+                }
+            }
+
+            GameplayScreen.Instance.enemyStarts.Add(m_vPatrolBegin);
+
             do{
                 m_vPatrolEnd = (Vector3)navNodes[rg.Next(navNodes.Count)];
             } while (m_vPatrolEnd.Equals(m_vPatrolBegin));
+            Console.WriteLine(m_vPatrolBegin);
 
             //compute the patrol paths once and store them to save on computation costs
             pathFromPatrolBeginToEnd = navigation.GetPath(m_vPatrolBegin, m_vPatrolEnd);
@@ -227,9 +246,11 @@ namespace Battlezone.BattlezoneObjects
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            Random rg = new Random();
             float fDelta = gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f;
             timer.Update(gameTime);
-
+            m_vPlayerPosition = GameplayScreen.Instance.m_kPlayer.Position;
+            Console.WriteLine(m_vPlayerPosition);
             DistanceFromCamera = (GameplayScreen.CameraMatrix.Translation - WorldPosition).Length();
             
             if (currentState == AIStates.STOP || currentState == AIStates.DEAD)
@@ -856,7 +877,10 @@ namespace Battlezone.BattlezoneObjects
             result.Z *= -1;
             return result;
         }
-
+        public Vector3 GetStartNode()
+        {
+            return m_vPatrolBegin;
+        }
         public Vector3 GetCannonFacing()
         {
             Vector3 result = (worldTransform * Matrix.CreateRotationY(turretRotationValue)).Forward;
@@ -924,8 +948,8 @@ namespace Battlezone.BattlezoneObjects
                     GameplayScreen.Instance.Enemies.Remove(this);
                     GameplayScreen.Instance.removeActor(this);
 
-                    explosionParticles = new ExplosionParticleSystemTank(Game, meshLoader);
-                    explosionSmokeParticles = new ExplosionSmokeParticleSystemTank(Game, meshLoader);
+                   // explosionParticles = new ExplosionParticleSystemTank(Game, meshLoader);
+                  //  explosionSmokeParticles = new ExplosionSmokeParticleSystemTank(Game, meshLoader);
 
                     // Set the draw order so the explosions and fire
                     // will appear over the top of the smoke.

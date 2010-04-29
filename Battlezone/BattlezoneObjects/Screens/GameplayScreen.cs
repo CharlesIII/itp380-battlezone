@@ -59,7 +59,7 @@ namespace Battlezone
         private List<Actor> actorsToAdd;    //list of new actors to add to list of activeActors
         private List<Actor> actorsToRemove; //list of existing actors to be removed from list of activeActors;
         
-        private PlayerTank m_kPlayer;
+        public PlayerTank m_kPlayer;
 
         private Camera e_Camera;
         public Camera Camera
@@ -79,8 +79,9 @@ namespace Battlezone
 
 		Utils.Timer m_kTimer = new Utils.Timer();
 
-        SpawnManager m_kSpawnManager;
-
+        //SpawnManager m_kSpawnManager;
+        public List<Vector3> enemyStarts=new List<Vector3>();
+        
         //HUD Objects
         BattlezoneObjects.HUD.HealthBar m_kHealthBar;
         BattlezoneObjects.HUD.Radar m_kRadar;
@@ -182,8 +183,7 @@ namespace Battlezone
              */
 
             //load spawn manager
-            m_kSpawnManager = new SpawnManager(ScreenManager.Game);
-            ScreenManager.Game.Components.Add(m_kSpawnManager);
+            
 
             //load camera
             e_Camera = new Camera(ScreenManager.Game);
@@ -199,15 +199,21 @@ namespace Battlezone
             m_kSkyDome = new SkyDome(ScreenManager.Game, ScreenManager.GraphicsDevice);
             ScreenManager.Game.Components.Add(m_kSkyDome);
 
+            //m_kSpawnManager = new SpawnManager(ScreenManager.Game,m_kPlayer,navPathFind);
+            //ScreenManager.Game.Components.Add(m_kSpawnManager);
+
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
 
             for (int i = 0; i < 15; i++)
             {
                 AITank temp = new AITank(ScreenManager.Game, navPathFind, m_kPlayer.WorldPosition);
-                Enemies.Add(temp);
+                //Thread.Sleep(100);
+                Enemies.Insert(i, temp);
                 ScreenManager.Game.Components.Add(temp);
+                
             }
+                
             
 
             //Load & Initialize HUD
