@@ -179,6 +179,10 @@ namespace Battlezone.Engine
             Up = Vector3.UnitY;
             GameplayScreen.CameraMatrix = Matrix.CreateLookAt(desiredPosition, LookAt, Up);
 
+            listener.Position = GameplayScreen.CameraMatrix.Translation;
+            listener.Forward = GameplayScreen.CameraMatrix.Forward;
+            listener.Up = GameplayScreen.CameraMatrix.Up;
+
            
 
             base.Update(gameTime);

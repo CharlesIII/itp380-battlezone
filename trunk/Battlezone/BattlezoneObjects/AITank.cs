@@ -828,7 +828,12 @@ namespace Battlezone.BattlezoneObjects
 
                     for (int i = 0; i < 1600; i++)
                         explosionSmokeParticles.AddParticle(WorldPosition, new Vector3());
+                    Cue c = ScreenManager.soundSoundBank.GetCue("TankExplosion");
 
+                    c.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                    c.Play();
+            
+            
 
                     timer.AddTimer("Dispose Tank", 15, DisposeSelf, false);
                 }

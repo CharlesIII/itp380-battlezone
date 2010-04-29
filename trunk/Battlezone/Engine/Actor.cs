@@ -315,6 +315,10 @@ namespace Battlezone
         {
             float fDelta = gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f;
             timer.Update(gameTime);
+            emitter.Position = WorldPosition;
+            emitter.Up = worldTransform.Up;
+            emitter.Forward = worldTransform.Forward;
+            emitter.Velocity = Velocity;
 
             if (bPhysicsDriven)
             {
