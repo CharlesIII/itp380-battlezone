@@ -371,10 +371,8 @@ namespace Battlezone.BattlezoneObjects
             //WorldBounds.Radius = ModelBounds.Radius * Scale;
             if (dead)
             {
-                if(soundCue.IsPlaying)
-                {
+
                     soundCue.Stop(AudioStopOptions.Immediate);
-                }
                 return;
             }
 
