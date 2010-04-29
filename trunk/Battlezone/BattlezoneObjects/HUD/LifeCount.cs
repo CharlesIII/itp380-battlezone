@@ -71,8 +71,15 @@ namespace Battlezone.BattlezoneObjects.HUD
             Color c = new Color(new Vector4(255, 255, 255, 100));
 
             mBatch.Draw(turretSelect, new Rectangle(30, 30, 70, 50), c);
-            mBatch.DrawString(GameplayScreen.Instance.ScreenManager.Font, "x " + life, new Vector2(100, 30), Color.White);
 
+            if (life < 0)
+            {
+                mBatch.DrawString(GameplayScreen.Instance.ScreenManager.Font, "x " + 0, new Vector2(100, 30), Color.White);
+            }
+            else
+            {
+                mBatch.DrawString(GameplayScreen.Instance.ScreenManager.Font, "x " + life, new Vector2(100, 30), Color.White);
+            }
             mBatch.End();
 
             base.Draw(gameTime);

@@ -139,7 +139,7 @@ namespace Battlezone
             else if (type == PROJECTILE_TYPE.SHELL)
             {
                 sMeshToLoad = "tank_shell";
-                Damage = 50.0f * dmgModifier;
+                Damage = 100.0f * dmgModifier;
             }
             position = Position;
             WorldPosition = position;

@@ -20,7 +20,7 @@ namespace Battlezone
     {
         #region Initialization
 
-        public static bool skip = false;
+        public static bool win = false;
         /// <summary>
         /// Constructor fills in the menu contents.
         /// </summary>
@@ -59,7 +59,7 @@ namespace Battlezone
                 }
         }
 
-        public static void LoadMenu(ScreenManager screenManager)
+        public static void LoadMenu(ScreenManager screenManager, bool winner)
         {
             // Tell all the current screens to transition off.
             foreach (GameScreen screen in screenManager.GetScreens())
@@ -67,6 +67,8 @@ namespace Battlezone
 
             screenManager.AddScreen(new GameOverBackgroundScreen());
             screenManager.AddScreen(new GameOverMenuScreen());
+
+            win = winner;
         }
 
 
