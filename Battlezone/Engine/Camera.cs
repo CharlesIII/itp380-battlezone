@@ -116,6 +116,15 @@ namespace Battlezone.Engine
 
         #endregion
 
+        AudioListener listener;
+        public AudioListener Listener
+        {
+            get
+            {
+                return listener;
+            }
+        }
+
         /// <summary>
         /// Constructor for the Camera Class.
         /// </summary>
@@ -135,6 +144,11 @@ namespace Battlezone.Engine
             // TODO: Add your initialization code here
 
             base.Initialize();
+
+            listener = new AudioListener();
+            listener.Position = GameplayScreen.CameraMatrix.Translation;
+            listener.Forward = GameplayScreen.CameraMatrix.Forward;
+            listener.Up = GameplayScreen.CameraMatrix.Up;
         }
 
         /// <summary>
