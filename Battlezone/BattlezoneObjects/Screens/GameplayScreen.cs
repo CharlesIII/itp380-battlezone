@@ -271,40 +271,62 @@ namespace Battlezone
         {
             content.Unload();
             ScreenManager.Game.Components.Remove(e_Camera);
+            e_Camera.Dispose();
 
             ScreenManager.Game.Components.Remove(m_kPlayer);
             /* Debug usage for AI Tank testing*/
             //m_kPlayer.Initialize();
+            m_kPlayer.Dispose();
 
             ScreenManager.Game.Components.Remove(m_kSkyDome);
-
+            m_kSkyDome.Dispose();
             //m_kSpawnManager = new SpawnManager(ScreenManager.Game,m_kPlayer,navPathFind);
             //ScreenManager.Game.Components.Add(m_kSpawnManager);
 
             ScreenManager.Game.Components.Remove(l);
             //AITank test = new AITank(ScreenManager.Game, navPathFind, m_kPlayer.WorldPosition);
             //ScreenManager.Game.Components.Add(test);
-
+            l.Dispose();
 
 
             ScreenManager.Game.Components.Remove(m_kHealthBar);
+            m_kHealthBar.Dispose();
             ScreenManager.Game.Components.Remove(m_kRadar);
+            m_kRadar.Dispose();
             ScreenManager.Game.Components.Remove(m_kWepSel);
+            m_kWepSel.Dispose();
             ScreenManager.Game.Components.Remove(m_kLifeCount);
-
+            m_kLifeCount.Dispose();
 
             // Register the particle system components.
             ScreenManager.Game.Components.Remove(explosionParticles);
+            explosionParticles.Dispose();
             ScreenManager.Game.Components.Remove(explosionSmokeParticles);
+            explosionSmokeParticles.Dispose();
             ScreenManager.Game.Components.Remove(projectileTrailParticles);
+            projectileTrailParticles.Dispose();
             ScreenManager.Game.Components.Remove(tankExaustPlumeParticles);
+            tankExaustPlumeParticles.Dispose();
             ScreenManager.Game.Components.Remove(fireParticles);
+            fireParticles.Dispose();
 
             foreach (Actor a in activeActors)
             {
                 ScreenManager.Game.Components.Remove(a);
+                a.Dispose();
             }
+            activeActors.Clear();
 
+            foreach (Actor a in actorsToRemove)
+            {
+                ScreenManager.Game.Components.Remove(a);
+                a.Dispose();
+            }
+            actorsToRemove.Clear();
+
+            actorsToAdd.Clear();
+
+            Enemies.Clear();
             cue.Stop(AudioStopOptions.Immediate);
 
         }
