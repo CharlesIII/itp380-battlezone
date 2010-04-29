@@ -123,6 +123,7 @@
     <Compile Include="Engine\ParticleSystems\ProjectileTrailParticleSystemGameplay.cs" />
     <Compile Include="Engine\ParticleSystems\ProjectileTrailParticleSystemTitleBackground.cs" />
     <Compile Include="Engine\ParticleSystems\SmokePlumeParticleSystemGameplay.cs" />
+    <Compile Include="Engine\ParticleSystems\TankCannonPlumeParticleSystem.cs" />
     <Compile Include="Engine\PathFinder.cs" />
     <Compile Include="BattlezoneObjects\Projectile.cs" />
     <Compile Include="Engine\ScreenManager\GameScreen.cs" />

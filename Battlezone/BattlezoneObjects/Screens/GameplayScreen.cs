@@ -94,6 +94,7 @@ namespace Battlezone
         private ParticleSystem projectileTrailParticles;
         private ParticleSystem tankExaustPlumeParticles;
         private ParticleSystem fireParticles;
+        private ParticleSystem TankCannonPlumeParticleSystem;
 
         //bool alphaBlendEnable;
         //Blend sourceBlend;
@@ -230,7 +231,7 @@ namespace Battlezone
             ScreenManager.Game.Components.Add(fireParticles);
 
             cue = ScreenManager.musicSoundBank.GetCue("BattlezoneGameplay");
-            cue.Play();
+            //cue.Play();
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -430,19 +431,19 @@ namespace Battlezone
                                 case 1:
                                     pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.PLAYER_TANK);
                                     audioManager.Play3DCue("FireCannon",m_kPlayer);
-                                    audioManager.Play3DCue("TankShellReload",m_kPlayer);
                                     break;
                                 case 2:
                                     if (!missileFired)
                                     {
                                         pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.MISSILE, CollisionIdentifier.PLAYER_TANK);
                                         audioManager.Play3DCue("FireMissile",m_kPlayer);
-                                        audioManager.Play3DCue("TankMissileReload",m_kPlayer);
+                                        UpdateTankCannonSmoke();
                                     }
                                     break;
                                 default:
                                     System.Console.WriteLine("Hmm, Seems there's a bug a crawlin - selectedWeapon was neither 1 or 2.  Defaulted to Shell");
                                     pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.PLAYER_TANK);
+                                    UpdateTankCannonSmoke();
                                     break;
                             }
 
@@ -547,6 +548,19 @@ namespace Battlezone
                 tankExaustFire = true;
             }
         }
+        void UpdateTankCannonSmoke()
+        {
+            // This is trivial: we just create one new smoke particle per frame.
+            const int smokeParticlesPerFrame = 30;
+
+            Random random = new Random();
+
+            for (int i = 0; i < smokeParticlesPerFrame; i++)
+            {
+                fireParticles.AddParticle((m_kPlayer.turretBone.Transform * m_kPlayer.worldTransform).Translation, m_kPlayer.GetWorldFacing() * 50);
+            }
+        }
+
         private void SaveGraphicsDeviceState()
         {
             //alphaBlendEnable = device.RenderState.AlphaBlendEnable;

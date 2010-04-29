@@ -48,9 +48,6 @@ namespace Battlezone
 
         TimeSpan timeToNextProjectile = TimeSpan.Zero;
 
-        SoundEffect Background;
-        SoundEffectInstance instance;
-
         private bool SmokePlume = true;
         private bool fired = true;
         private bool letter = true;
@@ -63,7 +60,6 @@ namespace Battlezone
         String text;
         String name;
         float scale;
-        Cue c;
 
         Utils.Timer m_kTimer = new Utils.Timer();
 
@@ -268,7 +264,7 @@ namespace Battlezone
 
                 UpdateExplosions(gameTime);
                 UpdateProjectiles(gameTime);
-                if (!letter)
+                if (TitleMenuScreen.skip)
                 {
                     UpdateFireExaust();
                 }

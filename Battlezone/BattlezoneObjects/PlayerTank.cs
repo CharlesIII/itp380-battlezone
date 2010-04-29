@@ -77,6 +77,9 @@ namespace Battlezone.BattlezoneObjects
         Cue soundCue;
         Cue treadsRollingCue;
 
+        enum EngineState { IDLE, SPEEDUP, SLOWDOWN, MOVING };
+        EngineState currentState;
+
         #endregion
 
         #region Bone Properties
@@ -206,6 +209,8 @@ namespace Battlezone.BattlezoneObjects
             // Allocate the transform matrix array.
             boneTransforms = new Matrix[tankModel.Bones.Count];
 
+            currentState = EngineState.IDLE;
+
 
 
         }
@@ -292,47 +297,62 @@ namespace Battlezone.BattlezoneObjects
             //WorldBounds.Center = WorldPosition + new Vector3(0,0, turretTransform.Translation.Z);
             //Console.Out.WriteLine(WorldBounds.Center);
             //WorldBounds.Radius = ModelBounds.Radius * Scale;
-            if (gamePlay && soundCue == null)
+            if (soundCue == null && gamePlay)
             {
-                soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankIdle");
-                soundCue.Play();
+                soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankIdle", this);
             }
-            if (gamePlay && soundCue != null)
+            else
             {
-                if (Velocity == Vector3.Zero)
+
+                if (gamePlay)
                 {
-                    name = soundCue.Name;
-                    if (soundCue.IsStopped && name == "TankSlowDown")
+                    if (Velocity == Vector3.Zero)
                     {
-                        soundCue.Stop(AudioStopOptions.Immediate);
-                        soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankIdle");
-                        soundCue.Play();
-                    }
-                    if (soundCue.IsStopped || name == "TankEngineMoving" || name == "TankSpeedUp")
-                    {
-                        soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankSlowDown");
-                        //soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankSlowDown",this);
-                        //soundCue.Play();
-                    }
-                }
-                else
-                {
-                    name = soundCue.Name;
-                    if (soundCue.IsStopped || name == "TankIdle"|| name =="TankSlowDown")
-                    {
-                        if (name == "TankIdle" || name == "TankSlowDown")
+                        if (soundCue.IsDisposed && currentState == EngineState.SLOWDOWN)
                         {
-                            soundCue.Stop(AudioStopOptions.Immediate);
-
-                            soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankSpeedUp");
-                            soundCue.Play();
-
+                            //soundCue.Stop(AudioStopOptions.AsAuthored);
+                            soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankIdle", this);
+                            currentState = EngineState.IDLE;
                         }
-                        else
+                        else if (soundCue.IsDisposed && currentState == EngineState.IDLE)
                         {
-                            soundCue.Stop(AudioStopOptions.Immediate);
-                            soundCue = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("TankEngineMoving");
-                            soundCue.Play();
+                            soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankIdle", this);
+                            currentState = EngineState.IDLE;
+                        }
+                        else if (soundCue.IsDisposed && currentState == EngineState.MOVING)
+                        {
+                            soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankSlowDown", this);
+                            currentState = EngineState.SLOWDOWN;
+                        }
+                        else if (soundCue.IsDisposed && currentState == EngineState.SPEEDUP)
+                        {
+                            soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankSlowDown", this);
+                            currentState = EngineState.SLOWDOWN;
+                        }
+                    }
+                    else
+                    {
+                        if (soundCue.IsDisposed && currentState == EngineState.SPEEDUP)
+                        {
+                            //soundCue.Stop(AudioStopOptions.AsAuthored);
+                            soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankEngineMoving", this);
+                            currentState = EngineState.MOVING;
+                        }
+                        else if (soundCue.IsDisposed && currentState == EngineState.MOVING)
+                        {
+                            //soundCue.Stop(AudioStopOptions.AsAuthored);
+                            soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankEngineMoving", this);
+                            currentState = EngineState.MOVING;
+                        }
+                        else if (soundCue.IsDisposed && currentState == EngineState.IDLE)
+                        {
+                            soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankSpeedUp", this);
+                            currentState = EngineState.SPEEDUP;
+                        }
+                        else if (soundCue.IsDisposed && currentState == EngineState.SLOWDOWN)
+                        {
+                            soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankSpeedUp", this);
+                            currentState = EngineState.SPEEDUP;
                         }
                     }
                 }
