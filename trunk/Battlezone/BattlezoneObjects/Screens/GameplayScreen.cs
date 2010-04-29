@@ -350,6 +350,8 @@ namespace Battlezone
             {
                 if (m_kPlayer != null)
                 {
+                    bool isTurning = false;
+
                     if (input.ShellSelect)
                     {
                         selectedWeapon = 1;
@@ -371,6 +373,7 @@ namespace Battlezone
 
                     if (input.TurnLeft)
                     {
+                        isTurning = true;
                         m_kPlayer.LWheelRotation -= (deltaTime);
                         m_kPlayer.RWheelRotation += (deltaTime);
                         m_kPlayer.TurretRotation -= ((float)Math.PI / 5) * deltaTime;
@@ -380,6 +383,7 @@ namespace Battlezone
 
                     if (input.TurnRight)
                     {
+                        isTurning = true;
                         //m_kPlayer.TurretRotation -= ((float)Math.PI / 5) * deltaTime;
                         //m_kPlayer.SteerRotation = -(float)Math.PI / 5;
                         m_kPlayer.LWheelRotation += (deltaTime);
@@ -391,10 +395,13 @@ namespace Battlezone
 
                     if (input.Move)
                     {
+                        if (!m_kPlayer.isColliding || (m_kPlayer.Velocity == new Vector3(0.0f, 0.0f, 0.0f)) || isTurning)
+                        {
+                            //m_kPlayer.Force = m_kPlayer.GetWorldFacing() * -1000.0f;
+                            m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * -550.0f * spdBoost;
+                        }
                         m_kPlayer.LWheelRotation += (4.0f * deltaTime * spdBoost);
                         m_kPlayer.RWheelRotation += (4.0f * deltaTime * spdBoost);
-                        //m_kPlayer.Force = m_kPlayer.GetWorldFacing() * -1000.0f;
-                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * -550.0f * spdBoost;
                         UpdateTankExaust();
                     }
 

@@ -68,6 +68,7 @@ namespace Battlezone.BattlezoneObjects
         float cannonRotationValue;
         float hatchRotationValue;
         public float turnDirection = 1.0f;
+        public bool isColliding = false;
 
         public bool gamePlay = false;
 
@@ -145,6 +146,7 @@ namespace Battlezone.BattlezoneObjects
         }
 
         #endregion
+
 
 
         /// <summary>
@@ -357,6 +359,8 @@ namespace Battlezone.BattlezoneObjects
                     }
                 }
             }
+
+            isColliding = false;
         }
 
         /// <summary>
@@ -399,6 +403,8 @@ namespace Battlezone.BattlezoneObjects
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
+                isColliding = true;
+
                 Building b = (Building)a;
 
                 Plane wall = findIntersectingPlane(b);
@@ -458,6 +464,7 @@ namespace Battlezone.BattlezoneObjects
 
             Vector4 firstClosest = new Vector4();
             Vector4 secondClosest = new Vector4();
+            Vector4 thirdClosest = new Vector4();
 
             Vector3[] corners = b.WorldBoundsBox.GetCorners();
             for (int i = 0; i < corners.Length; i++)
@@ -465,39 +472,80 @@ namespace Battlezone.BattlezoneObjects
                 Vector3 temp = corners[i];
                 float tempd = distanceSquared(new Vector2(temp.X, temp.Z), new Vector2(WorldPosition.X, WorldPosition.Z));
 
-                if (firstClosest.W > tempd || firstClosest.W == 0)
+                if ((firstClosest.W > tempd || firstClosest.W == 0.0f) && temp.Y < 100.0f)
                 {
+                    if (secondClosest.W == 0.0f) secondClosest = firstClosest;
+                    else if (thirdClosest.W == 0.0f) thirdClosest = firstClosest;
+                    else if (secondClosest.W > firstClosest.W)
+                    {
+                        if (thirdClosest.W > secondClosest.W)
+                        {
+                            thirdClosest = secondClosest;
+                        }
+                        secondClosest = firstClosest;
+                    }
+                    else if (thirdClosest.W > firstClosest.W) thirdClosest = firstClosest;
                     firstClosest = new Vector4(temp, tempd);
                 }
-                else if (secondClosest.W > tempd || secondClosest.W == 0)
+                else if ((secondClosest.W > tempd || secondClosest.W == 0.0f) && temp.Y < 100.0f)
                 {
+                    if (thirdClosest.W == 0.0f || thirdClosest.W > secondClosest.W) thirdClosest = secondClosest;
                     secondClosest = new Vector4(temp, tempd);
+                }
+                else if ((thirdClosest.W > tempd || thirdClosest.W == 0.0f) && temp.Y < 100.0f)
+                {
+                    thirdClosest = new Vector4(temp, tempd);
                 }
             }
 
-            firstClosest.W = (float)Math.Sqrt(firstClosest.W);
-            secondClosest.W = (float)Math.Sqrt(secondClosest.W);
-            Vector3 arbitrary = new Vector3();
+            //firstClosest.W = (float)Math.Sqrt(firstClosest.W);
+            //secondClosest.W = (float)Math.Sqrt(secondClosest.W);
+            Vector3 arbitrary = new Vector3(0.0f, 0.0f, 0.0f);
 
             Random rand = new Random();
 
-
-
+            
+            
             if (firstClosest.X == secondClosest.X)
             {
                 arbitrary.X = firstClosest.X;
-                arbitrary.Z = rand.Next((int)Math.Min(firstClosest.Z, secondClosest.Z), (int)Math.Max(firstClosest.Z, secondClosest.Z));
+                arbitrary.Z = (float)rand.Next((int)Math.Min(firstClosest.Z, secondClosest.Z), (int)Math.Max(firstClosest.Z, secondClosest.Z));
             }
             else
             {
                 arbitrary.Z = firstClosest.Z;
-                arbitrary.X = rand.Next((int)Math.Min(firstClosest.X, secondClosest.X), (int)Math.Max(firstClosest.X, secondClosest.X));
+                arbitrary.X = (float)rand.Next((int)Math.Min(firstClosest.X, secondClosest.X), (int)Math.Max(firstClosest.X, secondClosest.X));
             }
 
-            return new Plane(new Vector3(firstClosest.X, firstClosest.Y, firstClosest.Z), arbitrary, new Vector3(secondClosest.X, secondClosest.Y, secondClosest.Z));
+            Plane wall1 = new Plane(new Vector3(firstClosest.X, firstClosest.Y, firstClosest.Z), arbitrary, new Vector3(secondClosest.X, secondClosest.Y, secondClosest.Z));
+
+            if (thirdClosest.X == firstClosest.X)
+            {
+                arbitrary.X = thirdClosest.X;
+                arbitrary.Z = (float)rand.Next((int)Math.Min(thirdClosest.Z, firstClosest.Z), (int)Math.Max(thirdClosest.Z, firstClosest.Z));
+            }
+            else
+            {
+                arbitrary.Z = thirdClosest.Z;
+                arbitrary.X = (float)rand.Next((int)Math.Min(thirdClosest.X, firstClosest.X), (int)Math.Max(thirdClosest.X, firstClosest.X));
+            }
+
+            Plane wall2 = new Plane(new Vector3(firstClosest.X, firstClosest.Y, firstClosest.Z), arbitrary, new Vector3(thirdClosest.X, thirdClosest.Y, thirdClosest.Z));
+
+            float distance1 = Vector3.Dot(Vector3.Normalize(wall1.Normal), WorldPosition) - wall1.D;
+            float distance2 = Vector3.Dot(Vector3.Normalize(wall2.Normal), WorldPosition) - wall2.D;
+
+            if (distance1 > distance2)
+            {
+                return wall1;
+            }
+            else
+            {
+                return wall2;
+            }
 
         }
-
+        
 
         /// <summary>
         /// Computes the distance squared between two points.
