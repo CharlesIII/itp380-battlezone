@@ -165,7 +165,7 @@ namespace Battlezone
         //Flag to tell if was just recently dmg
         private bool recentlyDamaged = false;
 
-        AudioEmitter emitter;
+        protected AudioEmitter emitter;
 
         /// <summary>
         /// Constructs a new Actor.
@@ -369,7 +369,6 @@ namespace Battlezone
         {
             Game.Components.Remove(this);
             GameplayScreen.Instance.removeActor(this);
-            Console.Out.WriteLine("removing actor");
         }
         /// <summary>
         /// Checks collision between this actor and the given actor. It is expected that inheriting classes override this to provide correct
