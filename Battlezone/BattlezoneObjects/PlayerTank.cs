@@ -407,9 +407,10 @@ namespace Battlezone.BattlezoneObjects
                 wallNormal.Normalize();
                 Vector3 perpVelComp = Vector3.Dot(Velocity, wallNormal * -1.0f) * wallNormal;
 
-                Velocity -= perpVelComp;
+                //System.Console.Out.WriteLine("Pre: " + Velocity);
+                Velocity += perpVelComp;
                 
-                System.Console.Out.WriteLine("Should be Working");
+                //System.Console.Out.WriteLine("Post: " + Velocity + " diff: " + perpVelComp);
                 //Console.Out.WriteLine(b.WorldPosition);
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.SHELL)
