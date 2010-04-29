@@ -115,6 +115,8 @@
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\CollisionIdentifier.cs" />
     <Compile Include="Engine\IAudioEmitter.cs" />
+    <Compile Include="Engine\ParticleSystems\ExplosionSmokeParticleSystemTank.cs" />
+    <Compile Include="Engine\ParticleSystems\ExplosionParticleSystemTank.cs" />
     <Compile Include="Engine\ParticleSystems\ExplosionParticleSystemBackground.cs" />
     <Compile Include="Engine\ParticleSystems\ExplosionParticleSystemTitleBackground.cs" />
     <Compile Include="Engine\ParticleSystems\ExplosionSmokeParticleSystemBackground.cs" />
