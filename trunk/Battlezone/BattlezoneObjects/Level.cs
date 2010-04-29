@@ -381,8 +381,9 @@ namespace Battlezone.BattlezoneObjects
 
             Building wall59 = new Building(Game, "walls\\wall59");
             Game.Components.Add(wall59);
+             
 
-
+            
 
         }
 
