@@ -62,6 +62,13 @@ namespace Battlezone
         private PlayerTank m_kPlayer;
 
         private Camera e_Camera;
+        public Camera Camera
+        {
+            get
+            {
+                return e_Camera;
+            }
+        }
 
         private SkyDome m_kSkyDome;
 

@@ -165,6 +165,8 @@ namespace Battlezone
         //Flag to tell if was just recently dmg
         private bool recentlyDamaged = false;
 
+        AudioEmitter emitter;
+
         /// <summary>
         /// Constructs a new Actor.
         /// </summary>
@@ -195,6 +197,12 @@ namespace Battlezone
             vForce = new Vector3(0.0f, 0.0f, 0.0f);
             vAcceleration = new Vector3(0.0f, 0.0f, 0.0f);
             COLLISION_IDENTIFIER = CollisionIdentifier.NONCOLLIDING;
+
+            emitter = new AudioEmitter();
+            emitter.Position = WorldPosition;
+            emitter.Up = worldTransform.Up;
+            emitter.Forward = worldTransform.Forward;
+            emitter.Velocity = Velocity;
             base.Initialize();
         }
 
