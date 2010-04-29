@@ -808,6 +808,7 @@ namespace Battlezone.BattlezoneObjects
         {
             dead = true;
             GameplayScreen.Instance.removeActor(this);
+            GameplayScreen.Instance.m_kLifeCount.life = GameplayScreen.Instance.m_kLifeCount.life - 1;
         }
 
 

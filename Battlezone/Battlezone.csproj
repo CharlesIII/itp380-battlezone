@@ -91,6 +91,7 @@
     <Compile Include="BattlezoneObjects\Building.cs" />
     <Compile Include="BattlezoneObjects\HUD\BoostMeter.cs" />
     <Compile Include="BattlezoneObjects\HUD\HealthBar.cs" />
+    <Compile Include="BattlezoneObjects\HUD\LifeCount.cs" />
     <Compile Include="BattlezoneObjects\HUD\Radar.cs" />
     <Compile Include="BattlezoneObjects\HUD\WeaponSelect.cs" />
     <Compile Include="BattlezoneObjects\Level.cs" />
