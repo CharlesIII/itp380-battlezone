@@ -131,6 +131,8 @@ namespace Battlezone
 
         Cue soundCue;
 
+        Level l;
+
         #endregion
 
         #region Initialization
@@ -203,7 +205,7 @@ namespace Battlezone
             //m_kSpawnManager = new SpawnManager(ScreenManager.Game,m_kPlayer,navPathFind);
             //ScreenManager.Game.Components.Add(m_kSpawnManager);
 
-            Level l = new Level(ScreenManager.Game);
+            l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
             //AITank test = new AITank(ScreenManager.Game, navPathFind, m_kPlayer.WorldPosition);
             //ScreenManager.Game.Components.Add(test);
@@ -268,6 +270,43 @@ namespace Battlezone
         public override void UnloadContent()
         {
             content.Unload();
+            ScreenManager.Game.Components.Remove(e_Camera);
+
+            ScreenManager.Game.Components.Remove(m_kPlayer);
+            /* Debug usage for AI Tank testing*/
+            //m_kPlayer.Initialize();
+
+            ScreenManager.Game.Components.Remove(m_kSkyDome);
+
+            //m_kSpawnManager = new SpawnManager(ScreenManager.Game,m_kPlayer,navPathFind);
+            //ScreenManager.Game.Components.Add(m_kSpawnManager);
+
+            ScreenManager.Game.Components.Remove(l);
+            //AITank test = new AITank(ScreenManager.Game, navPathFind, m_kPlayer.WorldPosition);
+            //ScreenManager.Game.Components.Add(test);
+
+
+
+            ScreenManager.Game.Components.Remove(m_kHealthBar);
+            ScreenManager.Game.Components.Remove(m_kRadar);
+            ScreenManager.Game.Components.Remove(m_kWepSel);
+            ScreenManager.Game.Components.Remove(m_kLifeCount);
+
+
+            // Register the particle system components.
+            ScreenManager.Game.Components.Remove(explosionParticles);
+            ScreenManager.Game.Components.Remove(explosionSmokeParticles);
+            ScreenManager.Game.Components.Remove(projectileTrailParticles);
+            ScreenManager.Game.Components.Remove(tankExaustPlumeParticles);
+            ScreenManager.Game.Components.Remove(fireParticles);
+
+            foreach (Actor a in activeActors)
+            {
+                ScreenManager.Game.Components.Remove(a);
+            }
+
+            cue.Stop(AudioStopOptions.Immediate);
+
         }
 
 
@@ -334,7 +373,11 @@ namespace Battlezone
 
                     if (Enemies.Count == 0)
                     {
-                        MainMenuScreen.LoadMenu(ScreenManager);
+                        GameOverMenuScreen.LoadMenu(ScreenManager);
+                    }
+                    else if (m_kLifeCount.life < 0)
+                    {
+                        GameOverMenuScreen.LoadMenu(ScreenManager);
                     }
                 }
             }
