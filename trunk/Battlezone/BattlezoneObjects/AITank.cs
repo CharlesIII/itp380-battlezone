@@ -24,7 +24,7 @@ namespace Battlezone.BattlezoneObjects
         #region Variables
 
         const float TURRET_ROTATION_SPEED = 1.0f;
-        const float AUTOMATIC_DETECTION_RADIUS = 300.0f;
+        const float AUTOMATIC_DETECTION_RADIUS = 1000.0f;
         const float TANK_ROTATION_SPEED = 1.25f;
         const float PURSUIT_DURATION = 30.0f;
 
@@ -275,7 +275,7 @@ namespace Battlezone.BattlezoneObjects
                 else
                 {
                     //only change states if we're in one of the relatively idle states
-                    if (currentState == AIStates.PATROL || currentState == AIStates.SCAN)
+                    if (currentState == AIStates.PATROL || currentState == AIStates.SCAN || currentState ==AIStates.PURSUE)
                     {
                         currentState = AIStates.NEED_PURSUE;
                     }
