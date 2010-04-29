@@ -32,27 +32,27 @@ namespace Battlezone
 
             settings.MaxParticles = 3000;
 
-            settings.Duration = TimeSpan.FromSeconds(1.5);
+            settings.Duration = TimeSpan.FromSeconds(3);
 
             settings.MinHorizontalVelocity = 0;
-            settings.MaxHorizontalVelocity = 50;
+            settings.MaxHorizontalVelocity = 10;
 
-            settings.MinVerticalVelocity = 10;
-            settings.MaxVerticalVelocity = 15;
+            settings.MinVerticalVelocity = 0;
+            settings.MaxVerticalVelocity = 20;
 
             // Create a wind effect by tilting the gravity vector sideways.
-            settings.Gravity = new Vector3(0, 50, 0);
+            settings.Gravity = new Vector3(0, 20, 0);
 
             settings.EndVelocity = 0.75f;
 
             settings.MinRotateSpeed = -1;
             settings.MaxRotateSpeed = 1;
 
-            settings.MinStartSize = 5;
-            settings.MaxStartSize = 10;
+            settings.MinStartSize = 50;
+            settings.MaxStartSize = 60;
 
-            settings.MinEndSize = 50;
-            settings.MaxEndSize = 200;
+            settings.MinEndSize = 90;
+            settings.MaxEndSize = 400;
         }
 
         public void setGravity(Vector3 grav)

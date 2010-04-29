@@ -448,19 +448,18 @@ namespace Battlezone
                                 case 1:
                                     pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.PLAYER_TANK);
                                     audioManager.Play3DCue("FireCannon",m_kPlayer);
+                                    //m_kPlayer.UpdateTankCannonSmoke();
                                     break;
                                 case 2:
                                     if (!missileFired)
                                     {
                                         pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.MISSILE, CollisionIdentifier.PLAYER_TANK);
                                         audioManager.Play3DCue("FireMissile",m_kPlayer);
-                                        UpdateTankCannonSmoke();
                                     }
                                     break;
                                 default:
                                     System.Console.WriteLine("Hmm, Seems there's a bug a crawlin - selectedWeapon was neither 1 or 2.  Defaulted to Shell");
                                     pro = new Projectile(pos, ChaseDirection, ScreenManager.Game, Projectile.PROJECTILE_TYPE.SHELL, CollisionIdentifier.PLAYER_TANK);
-                                    UpdateTankCannonSmoke();
                                     break;
                             }
 
@@ -556,25 +555,13 @@ namespace Battlezone
             }
             else
             {
-                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle - 2*(Math.PI / 3)), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle - 2*(Math.PI / 3)));
+                Vector3 temp = new Vector3(103 * (float)Math.Cos(m_kPlayer.RotAngle - 2 * (Math.PI / 3)), 85, 103 * (float)Math.Sin(m_kPlayer.RotAngle - 2 * (Math.PI / 3)));
                 temp = m_kPlayer.WorldPosition + temp;
                 for (int i = 0; i < fireParticlesPerFrame; i++)
                 {
                     fireParticles.AddParticle(temp, Vector3.Zero);
                 }
                 tankExaustFire = true;
-            }
-        }
-        void UpdateTankCannonSmoke()
-        {
-            // This is trivial: we just create one new smoke particle per frame.
-            const int smokeParticlesPerFrame = 30;
-
-            Random random = new Random();
-
-            for (int i = 0; i < smokeParticlesPerFrame; i++)
-            {
-                fireParticles.AddParticle((m_kPlayer.turretBone.Transform * m_kPlayer.worldTransform).Translation, m_kPlayer.GetWorldFacing() * 50);
             }
         }
 
