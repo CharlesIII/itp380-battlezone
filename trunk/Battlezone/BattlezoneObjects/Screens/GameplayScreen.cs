@@ -202,9 +202,13 @@ namespace Battlezone
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
 
-            AITank test = new AITank(ScreenManager.Game, navPathFind, m_kPlayer.WorldPosition);
-            ScreenManager.Game.Components.Add(test);
-            Enemies.Add(test);
+            for (int i = 0; i < 15; i++)
+            {
+                AITank temp = new AITank(ScreenManager.Game, navPathFind, m_kPlayer.WorldPosition);
+                Enemies.Add(temp);
+                ScreenManager.Game.Components.Add(temp);
+            }
+            
 
             //Load & Initialize HUD
             m_kHealthBar = new BattlezoneObjects.HUD.HealthBar(ScreenManager.Game);
@@ -316,11 +320,10 @@ namespace Battlezone
                     //check for collisions
                     checkCollision();
 
-                    //update 3d sound
-                    audioManager.Listener.Position = e_Camera.DesiredPosition;
-                    audioManager.Listener.Forward = CameraMatrix.Forward;
-                    audioManager.Listener.Up = CameraMatrix.Up;
-                    audioManager.Listener.Velocity = Vector3.Zero;
+                    if (Enemies.Count == 0)
+                    {
+                        MainMenuScreen.LoadMenu(ScreenManager);
+                    }
                 }
             }
         }
