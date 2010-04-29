@@ -204,7 +204,9 @@ namespace Battlezone
 
             Level l = new Level(ScreenManager.Game);
             ScreenManager.Game.Components.Add(l);
-
+            //AITank test = new AITank(ScreenManager.Game, navPathFind, m_kPlayer.WorldPosition);
+            //ScreenManager.Game.Components.Add(test);
+            
             for (int i = 0; i < 15; i++)
             {
                 AITank temp = new AITank(ScreenManager.Game, navPathFind, m_kPlayer.WorldPosition);
@@ -213,7 +215,7 @@ namespace Battlezone
                 ScreenManager.Game.Components.Add(temp);
                 
             }
-                
+              
             
 
             //Load & Initialize HUD
