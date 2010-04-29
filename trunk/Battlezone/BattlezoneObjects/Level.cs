@@ -422,6 +422,12 @@ namespace Battlezone.BattlezoneObjects
 
         }
 
+        protected override void UnloadContent()
+        {
+            base.UnloadContent();
+
+        }
+
         /// <summary>
         /// Allows the game component to update itself.
         /// </summary>

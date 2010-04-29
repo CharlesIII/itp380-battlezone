@@ -96,6 +96,8 @@
     <Compile Include="BattlezoneObjects\HUD\WeaponSelect.cs" />
     <Compile Include="BattlezoneObjects\Level.cs" />
     <Compile Include="BattlezoneObjects\Screens\BackgroundScreen.cs" />
+    <Compile Include="BattlezoneObjects\Screens\GameOverBackgroundScreen.cs" />
+    <Compile Include="BattlezoneObjects\Screens\GameOverMenuScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\GameplayScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\LoadingScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\MainMenuScreen.cs" />
