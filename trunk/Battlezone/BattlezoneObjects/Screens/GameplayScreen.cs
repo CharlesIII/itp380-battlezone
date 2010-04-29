@@ -395,11 +395,11 @@ namespace Battlezone
 
                     if (Enemies.Count == 0)
                     {
-                        GameOverMenuScreen.LoadMenu(ScreenManager);
+                        GameOverMenuScreen.LoadMenu(ScreenManager,true);
                     }
                     else if (m_kLifeCount.life < 0)
                     {
-                        GameOverMenuScreen.LoadMenu(ScreenManager);
+                        GameOverMenuScreen.LoadMenu(ScreenManager,false);
                     }
                 }
             }
