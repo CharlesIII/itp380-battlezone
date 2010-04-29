@@ -290,13 +290,20 @@ namespace Battlezone
 
             timer.AddTimer("Remove Projectile", 5, OnTimedEvent, false);
             //GameplayScreen.Instance.audioManager.Play3DCue("ProjectileExplosion",this);
-            Cue c = GameplayScreen.Instance.audioManager.soundSoundBank.GetCue("ProjectileExplosion");
+            
+            Cue c = ScreenManager.soundSoundBank.GetCue("ProjectileExplosion");
             AudioEmitter emitter = new AudioEmitter();
             emitter.Position = WorldPosition;
             emitter.Up = worldTransform.Up;
             emitter.Forward = worldTransform.Forward;
-            c.Apply3D(GameplayScreen.Instance.audioManager.Listener, emitter);
+            emitter.Velocity = Velocity;
+            AudioListener listener = new AudioListener();
+            listener.Position = GameplayScreen.CameraMatrix.Translation;
+            listener.Forward = GameplayScreen.CameraMatrix.Forward;
+            listener.Up = GameplayScreen.CameraMatrix.Up;
+            c.Apply3D(listener, emitter);
             c.Play();
+            
         }
 
         public override void removeSelf()

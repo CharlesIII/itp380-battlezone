@@ -239,31 +239,45 @@ namespace Battlezone.BattlezoneObjects
             if (targetTankRotationValue > 0)
             {
                 //we need to rotate CCW
-                RotAngle += TANK_ROTATION_SPEED * fDelta;
-                targetTankRotationValue -= TANK_ROTATION_SPEED * fDelta;
                 //clamp RotAngle to target if close enough
                 if (Math.Abs(targetTankRotationValue) <= 0.10f)
+                {
+                    RotAngle += targetTankRotationValue;
                     targetTankRotationValue = 0;
+                }
+                else
+                {
+                    RotAngle += TANK_ROTATION_SPEED * fDelta;
+                    targetTankRotationValue -= TANK_ROTATION_SPEED * fDelta;
+                }
+                
                 Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
             }
             else if (targetTankRotationValue < 0)
             {
                 //we need to rotate CW
-                RotAngle -= TANK_ROTATION_SPEED * fDelta;
-                targetTankRotationValue += TANK_ROTATION_SPEED * fDelta;
-
                 //clamp RotAngle to target if close enough
                 if (Math.Abs(targetTankRotationValue) <= 0.10f)
+                {
+                    RotAngle -= targetTankRotationValue;
                     targetTankRotationValue = 0;
+                }
+                else
+                {
+                    RotAngle -= TANK_ROTATION_SPEED * fDelta;
+                    targetTankRotationValue += TANK_ROTATION_SPEED * fDelta;
+                }
+                
                 Quat = Quaternion.CreateFromAxisAngle(Vector3.UnitY, RotAngle);
             }
             else
             {
                 //we're facing the right direction so do movement logic
-                if ((m_vCurrentPathTarget - WorldPosition).Length() < 10.0f)
+                if ((m_vCurrentPathTarget - WorldPosition).Length() < 5.0f)
                 {
                     //we're close enough so stop moving and snap position
-                    Velocity = new Vector3(0.0f);
+                    if (currentState != AIStates.PURSUE)
+                        Velocity = new Vector3(0.0f);
                     WorldPosition = m_vCurrentPathTarget;
                     if (TankEngineIdleCue.IsStopped)
                         TankEngineIdleCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_IDLE,this);
@@ -334,11 +348,17 @@ namespace Battlezone.BattlezoneObjects
                 //if we've reached CurrentPathTarget, scan for player
                 if (WorldPosition.Equals(m_vCurrentPathTarget))
                 {
+                    previousState = currentState;
                     currentState = AIStates.SCAN;
                 }
             }
             else if (currentState == AIStates.NEED_PATROL)
             {
+                if (!WorldPosition.Equals(m_vCurrentPathTarget))
+                {
+                    //state was probably set by timer, wait until we are at the target
+                    return;
+                }
                 //reset turret
                 if (turretRotationValue != 0)
                 {
@@ -408,15 +428,7 @@ namespace Battlezone.BattlezoneObjects
                     }
                     else
                     {
-                        if (timer.GetNumberOfTimers() > 0)
-                        {
-                            //means we should be in pursuit mode
-                            currentState = AIStates.PURSUE;
-                        }
-                        else
-                        {
-                            currentState = AIStates.NEED_PATROL;
-                        }
+                        currentState = previousState;
                     }
                 }
             }
@@ -451,6 +463,7 @@ namespace Battlezone.BattlezoneObjects
                 //only scan for the player once we reach the navnode closest to its last known position
                 if (WorldPosition.Equals(m_vTarget))
                 {
+                    previousState = currentState;
                     currentState = AIStates.SCAN;
 
                     //pick a random place to look
@@ -559,7 +572,9 @@ namespace Battlezone.BattlezoneObjects
             //if the player is within a minimum detection distance, the AI will instantly "discover" the player
             //AI tank has a 20 degree viewing angle for checking? maybe?
             //Console.Out.WriteLine(WorldBounds);
-            //Console.Out.WriteLine("Current state: " + currentState);
+            Console.Out.WriteLine("Current state: " + currentState);
+            //Console.Out.WriteLine("Current position: " + WorldPosition);
+            //Console.Out.WriteLine("Current target: " + m_vCurrentPathTarget);
         }
 
         //Helper functions to keep the Update method clean
@@ -720,6 +735,12 @@ namespace Battlezone.BattlezoneObjects
             
             //set the magnitude of the Force vector
             Force = tempForce * fTerminalVelocity;
+
+            if (Velocity.Length() != 0)
+            {
+                //in pursuit so keep magnitude, but reset direction
+                Velocity = Velocity.Length() * tempForce;
+            }
         }
 
         public void msgWeAreColliding(AITank tank)
