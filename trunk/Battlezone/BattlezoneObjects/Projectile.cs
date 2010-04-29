@@ -130,11 +130,11 @@ namespace Battlezone
             this.type = type;
             source = src;
             float dmgModifier = 1.0f;
-            if (source == CollisionIdentifier.PLAYER_TANK) dmgModifier = 2.0f;
+            if (source == CollisionIdentifier.PLAYER_TANK) dmgModifier = 5.0f;
             if (type == PROJECTILE_TYPE.MISSILE)
             {
                 sMeshToLoad = "Missile";
-                Damage = 100.0f * dmgModifier;
+                Damage = 10.0f * dmgModifier;
             }
             else if (type == PROJECTILE_TYPE.SHELL)
             {
