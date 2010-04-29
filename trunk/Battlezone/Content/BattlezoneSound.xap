@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = 1::dfcb74f9-5edc-4ad3-b54d-4a59e53d7118;
+            Name = 1::370ce2da-0d27-4909-ac34-3c2fcacd81d9;
             Property = 1;
             Sound = 0;
             Line Color = 4280796060;
@@ -254,7 +254,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = 1::17916d1c-37fd-4f9b-b989-282d700eb050;
+            Name = 1::b2120a69-d7ac-4fb2-aaf6-134b9418d7f1;
             Property = 1;
             Sound = 0;
             Line Color = 4290103137;
@@ -287,7 +287,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = 1::fdaf274d-7cb2-4e1c-8ca5-fe8d311a2f06;
+            Name = 1::62039a80-a6da-41fc-8131-ecefb09e4632;
             Property = 1;
             Sound = 0;
             Line Color = 4285238243;
@@ -320,7 +320,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::3ea4f453-9ac9-484f-9039-4680a9d0f005;
+            Name = Sound::84ec5f8a-004b-4c1a-b432-597423a913db;
             Property = 0;
             Sound = 1;
             Line Color = 4292460339;
@@ -353,7 +353,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::fd7bdb20-9253-415d-8566-5c12c3abe9b0;
+            Name = Sound::074b8049-e00b-404c-94ec-3c0099b4b267;
             Property = 0;
             Sound = 1;
             Line Color = 4284641433;
@@ -386,7 +386,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = 1::43a738ea-3a16-45dd-8fa9-c0cbf53dd097;
+            Name = 1::e9c1aea3-d0cb-467b-a991-40663e057aba;
             Property = 1;
             Sound = 0;
             Line Color = 4287373627;
@@ -423,6 +423,12 @@ Wave Bank
     Windows Bank Path Edited = 1;
     Seek Tables = 1;
     Compression Preset Name = <none>;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 0;
+    PC Bank Last Modified High = 0;
+    Header Last Modified Low = 0;
+    Header Last Modified High = 0;
     Bank Last Revised Low = 2059063325;
     Bank Last Revised High = 30074714;
 
@@ -2027,7 +2033,7 @@ Sound Bank
     Sound
     {
         Name = bleep1;
-        Volume = -600;
+        Volume = -10;
         Pitch = 0;
         Priority = 0;
 
@@ -2176,7 +2182,7 @@ Sound Bank
             RPC Curve Entry
             {
                 RPC Name = Idle;
-                RPC Curve Name = 1::43a738ea-3a16-45dd-8fa9-c0cbf53dd097;
+                RPC Curve Name = 1::e9c1aea3-d0cb-467b-a991-40663e057aba;
             }
         }
     }
@@ -2239,7 +2245,7 @@ Sound Bank
             RPC Curve Entry
             {
                 RPC Name = SpeedUp;
-                RPC Curve Name = 1::dfcb74f9-5edc-4ad3-b54d-4a59e53d7118;
+                RPC Curve Name = 1::370ce2da-0d27-4909-ac34-3c2fcacd81d9;
             }
         }
     }
@@ -2302,7 +2308,7 @@ Sound Bank
             RPC Curve Entry
             {
                 RPC Name = SlowDown;
-                RPC Curve Name = 1::17916d1c-37fd-4f9b-b989-282d700eb050;
+                RPC Curve Name = 1::b2120a69-d7ac-4fb2-aaf6-134b9418d7f1;
             }
         }
     }
@@ -2365,7 +2371,7 @@ Sound Bank
             RPC Curve Entry
             {
                 RPC Name = TankMove;
-                RPC Curve Name = 1::fdaf274d-7cb2-4e1c-8ca5-fe8d311a2f06;
+                RPC Curve Name = 1::62039a80-a6da-41fc-8131-ecefb09e4632;
             }
         }
     }
