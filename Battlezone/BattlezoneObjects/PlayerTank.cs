@@ -409,6 +409,7 @@ namespace Battlezone.BattlezoneObjects
                     //}
                     else
                     {
+                        
                         Velocity = Vector3.Zero;
                     }
                        
@@ -568,7 +569,7 @@ namespace Battlezone.BattlezoneObjects
                 wallNormal.Normalize();
                 //perpVelComp = Perpendicular Velocity Component (perpendicular to plane)
                 Vector3 perpVelComp = Vector3.Dot(Velocity, wallNormal * -1.0f) * wallNormal;
-                
+
                 //System.Console.Out.WriteLine("Pre: " + Velocity);
                 Velocity += perpVelComp;
                 WorldPosition = m_vPreviousWorldPosition;
@@ -692,6 +693,11 @@ namespace Battlezone.BattlezoneObjects
             Plane wall1;
             Plane wall2;
 
+            Vector3 findCommon1;
+            Vector3 findCommon2;
+            Vector3 Common;
+
+
             Random rand = new Random();
 
             if (firstClosest.X == secondClosest.X)
@@ -699,18 +705,24 @@ namespace Battlezone.BattlezoneObjects
                 arbitrary.X = firstClosest.X;
                 arbitrary.Z = (float)rand.Next((int)Math.Min(firstClosest.Z, secondClosest.Z), (int)Math.Max(firstClosest.Z, secondClosest.Z));
                 wall1 = new Plane(firstClosest, arbitrary, secondClosest);
+                findCommon1 = firstClosest;
+                findCommon2 = secondClosest;
             }
             else if (firstClosest.X == thirdClosest.X)
             {
                 arbitrary.X = firstClosest.X;
                 arbitrary.Z = (float)rand.Next((int)Math.Min(firstClosest.Z, thirdClosest.Z), (int)Math.Max(firstClosest.Z, thirdClosest.Z));
                 wall1 = new Plane(firstClosest, arbitrary, thirdClosest);
+                findCommon1 = firstClosest;
+                findCommon2 = thirdClosest;
             }
             else
             {
                 arbitrary.X = secondClosest.X;
                 arbitrary.Z = (float)rand.Next((int)Math.Min(secondClosest.Z, thirdClosest.Z), (int)Math.Max(secondClosest.Z, thirdClosest.Z));
                 wall1 = new Plane(secondClosest, arbitrary, thirdClosest);
+                findCommon1 = thirdClosest;
+                findCommon2 = secondClosest;
             }
             
             if (firstClosest.Z == secondClosest.Z)
@@ -718,12 +730,24 @@ namespace Battlezone.BattlezoneObjects
                 arbitrary2.Z = firstClosest.Z;
                 arbitrary2.X = (float)rand.Next((int)Math.Min(firstClosest.X, secondClosest.X), (int)Math.Min(firstClosest.X, secondClosest.X));
                 wall2 = new Plane(firstClosest, arbitrary2, secondClosest);
+                if (firstClosest == findCommon1 || firstClosest == findCommon2)
+                {
+                    Common = firstClosest;
+                }
+                else
+                    Common = secondClosest;
             }
             else if (firstClosest.Z == thirdClosest.Z)
             {
                 arbitrary2.Z = firstClosest.Z;
                 arbitrary2.X = (float)rand.Next((int)Math.Min(firstClosest.X, thirdClosest.X), (int)Math.Min(firstClosest.X, thirdClosest.X));
                 wall2 = new Plane(firstClosest, arbitrary2, thirdClosest);
+                if (firstClosest == findCommon1 || firstClosest == findCommon2)
+                {
+                    Common = firstClosest;
+                }
+                else
+                    Common = thirdClosest;
             }
             
             else
@@ -731,6 +755,12 @@ namespace Battlezone.BattlezoneObjects
                 arbitrary2.Z = thirdClosest.Z;
                 arbitrary2.X = (float)rand.Next((int)Math.Min(secondClosest.X, thirdClosest.X), (int)Math.Min(secondClosest.X, thirdClosest.X));
                 wall2 = new Plane(secondClosest, arbitrary2, thirdClosest);
+                if (thirdClosest == findCommon1 || thirdClosest == findCommon2)
+                {
+                    Common = thirdClosest;
+                }
+                else
+                    Common = secondClosest;
             }
 
             
@@ -741,7 +771,21 @@ namespace Battlezone.BattlezoneObjects
             {
                 return wall1;
             }
-            else
+            /*
+            else if (Math.Abs(distance1 - distance2) < 5)
+            {
+                //TODO: Need to figure out how to decide which diagonal the plane should be (depends on corner of building)
+                if (true)
+                {
+                    return new Plane(new Vector3(Common.X - 10.0f, 0.0f, Common.Z + 10.0f), Common, new Vector3(Common.X + 10.0f, 0.0f, Common.Z - 10.0f));
+                }
+                else
+                {
+                    return new Plane(new Vector3(Common.X + 10.0f, 0.0f, Common.Z + 10.0f), Common, new Vector3(Common.X - 10.0f, 0.0f, Common.Z - 10.0f));
+                }
+            }
+            */
+            else 
             {
                 return wall2;
             }
