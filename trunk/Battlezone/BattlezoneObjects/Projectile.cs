@@ -139,7 +139,7 @@ namespace Battlezone
             else if (type == PROJECTILE_TYPE.SHELL)
             {
                 sMeshToLoad = "tank_shell";
-                Damage = 100.0f * dmgModifier;
+                Damage = 5.0f * dmgModifier;
             }
             position = Position;
             WorldPosition = position;
@@ -262,7 +262,8 @@ namespace Battlezone
                 //age += elapsedTime;
 
                 // Update the particle emitter, which will create our particle trail.
-                trailEmitter.Update(gameTime, WorldPosition);
+                if(trailEmitter != null)
+                    trailEmitter.Update(gameTime, WorldPosition);
               
                 // If enough time has passed, explode! Note how we pass our velocity
                 // in to the AddParticle method: this lets the explosion be influenced

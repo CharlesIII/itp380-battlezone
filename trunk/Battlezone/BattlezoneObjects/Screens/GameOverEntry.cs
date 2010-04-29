@@ -137,7 +137,7 @@ namespace Battlezone
             SpriteFont font = screenManager.Font;
 
             Vector2 origin = new Vector2(0, font.LineSpacing / 2);
-            Vector2 message = new Vector2(0,0);
+            Vector2 message = new Vector2(50,50);
             if (GameOverMenuScreen.win)
             {
                 spriteBatch.DrawString(font, "MISSION ALL OVER!", message, color, 0,
