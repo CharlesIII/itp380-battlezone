@@ -78,6 +78,8 @@ namespace Battlezone
 
                 if (selectedEntry < 0)
                     selectedEntry = menuEntries.Count - 1;
+
+                ScreenManager.soundSoundBank.PlayCue("MenuBeep1");
             }
 
             // Move to the next menu entry?
@@ -87,12 +89,14 @@ namespace Battlezone
 
                 if (selectedEntry >= menuEntries.Count)
                     selectedEntry = 0;
+                ScreenManager.soundSoundBank.PlayCue("MenuBeep1");
             }
 
             // Accept or cancel the menu?
             if (input.MenuSelect)
             {
                 OnSelectEntry(selectedEntry);
+                ScreenManager.soundSoundBank.PlayCue("MenuBeep1");
             }
             else if (input.MenuCancel)
             {

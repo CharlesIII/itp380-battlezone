@@ -307,7 +307,10 @@ namespace Battlezone.BattlezoneObjects
             tankCannonPlumeParticleSystem.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
             if (soundCue == null && gamePlay)
             {
-                soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankIdle", this);
+                soundCue = ScreenManager.soundSoundBank.GetCue("TankIdle");
+
+                soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                soundCue.Play();
             }
             else
             {
