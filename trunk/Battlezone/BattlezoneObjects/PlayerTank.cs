@@ -73,6 +73,7 @@ namespace Battlezone.BattlezoneObjects
 
         public bool gamePlay = false;
 
+
         private Vector3 startingPos;
         String name;
 
@@ -372,6 +373,7 @@ namespace Battlezone.BattlezoneObjects
 
                 if (gamePlay)
                 {
+                    if (dead) return;
                     if (Move && !isColliding)
                     {
                         Velocity = GetWorldFacing() * -TANK_VELOCITY * GameplayScreen.Instance.spdBoost;
@@ -382,7 +384,7 @@ namespace Battlezone.BattlezoneObjects
                     }
                     //else if (Move && isColliding)
                     //{
-                        
+                        //Velocity = GetWorldFacing() * -TANK_VELOCITY * GameplayScreen.Instance.spdBoost;
                     //}
                     //else if (Reverse && isColliding)
                     //{
@@ -547,6 +549,7 @@ namespace Battlezone.BattlezoneObjects
                 Console.Out.WriteLine(wall);
                 Vector3 wallNormal = wall.Normal;
                 wallNormal.Normalize();
+                //perpVelComp = Perpendicular Velocity Component (perpendicular to plane)
                 Vector3 perpVelComp = Vector3.Dot(Velocity, wallNormal * -1.0f) * wallNormal;
                 
                 //System.Console.Out.WriteLine("Pre: " + Velocity);
@@ -588,9 +591,6 @@ namespace Battlezone.BattlezoneObjects
             {
                 if (WorldPosition.Z >= (minZ - WorldBounds.Radius) && WorldPosition.Z <= (maxZ + WorldBounds.Radius))
                 {
-                    
-                    //Console.Out.WriteLine(b.WorldBoundsBox);
-                    //Console.Out.WriteLine(WorldPosition);
                     return true;
                 }
             }
@@ -715,5 +715,20 @@ namespace Battlezone.BattlezoneObjects
             return (p2.X - p1.X) * (p2.X - p1.X) + (p2.Y - p1.Y) * (p2.Y - p1.Y);
         }
 
+        public void playerDeath()
+        {
+            dead = true;
+            Game.Components.Remove(this);
+        }
+
+
+        public void respawnPlayer()
+        {
+            GameplayScreen.Instance.m_kTimer.RemoveTimer("Respawn");
+            CurrentHealth = 100.0f;
+            dead = false;
+            Game.Components.Add(this);
+
+        }
     }
 }
