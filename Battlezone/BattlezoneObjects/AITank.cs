@@ -141,13 +141,15 @@ namespace Battlezone.BattlezoneObjects
 
             collidingAITanks = new List<AITank>(10);
 
-            TankEngineIdleCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_IDLE,this);
-            TankTreadRollingCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_TREAD_MOVE,this);
-            TankEngineMovingCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_ENGINE_MOVE,this);
+            //TankEngineIdleCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_IDLE,this);
+            //TankTreadRollingCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_TREAD_MOVE,this);
+            //TankEngineMovingCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_ENGINE_MOVE,this);
             //TankCannonFireCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_FIRE,this);
             //TankCannonReloadCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_RELOAD,this);
 
             DistanceFromCamera = (GameplayScreen.CameraMatrix.Translation - WorldPosition).Length();
+
+            m_vPlayerLastKnownPosition = new Vector3(m_vPlayerPosition.X, m_vPlayerPosition.Y, m_vPlayerPosition.Z);
 
             COLLISION_IDENTIFIER = CollisionIdentifier.AI_TANK;         
         }
@@ -299,6 +301,7 @@ namespace Battlezone.BattlezoneObjects
                     if (currentState != AIStates.PURSUE)
                         Velocity = new Vector3(0.0f);
                     WorldPosition = m_vCurrentPathTarget;
+                    /*
                     if (TankEngineIdleCue.IsStopped)
                         TankEngineIdleCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_IDLE,this);
                     if (TankEngineIdleCue.IsPrepared)
@@ -309,6 +312,7 @@ namespace Battlezone.BattlezoneObjects
                         TankEngineMovingCue.Stop(AudioStopOptions.Immediate);
                     if (TankTreadRollingCue.IsPlaying)
                         TankTreadRollingCue.Stop(AudioStopOptions.Immediate);
+                     * */
                 }
                 else
                 {
@@ -326,6 +330,7 @@ namespace Battlezone.BattlezoneObjects
                             Velocity = temp;
                             Velocity *= fTerminalVelocity;
                         }
+                        /*
                         if (TankEngineMovingCue.IsStopped)
                             TankEngineMovingCue = GameplayScreen.Instance.audioManager.Play3DCue(TANK_ENGINE_MOVE,this);
                         if (TankTreadRollingCue.IsStopped)
@@ -343,6 +348,7 @@ namespace Battlezone.BattlezoneObjects
                             TankTreadRollingCue.SetVariable("Distance", DistanceFromCamera);
                             TankTreadRollingCue.Play();
                         }
+                         * */
                     }
                     else
                     {
@@ -592,7 +598,7 @@ namespace Battlezone.BattlezoneObjects
             //if the player is within a minimum detection distance, the AI will instantly "discover" the player
             //AI tank has a 20 degree viewing angle for checking? maybe?
             //Console.Out.WriteLine(WorldBounds);
-            Console.Out.WriteLine("Current state: " + currentState);
+            //Console.Out.WriteLine("Current state: " + currentState);
             //Console.Out.WriteLine("Current position: " + WorldPosition);
             //Console.Out.WriteLine("Current target: " + m_vCurrentPathTarget);
         }
