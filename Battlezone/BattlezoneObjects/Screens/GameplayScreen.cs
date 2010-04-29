@@ -77,7 +77,7 @@ namespace Battlezone
 
         Random random = new Random();
 
-		Utils.Timer m_kTimer = new Utils.Timer();
+		public Utils.Timer m_kTimer = new Utils.Timer();
 
         //SpawnManager m_kSpawnManager;
         public List<Vector3> enemyStarts=new List<Vector3>();
@@ -292,7 +292,14 @@ namespace Battlezone
                     m_kTimer.Update(gameTime);
                     DirLightDirection.X = (float)Math.Cos(m_fTotalTime);
                     DirLightDirection.Y = (float)Math.Sin(m_fTotalTime);
-                    
+
+                    if (m_kPlayer.CurrentHealth <= 0.0f)
+                    {
+                        m_kPlayer.playerDeath();
+                        m_kTimer.AddTimer("Respawn", 5.0f, new Utils.TimerDelegate(m_kPlayer.respawnPlayer), false);
+                    }
+
+
                     if (m_fTotalTime >= 5 && m_fTotalTime <= 5 + fDelta)
                     {
                         switch (random.Next(3))
