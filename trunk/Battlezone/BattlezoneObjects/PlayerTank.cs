@@ -84,6 +84,8 @@ namespace Battlezone.BattlezoneObjects
         EngineState currentState;
 
         private ParticleSystem tankCannonPlumeParticleSystem;
+        public ParticleSystem explosionParticles;
+        public ParticleSystem explosionSmokeParticles;
 
         #endregion
 
@@ -293,6 +295,13 @@ namespace Battlezone.BattlezoneObjects
 
         public override void Draw(GameTime gameTime)
         {
+            if (explosionParticles != null && explosionSmokeParticles != null)
+            {
+                explosionParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
+                explosionSmokeParticles.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
+            }
+            if (dead)
+                return;
             base.updateWorldTransform();
 
             // Set the world matrix as the root transform of the model.
@@ -355,10 +364,20 @@ namespace Battlezone.BattlezoneObjects
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            timer.Update(gameTime);
             //Console.Out.WriteLine(WorldPosition);
             //WorldBounds.Center = WorldPosition + new Vector3(0,0, turretTransform.Translation.Z);
             //Console.Out.WriteLine(WorldBounds.Center);
             //WorldBounds.Radius = ModelBounds.Radius * Scale;
+            if (dead)
+            {
+                if(soundCue.IsPlaying)
+                {
+                    soundCue.Stop(AudioStopOptions.Immediate);
+                }
+                return;
+            }
+
             Delta = gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f;
             tankCannonPlumeParticleSystem.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
             if (soundCue == null && gamePlay)
@@ -569,6 +588,34 @@ namespace Battlezone.BattlezoneObjects
                     CurrentHealth -= temp.Damage;
                     System.Console.Out.WriteLine("Ouch");
                 }
+                if (this.CurrentHealth <= 0.0f)
+                {
+                    this.playerDeath();
+                    timer.AddTimer("Respawn", 10.0f, new Utils.TimerDelegate(respawnPlayer), false);
+
+                    explosionParticles = new ExplosionParticleSystemTank(Game, meshLoader);
+                    explosionSmokeParticles = new ExplosionSmokeParticleSystemTank(Game, meshLoader);
+
+                    // Set the draw order so the explosions and fire
+                    // will appear over the top of the smoke.
+                    explosionSmokeParticles.DrawOrder = 200;
+                    explosionParticles.DrawOrder = 400;
+
+                    // Register the particle system components.
+                    Game.Components.Add(explosionParticles);
+                    Game.Components.Add(explosionSmokeParticles);
+
+                    for (int i = 0; i < 1000; i++)
+                        explosionParticles.AddParticle(WorldPosition, new Vector3());
+
+                    for (int i = 0; i < 1600; i++)
+                        explosionSmokeParticles.AddParticle(WorldPosition, new Vector3());
+                    Cue c = ScreenManager.soundSoundBank.GetCue("TankExplosion");
+
+                    c.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                    c.Play();
+                }
+
                 
             }
         }
@@ -718,7 +765,7 @@ namespace Battlezone.BattlezoneObjects
         public void playerDeath()
         {
             dead = true;
-            Game.Components.Remove(this);
+            GameplayScreen.Instance.removeActor(this);
         }
 
 
@@ -727,7 +774,7 @@ namespace Battlezone.BattlezoneObjects
             GameplayScreen.Instance.m_kTimer.RemoveTimer("Respawn");
             CurrentHealth = 100.0f;
             dead = false;
-            Game.Components.Add(this);
+            GameplayScreen.Instance.addActor(this);
 
         }
     }

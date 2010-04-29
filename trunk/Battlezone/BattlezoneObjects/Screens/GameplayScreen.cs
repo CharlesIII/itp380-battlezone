@@ -293,12 +293,6 @@ namespace Battlezone
                     DirLightDirection.X = (float)Math.Cos(m_fTotalTime);
                     DirLightDirection.Y = (float)Math.Sin(m_fTotalTime);
 
-                    if (m_kPlayer.CurrentHealth <= 0.0f)
-                    {
-                        m_kPlayer.playerDeath();
-                        m_kTimer.AddTimer("Respawn", 5.0f, new Utils.TimerDelegate(m_kPlayer.respawnPlayer), false);
-                    }
-
 
                     if (m_fTotalTime >= 5 && m_fTotalTime <= 5 + fDelta)
                     {
@@ -350,6 +344,8 @@ namespace Battlezone
         /// </summary>
 		public override void HandleInput(InputState input, GameTime gameTime)
         {
+            if (m_kPlayer.dead)
+                return;
 
             float deltaTime = ((float)gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond) / 1000.0f;
 
@@ -538,7 +534,8 @@ namespace Battlezone
         void UpdateTankExaust()
         {
             // This is trivial: we just create one new smoke particle per frame.
-
+            if (m_kPlayer.dead)
+                return;
 
             if (tankExaust)
             {
