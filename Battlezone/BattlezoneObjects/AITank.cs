@@ -39,6 +39,7 @@ namespace Battlezone.BattlezoneObjects
         Cue TankTreadRollingCue;
         Cue TankCannonFireCue;
         Cue TankCannonReloadCue;
+        Cue soundCue;
 
         public ParticleSystem explosionParticles;
         public ParticleSystem explosionSmokeParticles;
@@ -70,6 +71,9 @@ namespace Battlezone.BattlezoneObjects
         enum AIStates {NEED_PURSUE, PURSUE, PATROL, NEED_PATROL, SCAN, ATTACK, DEAD, STOP};
         AIStates currentState;
         AIStates previousState;
+
+        enum EngineState { IDLE, SPEEDUP, SLOWDOWN, MOVING };
+        EngineState currentEngineState;
 
         float turretRotationValue;
         float turretTargetRotationValue;
@@ -151,7 +155,7 @@ namespace Battlezone.BattlezoneObjects
 
             m_vPlayerLastKnownPosition = new Vector3(m_vPlayerPosition.X, m_vPlayerPosition.Y, m_vPlayerPosition.Z);
 
-            COLLISION_IDENTIFIER = CollisionIdentifier.AI_TANK;         
+            COLLISION_IDENTIFIER = CollisionIdentifier.AI_TANK;
         }
 
         /// <summary>
@@ -313,6 +317,55 @@ namespace Battlezone.BattlezoneObjects
                     if (TankTreadRollingCue.IsPlaying)
                         TankTreadRollingCue.Stop(AudioStopOptions.Immediate);
                      * */
+                    if (soundCue == null)
+                    {
+                        soundCue = ScreenManager.soundSoundBank.GetCue("TankIdle");
+
+                        soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                        soundCue.Play();
+                        currentEngineState = EngineState.IDLE;
+                    }
+                    if (soundCue.IsStopped && currentEngineState == EngineState.SLOWDOWN)
+                    {
+                        soundCue.Stop(AudioStopOptions.AsAuthored);
+                        soundCue = ScreenManager.soundSoundBank.GetCue("TankIdle");
+
+                        soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                        soundCue.Play();
+                        //soundCue.Stop(AudioStopOptions.AsAuthored);
+                        //soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankIdle", this);
+                        currentEngineState = EngineState.IDLE;
+                    }
+                    else if (soundCue.IsStopped && currentEngineState == EngineState.IDLE)
+                    {
+                        soundCue.Stop(AudioStopOptions.AsAuthored);
+                        soundCue = ScreenManager.soundSoundBank.GetCue("TankIdle");
+
+                        soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                        soundCue.Play();
+                        //soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankIdle", this);
+                        currentEngineState = EngineState.IDLE;
+                    }
+                    else if (currentEngineState == EngineState.MOVING)
+                    {
+                        soundCue.Stop(AudioStopOptions.AsAuthored);
+                        soundCue = ScreenManager.soundSoundBank.GetCue("TankSlowDown");
+
+                        soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                        soundCue.Play();
+                        //soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankSlowDown", this);
+                        currentEngineState = EngineState.SLOWDOWN;
+                    }
+                    else if (currentEngineState == EngineState.SPEEDUP)
+                    {
+                        soundCue.Stop(AudioStopOptions.AsAuthored);
+                        soundCue = ScreenManager.soundSoundBank.GetCue("TankSlowDown");
+
+                        soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                        soundCue.Play();
+                        //soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankSlowDown", this);
+                        currentEngineState = EngineState.SLOWDOWN;
+                    }
                 }
                 else
                 {
@@ -349,6 +402,56 @@ namespace Battlezone.BattlezoneObjects
                             TankTreadRollingCue.Play();
                         }
                          * */
+                        if (soundCue == null)
+                        {
+                            soundCue = ScreenManager.soundSoundBank.GetCue("TankEngineMoving");
+
+                            soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                            soundCue.Play();
+                            currentEngineState = EngineState.MOVING;
+                        }
+                        if (soundCue.IsStopped && currentEngineState == EngineState.SPEEDUP)
+                        {
+                            soundCue.Stop(AudioStopOptions.AsAuthored);
+                            soundCue = ScreenManager.soundSoundBank.GetCue("TankEngineMoving");
+
+                            soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                            soundCue.Play();
+
+                            //soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankEngineMoving", this);
+                            currentEngineState = EngineState.MOVING;
+                        }
+                        else if (soundCue.IsStopped && currentEngineState == EngineState.MOVING)
+                        {
+                            soundCue.Stop(AudioStopOptions.AsAuthored);
+                            soundCue = ScreenManager.soundSoundBank.GetCue("TankEngineMoving");
+
+                            soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                            soundCue.Play();
+                            //soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankEngineMoving", this);
+                            currentEngineState = EngineState.MOVING;
+                        }
+                        else if (currentEngineState == EngineState.IDLE)
+                        {
+                            soundCue.Stop(AudioStopOptions.AsAuthored);
+                            soundCue = ScreenManager.soundSoundBank.GetCue("TankSpeedUp");
+
+                            soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                            soundCue.Play();
+                            //soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankSpeedUp", this);
+                            currentEngineState = EngineState.SPEEDUP;
+                        }
+                        else if (currentEngineState == EngineState.SLOWDOWN)
+                        {
+                            soundCue.Stop(AudioStopOptions.AsAuthored);
+                            soundCue = ScreenManager.soundSoundBank.GetCue("TankSpeedUp");
+
+                            soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                            soundCue.Play();
+                            //soundCue = GameplayScreen.Instance.audioManager.Play3DCue("TankSpeedUp", this);
+                            currentEngineState = EngineState.SPEEDUP;
+                        }
+
                     }
                     else
                     {
@@ -548,6 +651,16 @@ namespace Battlezone.BattlezoneObjects
                             //TankCannonFireCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_FIRE,this);
                         //TankCannonFireCue.Play();
                         //TankCannonReloadCue = GameplayScreen.Instance.audioManager.Play3DCue(CANNON_RELOAD,this);
+
+                        TankCannonFireCue = ScreenManager.soundSoundBank.GetCue(CANNON_FIRE);
+
+                        TankCannonFireCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                        TankCannonFireCue.Play();
+
+                        TankCannonReloadCue = ScreenManager.soundSoundBank.GetCue(CANNON_RELOAD);
+
+                        TankCannonReloadCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                        TankCannonReloadCue.Play();
 
                         canFire = false;
                         canRotate = false;
