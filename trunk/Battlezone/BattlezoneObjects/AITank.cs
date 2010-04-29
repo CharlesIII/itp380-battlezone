@@ -84,8 +84,8 @@ namespace Battlezone.BattlezoneObjects
         bool canRotate;
 
         List<AITank> collidingAITanks;
-        
-        
+
+        Random rg;
 
         #endregion
 
@@ -113,7 +113,7 @@ namespace Battlezone.BattlezoneObjects
             // TODO: Add your initialization code here
 
             base.Initialize();
-            Random rg = new Random();
+            rg = new Random();
             fMass = 10;
             bPhysicsDriven = true;
             fTerminalVelocity = 200.0f;
@@ -246,7 +246,6 @@ namespace Battlezone.BattlezoneObjects
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            Random rg = new Random();
             float fDelta = gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f;
             timer.Update(gameTime);
             m_vPlayerPosition = GameplayScreen.Instance.m_kPlayer.Position;
