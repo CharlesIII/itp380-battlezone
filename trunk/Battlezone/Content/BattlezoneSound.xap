@@ -124,7 +124,7 @@ Global Settings
         Reserved = 1;
         Read Only = 0;
         Time = 0;
-        Value = 1.000000;
+        Value = 1.428571;
         Initial Value = 0.000000;
         Min = 0.000000;
         Max = 4.000000;
@@ -209,7 +209,7 @@ Global Settings
         Reserved = 1;
         Read Only = 0;
         Time = 0;
-        Value = 5849.800293;
+        Value = 3748.943359;
         Initial Value = 0.000000;
         Min = 0.000000;
         Max = 7353.000000;
@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = 1::a2b2f8ed-011b-4c51-a4f4-636f3df7e0aa;
+            Name = 1::ba190994-a000-4b78-900e-22a6ce462481;
             Property = 1;
             Sound = 0;
             Line Color = 4280796060;
@@ -241,8 +241,8 @@ Global Settings
 
             RPC Point
             {
-                X = 1958.000000;
-                Y = 510.726654;
+                X = 15000.000000;
+                Y = 494.117645;
                 Curve = 0;
             }
         }
@@ -254,7 +254,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = 1::7b0ef3ed-d0bd-45c7-aecf-98c8405cc049;
+            Name = 1::457a2f61-0dc6-46ba-b625-007ea0a86084;
             Property = 1;
             Sound = 0;
             Line Color = 4290103137;
@@ -274,8 +274,8 @@ Global Settings
 
             RPC Point
             {
-                X = 2105.000000;
-                Y = -4.152249;
+                X = 15000.000000;
+                Y = 12.456747;
                 Curve = 0;
             }
         }
@@ -287,7 +287,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = 1::76e8bc83-7d1e-4f57-a297-35bb54bf98d0;
+            Name = 1::bb22ea4e-1bdb-4196-b6e7-3c6f28c39d00;
             Property = 1;
             Sound = 0;
             Line Color = 4285238243;
@@ -295,19 +295,19 @@ Global Settings
 
             Variable Entry
             {
-                Name = AttackTime;
+                Name = DopplerPitchScalar;
             }
 
             RPC Point
             {
-                X = 3805.000000;
+                X = 0.000000;
                 Y = 510.726654;
                 Curve = 0;
             }
 
             RPC Point
             {
-                X = 10123.000000;
+                X = 0.729064;
                 Y = 510.726654;
                 Curve = 0;
             }
@@ -320,7 +320,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::930ea664-dcc5-48a4-b348-18091a85e867;
+            Name = Sound::b259148c-d3ec-4937-8314-b18677241956;
             Property = 0;
             Sound = 1;
             Line Color = 4292460339;
@@ -333,7 +333,7 @@ Global Settings
 
             RPC Point
             {
-                X = 561.435974;
+                X = 3115.063965;
                 Y = 600.000000;
                 Curve = 1;
             }
@@ -353,7 +353,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::829d49d6-1bc5-46a3-80c4-fa885fed2087;
+            Name = Sound::bb53b836-beca-423b-9bc9-c7f6d9065298;
             Property = 0;
             Sound = 1;
             Line Color = 4284641433;
@@ -366,15 +366,15 @@ Global Settings
 
             RPC Point
             {
-                X = 380.327576;
-                Y = 600.000000;
+                X = 1032.317749;
+                Y = 0.000000;
                 Curve = 1;
             }
 
             RPC Point
             {
-                X = 1937.859619;
-                Y = -2500.000000;
+                X = 6012.797852;
+                Y = -1411.764771;
                 Curve = 0;
             }
         }
@@ -390,8 +390,14 @@ Wave Bank
     Windows Bank Path Edited = 1;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 1309796403;
-    Bank Last Revised High = 30074355;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 0;
+    PC Bank Last Modified High = 0;
+    Header Last Modified Low = 0;
+    Header Last Modified High = 0;
+    Bank Last Revised Low = 1771451721;
+    Bank Last Revised High = 30074531;
 
     Wave
     {
@@ -480,8 +486,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4050525228;
-            Last Modified High = 30073876;
+            Last Modified Low = 329489372;
+            Last Modified High = 30074520;
         }
     }
 
@@ -503,8 +509,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4049589226;
-            Last Modified High = 30073876;
+            Last Modified Low = 328489370;
+            Last Modified High = 30074520;
         }
     }
 
@@ -526,8 +532,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4049901226;
-            Last Modified High = 30073876;
+            Last Modified Low = 328489370;
+            Last Modified High = 30074520;
         }
     }
 
@@ -549,8 +555,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4049277225;
-            Last Modified High = 30073876;
+            Last Modified Low = 328089370;
+            Last Modified High = 30074520;
         }
     }
 
@@ -641,8 +647,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4049589226;
-            Last Modified High = 30073876;
+            Last Modified Low = 328389370;
+            Last Modified High = 30074520;
         }
     }
 
@@ -664,8 +670,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4049589226;
-            Last Modified High = 30073876;
+            Last Modified Low = 328389370;
+            Last Modified High = 30074520;
         }
     }
 
@@ -733,8 +739,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4049121225;
-            Last Modified High = 30073876;
+            Last Modified Low = 327989370;
+            Last Modified High = 30074520;
         }
     }
 
@@ -756,8 +762,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4049589226;
-            Last Modified High = 30073876;
+            Last Modified Low = 328489370;
+            Last Modified High = 30074520;
         }
     }
 
@@ -779,8 +785,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4050681228;
-            Last Modified High = 30073876;
+            Last Modified Low = 329489372;
+            Last Modified High = 30074520;
         }
     }
 
@@ -802,8 +808,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4049433226;
-            Last Modified High = 30073876;
+            Last Modified Low = 328289370;
+            Last Modified High = 30074520;
         }
     }
 
@@ -894,8 +900,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 3681021802;
-            Last Modified High = 30074488;
+            Last Modified Low = 328789371;
+            Last Modified High = 30074520;
         }
     }
 
@@ -917,8 +923,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 3681646802;
-            Last Modified High = 30074488;
+            Last Modified Low = 329189371;
+            Last Modified High = 30074520;
         }
     }
 
@@ -940,8 +946,31 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 3681803052;
-            Last Modified High = 30074488;
+            Last Modified Low = 329389372;
+            Last Modified High = 30074520;
+        }
+    }
+
+    Wave
+    {
+        Name = 26972__LG__Diesel01;
+        File = Sound\Effects\26972__LG__Diesel01.wav;
+        Build Settings Last Modified Low = 3764117333;
+        Build Settings Last Modified High = 30074530;
+
+        Cache
+        {
+            Format Tag = 0;
+            Channels = 2;
+            Sampling Rate = 44100;
+            Bits Per Sample = 1;
+            Play Region Offset = 44;
+            Play Region Length = 434052;
+            Loop Region Offset = 0;
+            Loop Region Length = 0;
+            File Type = 1;
+            Last Modified Low = 1149888963;
+            Last Modified High = 30071741;
         }
     }
 }
@@ -966,6 +995,11 @@ Sound Bank
         Category Entry
         {
             Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = ExplosionDistance;
         }
 
         Track
@@ -1015,6 +1049,11 @@ Sound Bank
             Name = Default;
         }
 
+        RPC Entry
+        {
+            RPC Name = ExplosionDistance;
+        }
+
         Track
         {
             Volume = 0;
@@ -1060,6 +1099,11 @@ Sound Bank
         Category Entry
         {
             Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = OtherDistance;
         }
 
         Track
@@ -1109,6 +1153,11 @@ Sound Bank
             Name = Default;
         }
 
+        RPC Entry
+        {
+            RPC Name = OtherDistance;
+        }
+
         Track
         {
             Volume = 0;
@@ -1156,6 +1205,11 @@ Sound Bank
             Name = Default;
         }
 
+        RPC Entry
+        {
+            RPC Name = OtherDistance;
+        }
+
         Track
         {
             Volume = 0;
@@ -1193,53 +1247,6 @@ Sound Bank
 
     Sound
     {
-        Name = tank_idle;
-        Volume = 600;
-        Pitch = 0;
-        Priority = 0;
-
-        Category Entry
-        {
-            Name = Default;
-        }
-
-        Track
-        {
-            Volume = 0;
-            Use Filter = 0;
-
-            Play Wave Event
-            {
-                Break Loop = 0;
-                Use Speaker Position = 0;
-                Use Center Speaker = 1;
-                New Speaker Position On Loop = 1;
-                Speaker Position Angle = 0.000000;
-                Speaer Position Arc = 0.000000;
-
-                Event Header
-                {
-                    Timestamp = 0;
-                    Relative = 0;
-                    Random Recurrence = 0;
-                    Random Offset = 0;
-                }
-
-                Wave Entry
-                {
-                    Bank Name = BattlezoneSoundWaveBank;
-                    Bank Index = 0;
-                    Entry Name = tank_idle;
-                    Entry Index = 17;
-                    Weight = 255;
-                    Weight Min = 0;
-                }
-            }
-        }
-    }
-
-    Sound
-    {
         Name = tank_hit_2;
         Volume = 600;
         Pitch = 0;
@@ -1248,6 +1255,11 @@ Sound Bank
         Category Entry
         {
             Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = ExplosionDistance;
         }
 
         Track
@@ -1297,6 +1309,11 @@ Sound Bank
             Name = Default;
         }
 
+        RPC Entry
+        {
+            RPC Name = OtherDistance;
+        }
+
         Track
         {
             Volume = 0;
@@ -1342,6 +1359,11 @@ Sound Bank
         Category Entry
         {
             Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = ExplosionDistance;
         }
 
         Track
@@ -1391,6 +1413,11 @@ Sound Bank
             Name = Default;
         }
 
+        RPC Entry
+        {
+            RPC Name = OtherDistance;
+        }
+
         Track
         {
             Volume = 0;
@@ -1436,6 +1463,11 @@ Sound Bank
         Category Entry
         {
             Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = OtherDistance;
         }
 
         Track
@@ -1485,6 +1517,11 @@ Sound Bank
             Name = Default;
         }
 
+        RPC Entry
+        {
+            RPC Name = ExplosionDistance;
+        }
+
         Track
         {
             Volume = 0;
@@ -1530,6 +1567,11 @@ Sound Bank
         Category Entry
         {
             Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = ExplosionDistance;
         }
 
         Track
@@ -1579,6 +1621,11 @@ Sound Bank
             Name = Default;
         }
 
+        RPC Entry
+        {
+            RPC Name = OtherDistance;
+        }
+
         Track
         {
             Volume = 0;
@@ -1624,6 +1671,11 @@ Sound Bank
         Category Entry
         {
             Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = OtherDistance;
         }
 
         Track
@@ -1673,6 +1725,11 @@ Sound Bank
             Name = Default;
         }
 
+        RPC Entry
+        {
+            RPC Name = ExplosionDistance;
+        }
+
         Track
         {
             Volume = 0;
@@ -1718,6 +1775,11 @@ Sound Bank
         Category Entry
         {
             Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = ExplosionDistance;
         }
 
         Track
@@ -1767,6 +1829,11 @@ Sound Bank
             Name = Default;
         }
 
+        RPC Entry
+        {
+            RPC Name = ExplosionDistance;
+        }
+
         Track
         {
             Volume = 0;
@@ -1814,6 +1881,11 @@ Sound Bank
             Name = Default;
         }
 
+        RPC Entry
+        {
+            RPC Name = ExplosionDistance;
+        }
+
         Track
         {
             Volume = 0;
@@ -1859,6 +1931,11 @@ Sound Bank
         Category Entry
         {
             Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = ExplosionDistance;
         }
 
         Track
@@ -2039,8 +2116,60 @@ Sound Bank
 
     Sound
     {
-        Name = TankSpeedUp;
-        Volume = 600;
+        Name = 26972__LG__Diesel01;
+        Volume = 0;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = OtherDistance;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaer Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = BattlezoneSoundWaveBank;
+                    Bank Index = 0;
+                    Entry Name = 26972__LG__Diesel01;
+                    Entry Index = 24;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
+    Sound
+    {
+        Name = 26972__LG__Diesel01 2;
+        Volume = 0;
         Pitch = 0;
         Priority = 0;
 
@@ -2054,6 +2183,11 @@ Sound Bank
             RPC Name = SpeedUp;
         }
 
+        RPC Entry
+        {
+            RPC Name = OtherDistance;
+        }
+
         Track
         {
             Volume = 0;
@@ -2080,8 +2214,8 @@ Sound Bank
                 {
                     Bank Name = BattlezoneSoundWaveBank;
                     Bank Index = 0;
-                    Entry Name = tank_idle;
-                    Entry Index = 17;
+                    Entry Name = 26972__LG__Diesel01;
+                    Entry Index = 24;
                     Weight = 255;
                     Weight Min = 0;
                 }
@@ -2090,73 +2224,15 @@ Sound Bank
             RPC Curve Entry
             {
                 RPC Name = SpeedUp;
-                RPC Curve Name = 1::a2b2f8ed-011b-4c51-a4f4-636f3df7e0aa;
+                RPC Curve Name = 1::ba190994-a000-4b78-900e-22a6ce462481;
             }
         }
     }
 
     Sound
     {
-        Name = TankSlowDown;
-        Volume = 600;
-        Pitch = 0;
-        Priority = 0;
-
-        Category Entry
-        {
-            Name = Default;
-        }
-
-        RPC Entry
-        {
-            RPC Name = SlowDown;
-        }
-
-        Track
-        {
-            Volume = 0;
-            Use Filter = 0;
-
-            Play Wave Event
-            {
-                Break Loop = 0;
-                Use Speaker Position = 0;
-                Use Center Speaker = 1;
-                New Speaker Position On Loop = 1;
-                Speaker Position Angle = 0.000000;
-                Speaer Position Arc = 0.000000;
-
-                Event Header
-                {
-                    Timestamp = 0;
-                    Relative = 0;
-                    Random Recurrence = 0;
-                    Random Offset = 0;
-                }
-
-                Wave Entry
-                {
-                    Bank Name = BattlezoneSoundWaveBank;
-                    Bank Index = 0;
-                    Entry Name = tank_idle;
-                    Entry Index = 17;
-                    Weight = 255;
-                    Weight Min = 0;
-                }
-            }
-
-            RPC Curve Entry
-            {
-                RPC Name = SlowDown;
-                RPC Curve Name = 1::7b0ef3ed-d0bd-45c7-aecf-98c8405cc049;
-            }
-        }
-    }
-
-    Sound
-    {
-        Name = TankMoving;
-        Volume = 600;
+        Name = 26972__LG__Diesel01 3;
+        Volume = 0;
         Pitch = 0;
         Priority = 0;
 
@@ -2170,6 +2246,11 @@ Sound Bank
             RPC Name = TankMove;
         }
 
+        RPC Entry
+        {
+            RPC Name = OtherDistance;
+        }
+
         Track
         {
             Volume = 0;
@@ -2196,8 +2277,8 @@ Sound Bank
                 {
                     Bank Name = BattlezoneSoundWaveBank;
                     Bank Index = 0;
-                    Entry Name = tank_idle;
-                    Entry Index = 17;
+                    Entry Name = 26972__LG__Diesel01;
+                    Entry Index = 24;
                     Weight = 255;
                     Weight Min = 0;
                 }
@@ -2206,7 +2287,70 @@ Sound Bank
             RPC Curve Entry
             {
                 RPC Name = TankMove;
-                RPC Curve Name = 1::76e8bc83-7d1e-4f57-a297-35bb54bf98d0;
+                RPC Curve Name = 1::bb22ea4e-1bdb-4196-b6e7-3c6f28c39d00;
+            }
+        }
+    }
+
+    Sound
+    {
+        Name = 26972__LG__Diesel01 4;
+        Volume = 0;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        RPC Entry
+        {
+            RPC Name = SlowDown;
+        }
+
+        RPC Entry
+        {
+            RPC Name = OtherDistance;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaer Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = BattlezoneSoundWaveBank;
+                    Bank Index = 0;
+                    Entry Name = 26972__LG__Diesel01;
+                    Entry Index = 24;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+
+            RPC Curve Entry
+            {
+                RPC Name = SlowDown;
+                RPC Curve Name = 1::457a2f61-0dc6-46ba-b625-007ea0a86084;
             }
         }
     }
@@ -2244,8 +2388,8 @@ Sound Bank
 
         Sound Entry
         {
-            Name = tank_idle;
-            Index = 5;
+            Name = 26972__LG__Diesel01;
+            Index = 22;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2285,7 +2429,7 @@ Sound Bank
         Sound Entry
         {
             Name = tank_hit;
-            Index = 7;
+            Index = 6;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2305,7 +2449,7 @@ Sound Bank
         Sound Entry
         {
             Name = tank_hit_2;
-            Index = 6;
+            Index = 5;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2313,7 +2457,7 @@ Sound Bank
         Sound Entry
         {
             Name = tank_heavy_shot;
-            Index = 8;
+            Index = 7;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2353,7 +2497,7 @@ Sound Bank
         Sound Entry
         {
             Name = cooldown_reload_sound;
-            Index = 14;
+            Index = 13;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2361,7 +2505,7 @@ Sound Bank
         Sound Entry
         {
             Name = cooldown_reload_sound_2;
-            Index = 13;
+            Index = 12;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2381,7 +2525,7 @@ Sound Bank
         Sound Entry
         {
             Name = cannon_large;
-            Index = 17;
+            Index = 16;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2401,7 +2545,7 @@ Sound Bank
         Sound Entry
         {
             Name = bleep3;
-            Index = 20;
+            Index = 19;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2421,7 +2565,7 @@ Sound Bank
         Sound Entry
         {
             Name = building_demolition;
-            Index = 19;
+            Index = 18;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2429,7 +2573,7 @@ Sound Bank
         Sound Entry
         {
             Name = building_demolition_2;
-            Index = 18;
+            Index = 17;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2449,7 +2593,7 @@ Sound Bank
         Sound Entry
         {
             Name = bleep1;
-            Index = 21;
+            Index = 20;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2469,7 +2613,7 @@ Sound Bank
         Sound Entry
         {
             Name = bleep2;
-            Index = 22;
+            Index = 21;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2508,8 +2652,8 @@ Sound Bank
 
         Sound Entry
         {
-            Name = TankSlowDown;
-            Index = 24;
+            Name = 26972__LG__Diesel01 4;
+            Index = 25;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -2528,7 +2672,7 @@ Sound Bank
 
         Sound Entry
         {
-            Name = TankSpeedUp;
+            Name = 26972__LG__Diesel01 2;
             Index = 23;
             Weight Min = 0;
             Weight Max = 255;
@@ -2548,8 +2692,8 @@ Sound Bank
 
         Sound Entry
         {
-            Name = TankMoving;
-            Index = 25;
+            Name = 26972__LG__Diesel01 3;
+            Index = 24;
             Weight Min = 0;
             Weight Max = 255;
         }
