@@ -59,13 +59,13 @@ namespace Battlezone.BattlezoneObjects
             Game.Components.Add(building6);
             
             Building building7 = new Building(Game, "buildings\\building7");
-            //Game.Components.Add(building7);
+            Game.Components.Add(building7);
 
             Building building8 = new Building(Game, "buildings\\building8");
-            //Game.Components.Add(building8);
+            Game.Components.Add(building8);
 
             Building building9 = new Building(Game, "buildings\\building9");
-            //Game.Components.Add(building9);
+            Game.Components.Add(building9);
 
             Building building10 = new Building(Game, "buildings\\building10");
             Game.Components.Add(building10);
@@ -381,6 +381,8 @@ namespace Battlezone.BattlezoneObjects
 
             Building wall59 = new Building(Game, "walls\\wall59");
             Game.Components.Add(wall59);
+
+
 
         }
 
