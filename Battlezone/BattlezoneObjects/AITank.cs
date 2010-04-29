@@ -342,7 +342,7 @@ namespace Battlezone.BattlezoneObjects
                         soundCue = ScreenManager.soundSoundBank.GetCue("TankIdle");
 
                         soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
-                        soundCue.Play();
+                        //soundCue.Play();
                         currentEngineState = EngineState.IDLE;
                     }
                     if (soundCue.IsStopped && currentEngineState == EngineState.SLOWDOWN)

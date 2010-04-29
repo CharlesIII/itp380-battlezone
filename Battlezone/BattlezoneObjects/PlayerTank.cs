@@ -413,7 +413,7 @@ namespace Battlezone.BattlezoneObjects
                     {
                         Velocity = Vector3.Zero;
                     }
-                        
+                       
                     if (Velocity == Vector3.Zero)
                     {
                         if (soundCue.IsStopped && currentState == EngineState.SLOWDOWN)

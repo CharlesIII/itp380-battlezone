@@ -209,7 +209,7 @@ Global Settings
         Reserved = 1;
         Read Only = 0;
         Time = 0;
-        Value = 959.874390;
+        Value = 1231.536987;
         Initial Value = 0.000000;
         Min = 0.000000;
         Max = 7353.000000;
@@ -221,7 +221,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = 1::370ce2da-0d27-4909-ac34-3c2fcacd81d9;
+            Name = 1::ce1019c7-ead4-4a38-b1a5-35720dfaa5a5;
             Property = 1;
             Sound = 0;
             Line Color = 4280796060;
@@ -254,7 +254,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = 1::b2120a69-d7ac-4fb2-aaf6-134b9418d7f1;
+            Name = 1::42d3ad6f-d11a-40e1-a999-3ba0570b19ca;
             Property = 1;
             Sound = 0;
             Line Color = 4290103137;
@@ -287,7 +287,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = 1::62039a80-a6da-41fc-8131-ecefb09e4632;
+            Name = 1::f1b6a614-3222-4c67-b994-2a28dbb79b83;
             Property = 1;
             Sound = 0;
             Line Color = 4285238243;
@@ -320,7 +320,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::84ec5f8a-004b-4c1a-b432-597423a913db;
+            Name = Sound::f412b5a1-b6b4-4987-bdff-b698dfb5c0a1;
             Property = 0;
             Sound = 1;
             Line Color = 4292460339;
@@ -353,7 +353,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = Sound::074b8049-e00b-404c-94ec-3c0099b4b267;
+            Name = Sound::5d4324f1-f79d-4994-b824-0b5fab9f51bf;
             Property = 0;
             Sound = 1;
             Line Color = 4284641433;
@@ -366,15 +366,15 @@ Global Settings
 
             RPC Point
             {
-                X = 1032.317749;
-                Y = 0.000000;
+                X = 1285.869507;
+                Y = 600.000000;
                 Curve = 1;
             }
 
             RPC Point
             {
-                X = 6000.000000;
-                Y = -2364.705811;
+                X = 4000.000000;
+                Y = -2435.294189;
                 Curve = 0;
             }
         }
@@ -386,7 +386,7 @@ Global Settings
 
         RPC Curve
         {
-            Name = 1::e9c1aea3-d0cb-467b-a991-40663e057aba;
+            Name = 1::02335681-0dbe-4607-8d45-9e3b37d3bbe3;
             Property = 1;
             Sound = 0;
             Line Color = 4287373627;
@@ -2182,7 +2182,7 @@ Sound Bank
             RPC Curve Entry
             {
                 RPC Name = Idle;
-                RPC Curve Name = 1::e9c1aea3-d0cb-467b-a991-40663e057aba;
+                RPC Curve Name = 1::02335681-0dbe-4607-8d45-9e3b37d3bbe3;
             }
         }
     }
@@ -2245,7 +2245,7 @@ Sound Bank
             RPC Curve Entry
             {
                 RPC Name = SpeedUp;
-                RPC Curve Name = 1::370ce2da-0d27-4909-ac34-3c2fcacd81d9;
+                RPC Curve Name = 1::ce1019c7-ead4-4a38-b1a5-35720dfaa5a5;
             }
         }
     }
@@ -2308,7 +2308,7 @@ Sound Bank
             RPC Curve Entry
             {
                 RPC Name = SlowDown;
-                RPC Curve Name = 1::b2120a69-d7ac-4fb2-aaf6-134b9418d7f1;
+                RPC Curve Name = 1::42d3ad6f-d11a-40e1-a999-3ba0570b19ca;
             }
         }
     }
@@ -2371,7 +2371,7 @@ Sound Bank
             RPC Curve Entry
             {
                 RPC Name = TankMove;
-                RPC Curve Name = 1::62039a80-a6da-41fc-8131-ecefb09e4632;
+                RPC Curve Name = 1::f1b6a614-3222-4c67-b994-2a28dbb79b83;
             }
         }
     }
