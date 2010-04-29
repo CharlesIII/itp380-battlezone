@@ -23,6 +23,7 @@ namespace Battlezone.BattlezoneObjects
         #region Bone Fields
 
 
+        const float TANK_VELOCITY = 550.0f;
         // The XNA framework Model object that we are going to display.
         Model tankModel;
 
@@ -147,9 +148,66 @@ namespace Battlezone.BattlezoneObjects
             set { hatchRotationValue = value; }
         }
 
+        private bool m_bRotateLeft;
+        public bool RotateLeft
+        {
+            get
+            {
+                return m_bRotateLeft;
+            }
+            set
+            {
+                if (m_bRotateRight)
+                    m_bRotateRight = false;
+                m_bRotateLeft = value;
+            }
+        }
+        private bool m_bRotateRight;
+        public bool RotateRight
+        {
+            get
+            {
+                return m_bRotateRight;
+            }
+            set
+            {
+                if (m_bRotateLeft)
+                    m_bRotateLeft = false;
+                m_bRotateRight = value;
+            }
+        }
+        private bool m_bMove;
+        public bool Move
+        {
+            get
+            {
+                return m_bMove;
+            }
+            set
+            {
+                if (m_bReverse)
+                    m_bReverse = false;
+                m_bMove = value;
+            }
+        }
+        private bool m_bReverse;
+        public bool Reverse
+        {
+            get
+            {
+                return m_bReverse;
+            }
+            set
+            {
+                if (m_bMove)
+                    m_bMove = false;
+                m_bReverse = value;
+            }
+        }
+
         #endregion
 
-
+        float Delta = 0;
 
         /// <summary>
         /// Construtor for the Player Tank
@@ -174,7 +232,7 @@ namespace Battlezone.BattlezoneObjects
             base.Initialize();
             Scale = 0.30f;
             WorldPosition = startingPos;
-         
+
             COLLISION_IDENTIFIER = CollisionIdentifier.PLAYER_TANK;
 
         }
@@ -296,14 +354,11 @@ namespace Battlezone.BattlezoneObjects
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
-
-            base.Update(gameTime);
             //Console.Out.WriteLine(WorldPosition);
             //WorldBounds.Center = WorldPosition + new Vector3(0,0, turretTransform.Translation.Z);
             //Console.Out.WriteLine(WorldBounds.Center);
             //WorldBounds.Radius = ModelBounds.Radius * Scale;
-
+            Delta = gameTime.ElapsedGameTime.Ticks / System.TimeSpan.TicksPerMillisecond / 1000.0f;
             tankCannonPlumeParticleSystem.SetCamera(GameplayScreen.CameraMatrix, GameplayScreen.ProjectionMatrix);
             if (soundCue == null && gamePlay)
             {
@@ -317,7 +372,27 @@ namespace Battlezone.BattlezoneObjects
 
                 if (gamePlay)
                 {
-                    soundCue.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
+                    if (Move && !isColliding)
+                    {
+                        Velocity = GetWorldFacing() * -TANK_VELOCITY * GameplayScreen.Instance.spdBoost;
+                    }
+                    else if (Reverse && !isColliding)
+                    {
+                        Velocity = GetWorldFacing() * TANK_VELOCITY * GameplayScreen.Instance.spdBoost;
+                    }
+                    //else if (Move && isColliding)
+                    //{
+                        
+                    //}
+                    //else if (Reverse && isColliding)
+                    //{
+
+                    //}
+                    else
+                    {
+                        Velocity = Vector3.Zero;
+                    }
+                        
                     if (Velocity == Vector3.Zero)
                     {
                         if (soundCue.IsStopped && currentState == EngineState.SLOWDOWN)
@@ -410,6 +485,7 @@ namespace Battlezone.BattlezoneObjects
             }
 
             isColliding = false;
+            base.Update(gameTime);
         }
         public void UpdateTankCannonSmoke()
         {
@@ -458,24 +534,30 @@ namespace Battlezone.BattlezoneObjects
         {
             if (a.COLLISION_IDENTIFIER == CollisionIdentifier.AI_TANK)
             {
+                isColliding = true;
                 Velocity = new Vector3(0.0f, 0.0f, 0.0f);
-                System.Console.Out.WriteLine("TANKS CRASHED!");
+                WorldPosition = m_vPreviousWorldPosition;
+                //System.Console.Out.WriteLine("TANKS CRASHED!");
             }
             else if (a.COLLISION_IDENTIFIER == CollisionIdentifier.BUILDING)
             {
                 isColliding = true;
-
+                
+                
                 Building b = (Building)a;
 
                 Plane wall = findIntersectingPlane(b);
-
+                Console.Out.WriteLine(wall);
                 Vector3 wallNormal = wall.Normal;
                 wallNormal.Normalize();
                 Vector3 perpVelComp = Vector3.Dot(Velocity, wallNormal * -1.0f) * wallNormal;
-
+                
                 //System.Console.Out.WriteLine("Pre: " + Velocity);
                 Velocity += perpVelComp;
-                
+                WorldPosition = m_vPreviousWorldPosition;
+                WorldPosition += Velocity * Delta;
+
+                //WorldPosition += Velocity;
                 //System.Console.Out.WriteLine("Post: " + Velocity + " diff: " + perpVelComp);
                 //Console.Out.WriteLine(b.WorldPosition);
             }
@@ -522,80 +604,98 @@ namespace Battlezone.BattlezoneObjects
         public Plane findIntersectingPlane(Building b)
         {
 
-            Vector4 firstClosest = new Vector4();
-            Vector4 secondClosest = new Vector4();
-            Vector4 thirdClosest = new Vector4();
+            Vector3 firstClosest = new Vector3();
+            float firstClosestDistance = float.MaxValue;
+            Vector3 secondClosest = new Vector3();
+            float secondClosestDistance = float.MaxValue;
+            Vector3 thirdClosest = new Vector3();
+            float thirdClosestDistance = float.MaxValue;
 
             Vector3[] corners = b.WorldBoundsBox.GetCorners();
             for (int i = 0; i < corners.Length; i++)
             {
                 Vector3 temp = corners[i];
+                if (temp.Y > 100)
+                    continue;
+
                 float tempd = distanceSquared(new Vector2(temp.X, temp.Z), new Vector2(WorldPosition.X, WorldPosition.Z));
 
-                if ((firstClosest.W > tempd || firstClosest.W == 0.0f) && temp.Y < 100.0f)
+                if (tempd <= firstClosestDistance)
                 {
-                    if (secondClosest.W == 0.0f) secondClosest = firstClosest;
-                    else if (thirdClosest.W == 0.0f) thirdClosest = firstClosest;
-                    else if (secondClosest.W > firstClosest.W)
-                    {
-                        if (thirdClosest.W > secondClosest.W)
-                        {
-                            thirdClosest = secondClosest;
-                        }
-                        secondClosest = firstClosest;
-                    }
-                    else if (thirdClosest.W > firstClosest.W) thirdClosest = firstClosest;
-                    firstClosest = new Vector4(temp, tempd);
+                    thirdClosestDistance = secondClosestDistance;
+                    thirdClosest = secondClosest;
+                    secondClosestDistance = firstClosestDistance;
+                    secondClosest = firstClosest;
+                    firstClosestDistance = tempd;
+                    firstClosest = temp;
                 }
-                else if ((secondClosest.W > tempd || secondClosest.W == 0.0f) && temp.Y < 100.0f)
+                else if (tempd <= secondClosestDistance)
                 {
-                    if (thirdClosest.W == 0.0f || thirdClosest.W > secondClosest.W) thirdClosest = secondClosest;
-                    secondClosest = new Vector4(temp, tempd);
+                    thirdClosestDistance = secondClosestDistance;
+                    thirdClosest = secondClosest;
+                    secondClosestDistance = tempd;
+                    secondClosest = temp;
                 }
-                else if ((thirdClosest.W > tempd || thirdClosest.W == 0.0f) && temp.Y < 100.0f)
+                else if (tempd <= thirdClosestDistance)
                 {
-                    thirdClosest = new Vector4(temp, tempd);
+                    thirdClosestDistance = tempd;
+                    thirdClosest = temp;
                 }
             }
 
             //firstClosest.W = (float)Math.Sqrt(firstClosest.W);
             //secondClosest.W = (float)Math.Sqrt(secondClosest.W);
             Vector3 arbitrary = new Vector3(0.0f, 0.0f, 0.0f);
+            Vector3 arbitrary2 = new Vector3(0.0f, 0.0f, 0.0f);
+            Plane wall1;
+            Plane wall2;
 
             Random rand = new Random();
 
-            
-            
             if (firstClosest.X == secondClosest.X)
             {
                 arbitrary.X = firstClosest.X;
                 arbitrary.Z = (float)rand.Next((int)Math.Min(firstClosest.Z, secondClosest.Z), (int)Math.Max(firstClosest.Z, secondClosest.Z));
+                wall1 = new Plane(firstClosest, arbitrary, secondClosest);
+            }
+            else if (firstClosest.X == thirdClosest.X)
+            {
+                arbitrary.X = firstClosest.X;
+                arbitrary.Z = (float)rand.Next((int)Math.Min(firstClosest.Z, thirdClosest.Z), (int)Math.Max(firstClosest.Z, thirdClosest.Z));
+                wall1 = new Plane(firstClosest, arbitrary, thirdClosest);
             }
             else
             {
-                arbitrary.Z = firstClosest.Z;
-                arbitrary.X = (float)rand.Next((int)Math.Min(firstClosest.X, secondClosest.X), (int)Math.Max(firstClosest.X, secondClosest.X));
+                arbitrary.X = secondClosest.X;
+                arbitrary.Z = (float)rand.Next((int)Math.Min(secondClosest.Z, thirdClosest.Z), (int)Math.Max(secondClosest.Z, thirdClosest.Z));
+                wall1 = new Plane(secondClosest, arbitrary, thirdClosest);
             }
-
-            Plane wall1 = new Plane(new Vector3(firstClosest.X, firstClosest.Y, firstClosest.Z), arbitrary, new Vector3(secondClosest.X, secondClosest.Y, secondClosest.Z));
-
-            if (thirdClosest.X == firstClosest.X)
+            
+            if (firstClosest.Z == secondClosest.Z)
             {
-                arbitrary.X = thirdClosest.X;
-                arbitrary.Z = (float)rand.Next((int)Math.Min(thirdClosest.Z, firstClosest.Z), (int)Math.Max(thirdClosest.Z, firstClosest.Z));
+                arbitrary2.Z = firstClosest.Z;
+                arbitrary2.X = (float)rand.Next((int)Math.Min(firstClosest.X, secondClosest.X), (int)Math.Min(firstClosest.X, secondClosest.X));
+                wall2 = new Plane(firstClosest, arbitrary2, secondClosest);
             }
+            else if (firstClosest.Z == thirdClosest.Z)
+            {
+                arbitrary2.Z = firstClosest.Z;
+                arbitrary2.X = (float)rand.Next((int)Math.Min(firstClosest.X, thirdClosest.X), (int)Math.Min(firstClosest.X, thirdClosest.X));
+                wall2 = new Plane(firstClosest, arbitrary2, thirdClosest);
+            }
+            
             else
             {
-                arbitrary.Z = thirdClosest.Z;
-                arbitrary.X = (float)rand.Next((int)Math.Min(thirdClosest.X, firstClosest.X), (int)Math.Max(thirdClosest.X, firstClosest.X));
+                arbitrary2.Z = thirdClosest.Z;
+                arbitrary2.X = (float)rand.Next((int)Math.Min(secondClosest.X, thirdClosest.X), (int)Math.Min(secondClosest.X, thirdClosest.X));
+                wall2 = new Plane(secondClosest, arbitrary2, thirdClosest);
             }
 
-            Plane wall2 = new Plane(new Vector3(firstClosest.X, firstClosest.Y, firstClosest.Z), arbitrary, new Vector3(thirdClosest.X, thirdClosest.Y, thirdClosest.Z));
+            
+            float distance1 = Math.Abs(Vector3.Dot(Vector3.Normalize(wall1.Normal), arbitrary - WorldPosition));
+            float distance2 = Math.Abs(Vector3.Dot(Vector3.Normalize(wall2.Normal), arbitrary2 - WorldPosition));
 
-            float distance1 = Vector3.Dot(Vector3.Normalize(wall1.Normal), WorldPosition) - wall1.D;
-            float distance2 = Vector3.Dot(Vector3.Normalize(wall2.Normal), WorldPosition) - wall2.D;
-
-            if (distance1 > distance2)
+            if (distance1 < distance2)
             {
                 return wall1;
             }
@@ -615,7 +715,7 @@ namespace Battlezone.BattlezoneObjects
         /// <returns></returns>
         public float distanceSquared(Vector2 p1, Vector2 p2)
         {
-            return (p2.X - p1.X) * (p2.X - p1.X) - (p2.Y - p1.Y) * (p2.Y - p1.Y);
+            return (p2.X - p1.X) * (p2.X - p1.X) + (p2.Y - p1.Y) * (p2.Y - p1.Y);
         }
 
     }

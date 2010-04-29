@@ -114,7 +114,7 @@ namespace Battlezone
         //TextureAddressMode addressU;
         //TextureAddressMode addressV;
 
-        private float spdBoost = 1.0f;
+        public float spdBoost = 1.0f;
         private Boolean spdBoostAvail = true;
 
         private bool justFired = false;
@@ -401,21 +401,34 @@ namespace Battlezone
 
                     if (input.Move)
                     {
+                        /*
                         if (!m_kPlayer.isColliding || (m_kPlayer.Velocity == new Vector3(0.0f, 0.0f, 0.0f)) || isTurning)
                         {
                             //m_kPlayer.Force = m_kPlayer.GetWorldFacing() * -1000.0f;
                             m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * -550.0f * spdBoost;
                         }
+                         */
                         m_kPlayer.LWheelRotation += (4.0f * deltaTime * spdBoost);
                         m_kPlayer.RWheelRotation += (4.0f * deltaTime * spdBoost);
+
+                        m_kPlayer.Move = true;
                         UpdateTankExaust();
                     }
-
-                    if (!input.Move)
+                    else if (input.Reverse)
                     {
-                        //m_kPlayer.Force = new Vector3();
-                        m_kPlayer.Velocity = new Vector3(0.0f, 0.0f, 0.0f);
+                        m_kPlayer.LWheelRotation -= (4.0f * deltaTime * spdBoost);
+                        m_kPlayer.RWheelRotation -= (4.0f * deltaTime * spdBoost);
 
+                        //m_kPlayer.Force = m_kPlayer.GetWorldFacing() * 500.0f;
+
+                        //m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * 550.0f * spdBoost;
+                        m_kPlayer.Reverse = true;
+                        UpdateTankExaust();
+                    }
+                    else
+                    {
+                        m_kPlayer.Move = false;
+                        m_kPlayer.Reverse = false;
                     }
 
                     if (input.Boost)
@@ -423,16 +436,6 @@ namespace Battlezone
                         if (spdBoostAvail) useBoost();
                     }
 
-                    if (input.Reverse)
-                    {
-                        m_kPlayer.LWheelRotation -= (4.0f * deltaTime * spdBoost);
-                        m_kPlayer.RWheelRotation -= (4.0f * deltaTime * spdBoost);
-
-                        //m_kPlayer.Force = m_kPlayer.GetWorldFacing() * 500.0f;
-                        
-                        m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * 550.0f * spdBoost;
-                        UpdateTankExaust();
-                    }
                     if (!input.TurnLeft && !input.TurnRight)
                     {
                         m_kPlayer.SteerRotation = 0.0f;

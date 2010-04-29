@@ -336,8 +336,9 @@ namespace Battlezone
             }
             else
             {
+                m_vPreviousWorldPosition = m_vWorldPosition;
                 m_vWorldPosition += Vector3.Multiply(m_vVelocity, fDelta);
-
+                
                 //TODO: Add World Bound check so the player doesn't fall off the world
             }
 
