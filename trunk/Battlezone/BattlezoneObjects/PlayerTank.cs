@@ -879,7 +879,7 @@ namespace Battlezone.BattlezoneObjects
             dead = false;
             CurrentHealth = maxHealth;
             GameplayScreen.Instance.addActor(this);
-            Initialize();
+            WorldPosition = startingPos;
         }
     }
 }
