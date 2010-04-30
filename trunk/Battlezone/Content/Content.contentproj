@@ -816,15 +816,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="tank2.jpg">
-      <Name>tank2</Name>
+    <Compile Include="tank-display.jpg">
+      <Name>tank-display</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="tank-display.jpg">
-      <Name>tank-display</Name>
+    <Compile Include="tank2.jpg">
+      <Name>tank2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
