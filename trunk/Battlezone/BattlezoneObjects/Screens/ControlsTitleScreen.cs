@@ -16,7 +16,7 @@ namespace Battlezone
     /// <summary>
     /// The main menu screen is the first thing displayed when the game starts up.
     /// </summary>
-    class ControlsTitleScreen : TitleScreen
+    class ControlsTitleScreen : MenuScreen
     {
         #region Initialization
 
@@ -29,33 +29,33 @@ namespace Battlezone
         {
             // Create our menu entries.
             // Create our menu entries.
-            TitleEntry controls = new TitleEntry("Controls:");
-            TitleEntry W = new TitleEntry("W - Move Foward");
-            TitleEntry S = new TitleEntry("S - Move Backward");
-            TitleEntry A = new TitleEntry("A - Turn Left");
-            TitleEntry D = new TitleEntry("D - Turd Right");
-            TitleEntry Wep1 = new TitleEntry("1 - Turret Select");
-            TitleEntry Wep2 = new TitleEntry("2 - Missile Select");
-            TitleEntry Boost = new TitleEntry("G - Boost!");
-            TitleEntry Fire = new TitleEntry("SpaceBar - Fire Weapon");
+            MenuEntry controls = new MenuEntry("Controls:");
+            MenuEntry W = new MenuEntry("W - Move Foward");
+            MenuEntry S = new MenuEntry("S - Move Backward");
+            MenuEntry A = new MenuEntry("A - Turn Left");
+            MenuEntry D = new MenuEntry("D - Turd Right");
+            MenuEntry Wep1 = new MenuEntry("1 - Turret Select");
+            MenuEntry Wep2 = new MenuEntry("2 - Missile Select");
+            MenuEntry Boost = new MenuEntry("G - Boost!");
+            MenuEntry Fire = new MenuEntry("SpaceBar - Fire Weapon");
 
 
-            TitleEntry backMenuEntry = new TitleEntry("Back");
+            MenuEntry backMenuEntry = new MenuEntry("Back");
 
             // Hook up menu event handlers.
             backMenuEntry.Selected += BackMenuEntrySelected;
 
             // Add entries to the menu.
-            TitleEntries.Add(controls);
-            TitleEntries.Add(W);
-            TitleEntries.Add(S);
-            TitleEntries.Add(A);
-            TitleEntries.Add(D);
-            TitleEntries.Add(Wep1);
-            TitleEntries.Add(Wep2);
-            TitleEntries.Add(Boost);
-            TitleEntries.Add(Fire);
-            TitleEntries.Add(backMenuEntry);
+            MenuEntries.Add(controls);
+            MenuEntries.Add(W);
+            MenuEntries.Add(S);
+            MenuEntries.Add(A);
+            MenuEntries.Add(D);
+            MenuEntries.Add(Wep1);
+            MenuEntries.Add(Wep2);
+            MenuEntries.Add(Boost);
+            MenuEntries.Add(Fire);
+            MenuEntries.Add(backMenuEntry);
 
         }
 

@@ -118,6 +118,7 @@ namespace Battlezone
         public virtual void Draw(GameOverScreen screen, Vector2 position,
                                  bool isSelected, GameTime gameTime)
         {
+            
             // Draw the selected entry in yellow, otherwise white.
             Color color = isSelected ? Color.Blue : Color.White;
 
@@ -136,6 +137,8 @@ namespace Battlezone
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
             SpriteFont font = screenManager.Font;
 
+            spriteBatch.Begin();
+
             Vector2 origin = new Vector2(0, font.LineSpacing / 2);
             Vector2 message = new Vector2(50,50);
             if (GameOverMenuScreen.win)
@@ -151,6 +154,8 @@ namespace Battlezone
 
                 spriteBatch.DrawString(font, text, position, color, 0,
                                    origin, scale, SpriteEffects.None, 0);
+
+                spriteBatch.End();
         }
 
 

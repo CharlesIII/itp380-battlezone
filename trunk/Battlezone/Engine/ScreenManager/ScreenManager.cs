@@ -213,12 +213,13 @@ namespace Battlezone
 			BattlezoneGame myGame = (BattlezoneGame) Game;
 			
 			// Toggle fixed time step
+            /*
 			if (input.IsNewKeyPress(Microsoft.Xna.Framework.Input.Keys.F))
 			{
 				myGame.IsFixedTimeStep = !myGame.IsFixedTimeStep;
 				myGame.m_kFrameRate.ResetFPSCount();
 			}
-
+            */
 			// Increase or decrease our target ms per frame, which inversely effects the framerate
 			if (input.IsNewKeyPress(Microsoft.Xna.Framework.Input.Keys.OemMinus))
 			{

@@ -155,7 +155,7 @@ namespace Battlezone
                 }
                 catch (Exception e)
                 {
-                    Console.Out.WriteLine(e.ToString());
+                    //Console.Out.WriteLine(e.ToString());
                     throw new Exception("Unable to load path finding system.",e);
                 }
                 instance = this;
