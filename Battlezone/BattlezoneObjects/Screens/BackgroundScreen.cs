@@ -229,7 +229,7 @@ namespace Battlezone
         public override void UnloadContent()
         {
             //base.UnloadContent();
-            Console.Out.WriteLine("Background screen unloading content");
+            //Console.Out.WriteLine("Background screen unloading content");
             content.Unload();
             ScreenManager.Game.Components.Remove(tank);
             GameplayScreen.Instance.removeActor(tank);

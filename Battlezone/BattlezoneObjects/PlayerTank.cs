@@ -287,7 +287,7 @@ namespace Battlezone.BattlezoneObjects
 
         protected override void UnloadContent()
         {
-            Console.Out.WriteLine("Player_tank is unloading content");
+            //Console.Out.WriteLine("Player_tank is unloading content");
             if (explosionParticles != null && explosionSmokeParticles != null)
             {
                 explosionParticles.Dispose();
@@ -876,6 +876,7 @@ namespace Battlezone.BattlezoneObjects
         private void Respawn()
         {
             dead = false;
+            CurrentHealth = maxHealth;
             GameplayScreen.Instance.addActor(this);
         }
     }

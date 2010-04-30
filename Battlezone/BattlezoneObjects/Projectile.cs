@@ -235,7 +235,7 @@ namespace Battlezone
 
         protected override void UnloadContent()
         {
-            Console.Out.WriteLine("Projectile is unloading.");
+            //Console.Out.WriteLine("Projectile is unloading.");
             explosionParticles.ManualUnload();
             explosionSmokeParticles.ManualUnload();
             projectileTrailParticles.ManualUnload();

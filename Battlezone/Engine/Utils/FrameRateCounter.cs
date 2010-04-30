@@ -67,7 +67,7 @@ namespace Utils
         }
         
         public override void Draw(GameTime gameTime)
-        {
+        {/*
             m_kSpriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
             
 			// Color this based on the framerate
@@ -100,7 +100,7 @@ namespace Utils
                 m_kSpriteBatch.DrawString(m_kFont, "X: " + Battlezone.GameplayScreen.Instance.getPlayer().WorldPosition.X + " Y: " + Battlezone.GameplayScreen.Instance.getPlayer().WorldPosition.Y + " Z: " + Battlezone.GameplayScreen.Instance.getPlayer().WorldPosition.Z, new Vector2(m_vPosition.X - 60, m_vPosition.Y + 60), Color.Black);
             }
                 m_kSpriteBatch.End();
-
+            */
         }
 
 		public void ResetFPSCount()
