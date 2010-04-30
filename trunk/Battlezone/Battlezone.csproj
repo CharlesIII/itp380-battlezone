@@ -96,6 +96,7 @@
     <Compile Include="BattlezoneObjects\HUD\WeaponSelect.cs" />
     <Compile Include="BattlezoneObjects\Level.cs" />
     <Compile Include="BattlezoneObjects\Screens\BackgroundScreen.cs" />
+    <Compile Include="BattlezoneObjects\Screens\ControlsTitleScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\GameOverBackgroundScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\GameOverEntry.cs" />
     <Compile Include="BattlezoneObjects\Screens\GameOverMenuScreen.cs" />
@@ -106,7 +107,6 @@
     <Compile Include="BattlezoneObjects\Screens\MenuEntry.cs" />
     <Compile Include="BattlezoneObjects\Screens\MenuScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\MessageBoxScreen.cs" />
-    <Compile Include="BattlezoneObjects\Screens\OptionsMenuScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\PauseMenuScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\TitleBackgroundScreen.cs" />
     <Compile Include="BattlezoneObjects\Screens\TitleEntry.cs" />

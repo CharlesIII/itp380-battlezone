@@ -140,12 +140,12 @@ namespace Battlezone
             Vector2 message = new Vector2(50,50);
             if (GameOverMenuScreen.win)
             {
-                spriteBatch.DrawString(font, "MISSION ALL OVER!", message, color, 0,
+                spriteBatch.DrawString(font, "MISSION SUCCESS!", message, color, 0,
                      origin, scale, SpriteEffects.None, 0);
             }
             else
             {
-                spriteBatch.DrawString(font, "GAMEOVER!", message, color, 0,
+                spriteBatch.DrawString(font, "MISSION FAILURE!", message, color, 0,
                 origin, scale, SpriteEffects.None, 0);
             }
 
