@@ -360,7 +360,7 @@ namespace Battlezone
             {
                 //if we're colliding with the player don't explode until we get closer to the tank
                 float distance = (WorldPosition - a.WorldPosition).Length();
-                Console.Out.WriteLine(distance);
+                
                 if (distance < 110)
                 {
                     Explode();

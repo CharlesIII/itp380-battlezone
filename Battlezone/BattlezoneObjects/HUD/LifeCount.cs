@@ -24,7 +24,7 @@ namespace Battlezone.BattlezoneObjects.HUD
 
         private Texture2D turretSelect;
 
-        public int life = 3;  //1 for Turret, 2 for Missile
+        public int life = 3;
 
         //(
 

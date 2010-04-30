@@ -453,23 +453,17 @@ namespace Battlezone
                     if (input.TurnLeft)
                     {
                         isTurning = true;
-                        m_kPlayer.LWheelRotation -= (deltaTime);
-                        m_kPlayer.RWheelRotation += (deltaTime);
-                        m_kPlayer.TurretRotation -= ((float)Math.PI / 5) * deltaTime;
-                        m_kPlayer.RotAngle -= ((float)Math.PI / 5) * deltaTime;
-                        m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, 1.0f, 0.0f), ((float)Math.PI / 5) * deltaTime);
+                        m_kPlayer.RotateLeft = true;
                     }
-
-                    if (input.TurnRight)
+                    else if (input.TurnRight)
                     {
                         isTurning = true;
-                        //m_kPlayer.TurretRotation -= ((float)Math.PI / 5) * deltaTime;
-                        //m_kPlayer.SteerRotation = -(float)Math.PI / 5;
-                        m_kPlayer.LWheelRotation += (deltaTime);
-                        m_kPlayer.RWheelRotation -= (deltaTime);
-                        m_kPlayer.TurretRotation += ((float)Math.PI / 5) * deltaTime;
-                        m_kPlayer.RotAngle += ((float)Math.PI / 5) * deltaTime;
-                        m_kPlayer.Quat *= Quaternion.CreateFromAxisAngle(new Vector3(0.0f, -1.0f, 0.0f), ((float)Math.PI / 5) * deltaTime);
+                        m_kPlayer.RotateRight = true;
+                    }
+                    else
+                    {
+                        m_kPlayer.RotateLeft = false;
+                        m_kPlayer.RotateRight = false;
                     }
 
                     if (input.Move)
