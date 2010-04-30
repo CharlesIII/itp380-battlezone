@@ -681,7 +681,7 @@ namespace Battlezone.BattlezoneObjects
                         c.Apply3D(GameplayScreen.Instance.Camera.Listener, emitter);
                         c.Play();
 
-                        timer.AddTimer("Respawn Tank", 10, Respawn, false);
+                        timer.AddTimer("Respawn Tank", 5, new Utils.TimerDelegate(Respawn), false);
                     }
                 }
                 
@@ -875,9 +875,11 @@ namespace Battlezone.BattlezoneObjects
 
         private void Respawn()
         {
+            timer.RemoveTimer("Respawn Tank");
             dead = false;
             CurrentHealth = maxHealth;
             GameplayScreen.Instance.addActor(this);
+            Initialize();
         }
     }
 }
