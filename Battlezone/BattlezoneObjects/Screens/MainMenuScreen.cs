@@ -29,17 +29,17 @@ namespace Battlezone
         {
             // Create our menu entries.
             MenuEntry playGameMenuEntry = new MenuEntry("Play Game");
-            MenuEntry optionsMenuEntry = new MenuEntry("Options");
+            MenuEntry controlsMenuEntry = new MenuEntry("Controls");
             MenuEntry exitMenuEntry = new MenuEntry("Exit");
 
             // Hook up menu event handlers.
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
-            optionsMenuEntry.Selected += OptionsMenuEntrySelected;
+            controlsMenuEntry.Selected += ControlsMenuEntrySelected;
             exitMenuEntry.Selected += OnCancel;
 
             // Add entries to the menu.
             MenuEntries.Add(playGameMenuEntry);
-            MenuEntries.Add(optionsMenuEntry);
+            MenuEntries.Add(controlsMenuEntry);
             MenuEntries.Add(exitMenuEntry);
 
         }
@@ -69,9 +69,9 @@ namespace Battlezone
         /// <summary>
         /// Event handler for when the Options menu entry is selected.
         /// </summary>
-        void OptionsMenuEntrySelected(object sender, EventArgs e)
+        void ControlsMenuEntrySelected(object sender, EventArgs e)
         {
-            ScreenManager.AddScreen(new OptionsMenuScreen());
+            ScreenManager.AddScreen(new ControlsTitleScreen());
         }
 
 

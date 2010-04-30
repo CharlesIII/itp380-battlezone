@@ -617,7 +617,7 @@ namespace Battlezone.BattlezoneObjects
                 Building b = (Building)a;
 
                 Plane wall = findIntersectingPlane(b);
-                Console.Out.WriteLine(wall);
+                //Console.Out.WriteLine(wall);
                 Vector3 wallNormal = wall.Normal;
                 wallNormal.Normalize();
                 Vector3 perpVelComp = Vector3.Dot(Velocity, wallNormal * -1.0f) * wallNormal;
