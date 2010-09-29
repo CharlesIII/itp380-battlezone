@@ -472,7 +472,7 @@ namespace Battlezone
                         if (!m_kPlayer.isColliding || (m_kPlayer.Velocity == new Vector3(0.0f, 0.0f, 0.0f)) || isTurning)
                         {
                             //m_kPlayer.Force = m_kPlayer.GetWorldFacing() * -1000.0f;
-                            m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * -550.0f * spdBoost;
+                            m_kPlayer.Velocity = m_kPlayer.GetWorldFacing() * -3550.0f * spdBoost;
                         }
                          */
                         m_kPlayer.LWheelRotation += (4.0f * deltaTime * spdBoost);
