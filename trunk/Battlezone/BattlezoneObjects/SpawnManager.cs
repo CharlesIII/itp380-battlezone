@@ -10,6 +10,9 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
+using Battlezone.Engine;
+using Battlezone.BattlezoneObjects;
+using System.Timers;
 
 
 namespace Battlezone
@@ -22,13 +25,21 @@ namespace Battlezone
         Utils.Timer timer;
         Random rng;
         int maxScreenX, maxScreenY;
+        int count;
+        Game myGame;
+        PlayerTank player;
+        PathFinder navPathFind;
 
-        public SpawnManager(Game game)
+        public SpawnManager(Game game,PlayerTank tank,PathFinder finder)
             : base(game)
         {
             // TODO: Construct any child components here
             timer = new Utils.Timer();
             rng = new Random();
+            player = tank;
+            navPathFind = finder;
+
+            myGame = game;
 
             maxScreenX = Game.GraphicsDevice.PresentationParameters.BackBufferWidth / 2;
             maxScreenY = Game.GraphicsDevice.PresentationParameters.BackBufferHeight / 2;
@@ -41,6 +52,8 @@ namespace Battlezone
         public override void Initialize()
         {
             // TODO: Add your initialization code here
+
+            count=0;
             base.Initialize();
         }
 
@@ -51,7 +64,15 @@ namespace Battlezone
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
+            if (count % 100 == 0 && count<1000)
+            {
+                AITank temp = new AITank(myGame, navPathFind, player.WorldPosition);
+                //Enemies.Add(temp);
+                myGame.Components.Add(temp);
+                count++;
+            }
             base.Update(gameTime);
+
         }
     }
 }
